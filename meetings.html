@@ -31,21 +31,21 @@
 
         <!-- View Toggle -->
         <div class="mb-6">
-            <div class="inline-flex rounded-lg border border-gray-200 bg-white p-1">
+            <div class="flex flex-wrap gap-1 rounded-lg border border-gray-200 bg-white p-1">
                 <button onclick="setView('meeting')" id="btn-meeting"
-                    class="px-4 py-2 text-sm font-medium rounded-md transition bg-green-600 text-white">
+                    class="px-3 sm:px-4 py-2 text-xs sm:text-sm font-medium rounded-md transition bg-green-600 text-white">
                     Meeting
                 </button>
                 <button onclick="setView('agenda')" id="btn-agenda"
-                    class="px-4 py-2 text-sm font-medium rounded-md transition text-gray-600 hover:bg-gray-100">
+                    class="px-3 sm:px-4 py-2 text-xs sm:text-sm font-medium rounded-md transition text-gray-600 hover:bg-gray-100">
                     Agenda
                 </button>
                 <button onclick="setView('minutes')" id="btn-minutes"
-                    class="px-4 py-2 text-sm font-medium rounded-md transition text-gray-600 hover:bg-gray-100">
+                    class="px-3 sm:px-4 py-2 text-xs sm:text-sm font-medium rounded-md transition text-gray-600 hover:bg-gray-100">
                     Minutes
                 </button>
                 <button onclick="setView('transcripts')" id="btn-transcripts"
-                    class="px-4 py-2 text-sm font-medium rounded-md transition text-gray-600 hover:bg-gray-100">
+                    class="px-3 sm:px-4 py-2 text-xs sm:text-sm font-medium rounded-md transition text-gray-600 hover:bg-gray-100">
                     Transcripts
                 </button>
             </div>
@@ -116,9 +116,9 @@
             buttons.forEach(btn => {
                 const el = document.getElementById(`btn-${btn}`);
                 if (btn === view) {
-                    el.className = 'px-4 py-2 text-sm font-medium rounded-md transition bg-green-600 text-white';
+                    el.className = 'px-3 sm:px-4 py-2 text-xs sm:text-sm font-medium rounded-md transition bg-green-600 text-white';
                 } else {
-                    el.className = 'px-4 py-2 text-sm font-medium rounded-md transition text-gray-600 hover:bg-gray-100';
+                    el.className = 'px-3 sm:px-4 py-2 text-xs sm:text-sm font-medium rounded-md transition text-gray-600 hover:bg-gray-100';
                 }
             });
 
