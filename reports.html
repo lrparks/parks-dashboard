@@ -30,13 +30,15 @@
         </div>
 
         <!-- View Toggle -->
-        <div class="flex gap-2 mb-6">
-            <button id="btn-by-month" onclick="setView('month')" class="px-4 py-2 rounded-lg font-medium transition text-sm bg-green-600 text-white">
-                By Month
-            </button>
-            <button id="btn-by-division" onclick="setView('division')" class="px-4 py-2 rounded-lg font-medium transition text-sm bg-white text-gray-600 hover:bg-gray-50">
-                By Division
-            </button>
+        <div class="mb-6">
+            <div class="flex flex-wrap gap-1 rounded-lg border border-gray-200 bg-white p-1">
+                <button id="btn-by-month" onclick="setView('month')" class="px-3 sm:px-4 py-2 text-xs sm:text-sm font-medium rounded-md transition bg-green-600 text-white">
+                    By Month
+                </button>
+                <button id="btn-by-division" onclick="setView('division')" class="px-3 sm:px-4 py-2 text-xs sm:text-sm font-medium rounded-md transition text-gray-600 hover:bg-gray-100">
+                    By Division
+                </button>
+            </div>
         </div>
 
         <!-- Loading State -->
@@ -88,7 +90,8 @@
             operations: 'Operations',
             recreation: 'Recreation',
             volunteer: 'Volunteer Services',
-            safety: 'Safety'
+            safety: 'Safety',
+            reference: 'Reference Materials'
         };
 
         // Convert YYYYMM to display format
@@ -125,11 +128,11 @@
         function setView(view) {
             currentView = view;
             document.getElementById('btn-by-month').className = view === 'month'
-                ? 'px-4 py-2 rounded-lg font-medium transition text-sm bg-green-600 text-white'
-                : 'px-4 py-2 rounded-lg font-medium transition text-sm bg-white text-gray-600 hover:bg-gray-50';
+                ? 'px-3 sm:px-4 py-2 text-xs sm:text-sm font-medium rounded-md transition bg-green-600 text-white'
+                : 'px-3 sm:px-4 py-2 text-xs sm:text-sm font-medium rounded-md transition text-gray-600 hover:bg-gray-100';
             document.getElementById('btn-by-division').className = view === 'division'
-                ? 'px-4 py-2 rounded-lg font-medium transition text-sm bg-green-600 text-white'
-                : 'px-4 py-2 rounded-lg font-medium transition text-sm bg-white text-gray-600 hover:bg-gray-50';
+                ? 'px-3 sm:px-4 py-2 text-xs sm:text-sm font-medium rounded-md transition bg-green-600 text-white'
+                : 'px-3 sm:px-4 py-2 text-xs sm:text-sm font-medium rounded-md transition text-gray-600 hover:bg-gray-100';
             renderReports();
         }
 
@@ -173,9 +176,11 @@
 
         // Render grouped by division
         function renderByDivision(container) {
-            // Group by division
+            // Group by division (exclude reference documents)
             const byDivision = {};
             reports.forEach(r => {
+                // Skip reference documents in division view
+                if (r.division === 'reference') return;
                 if (!byDivision[r.division]) byDivision[r.division] = [];
                 byDivision[r.division].push(r);
             });
