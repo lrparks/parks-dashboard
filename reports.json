@@ -1,6 +1,5 @@
 {
   "reports": [
-    {"period": "202202", "division": "recreation", "file": "pdfs/202202-recreation.pdf"},
     {"period": "202208", "division": "reference", "file": "pdfs/202208-reference-fop-proposal.pdf"},
     {"period": "202209", "division": "recreation", "file": "pdfs/202209-recreation.pdf"},
     {"period": "202210", "division": "recreation", "file": "pdfs/202210-recreation.pdf"},
@@ -15,6 +14,7 @@
     {"period": "202301", "division": "recreation", "file": "pdfs/202301-recreation.pdf"},
     {"period": "202302", "division": "admin", "file": "pdfs/202302-admin.pdf"},
     {"period": "202302", "division": "operations", "file": "pdfs/202302-operations.pdf"},
+    {"period": "202302", "division": "recreation", "file": "pdfs/202302-recreation.pdf"},
     {"period": "202302", "division": "reference", "file": "pdfs/202302-reference-wjc-boundaries-special.pdf"},
     {"period": "202303", "division": "admin", "file": "pdfs/202303-admin.pdf"},
     {"period": "202303", "division": "operations", "file": "pdfs/202303-operations.pdf"},
