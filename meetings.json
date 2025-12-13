@@ -1,0 +1,25 @@
+{
+  "meetings": [
+    {
+      "period": "202412",
+      "title": "December 2024 Commission Meeting",
+      "youtube": "VIDEO_ID",
+      "minutes": "pdfs/202412-minutes.pdf",
+      "transcript": "transcripts/202412_Commission_Meeting.txt"
+    },
+    {
+      "period": "202411",
+      "title": "November 2024 Commission Meeting",
+      "youtube": "VIDEO_ID",
+      "minutes": "pdfs/202411-minutes.pdf",
+      "transcript": "transcripts/202411_Commission_Meeting.txt"
+    },
+    {
+      "period": "202410",
+      "title": "October 2024 Commission Meeting",
+      "youtube": "VIDEO_ID",
+      "minutes": "pdfs/202410-minutes.pdf",
+      "transcript": "transcripts/202410_Commission_Meeting.txt"
+    }
+  ]
+}

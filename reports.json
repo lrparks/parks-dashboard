@@ -1,0 +1,19 @@
+{
+  "reports": [
+    {"period": "202412", "division": "admin", "file": "pdfs/202412-admin.pdf"},
+    {"period": "202412", "division": "operations", "file": "pdfs/202412-operations.pdf"},
+    {"period": "202412", "division": "recreation", "file": "pdfs/202412-recreation.pdf"},
+    {"period": "202412", "division": "volunteer", "file": "pdfs/202412-volunteer.pdf"},
+    {"period": "202412", "division": "safety", "file": "pdfs/202412-safety.pdf"},
+    {"period": "202411", "division": "admin", "file": "pdfs/202411-admin.pdf"},
+    {"period": "202411", "division": "operations", "file": "pdfs/202411-operations.pdf"},
+    {"period": "202411", "division": "recreation", "file": "pdfs/202411-recreation.pdf"},
+    {"period": "202411", "division": "volunteer", "file": "pdfs/202411-volunteer.pdf"},
+    {"period": "202411", "division": "safety", "file": "pdfs/202411-safety.pdf"},
+    {"period": "202410", "division": "admin", "file": "pdfs/202410-admin.pdf"},
+    {"period": "202410", "division": "operations", "file": "pdfs/202410-operations.pdf"},
+    {"period": "202410", "division": "recreation", "file": "pdfs/202410-recreation.pdf"},
+    {"period": "202410", "division": "volunteer", "file": "pdfs/202410-volunteer.pdf"},
+    {"period": "202410", "division": "safety", "file": "pdfs/202410-safety.pdf"}
+  ]
+}

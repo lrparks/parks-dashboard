@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Division Reports - Little Rock Parks & Recreation</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="min-h-screen bg-gray-100">
+    <!-- Navigation Header -->
+    <nav class="bg-green-700 text-white">
+        <div class="max-w-6xl mx-auto px-4 py-3">
+            <div class="flex flex-wrap items-center justify-between gap-2">
+                <a href="index.html" class="font-semibold hover:text-green-200 transition">LR Parks Commission</a>
+                <div class="flex gap-1 text-sm">
+                    <a href="dashboard.html" class="px-3 py-1.5 rounded hover:bg-green-600 transition">Dashboard</a>
+                    <a href="reports.html" class="px-3 py-1.5 rounded bg-green-600">Reports</a>
+                    <a href="meetings.html" class="px-3 py-1.5 rounded hover:bg-green-600 transition">Meetings</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="max-w-6xl mx-auto px-4 py-6">
+        <!-- Page Header -->
+        <div class="mb-6">
+            <h1 class="text-2xl font-bold text-gray-800">Division Reports</h1>
+            <p class="text-gray-600 text-sm mt-1">Monthly reports from all Parks & Recreation divisions</p>
+        </div>
+
+        <!-- View Toggle -->
+        <div class="flex gap-2 mb-6">
+            <button id="btn-by-month" onclick="setView('month')" class="px-4 py-2 rounded-lg font-medium transition text-sm bg-green-600 text-white">
+                By Month
+            </button>
+            <button id="btn-by-division" onclick="setView('division')" class="px-4 py-2 rounded-lg font-medium transition text-sm bg-white text-gray-600 hover:bg-gray-50">
+                By Division
+            </button>
+        </div>
+
+        <!-- Loading State -->
+        <div id="loading" class="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-4 flex items-center gap-3">
+            <div class="animate-spin rounded-full h-5 w-5 border-b-2 border-blue-600"></div>
+            <span class="text-blue-700">Loading reports...</span>
+        </div>
+
+        <!-- Error State -->
+        <div id="error" class="bg-red-50 border border-red-200 rounded-lg p-4 mb-4 hidden">
+            <span class="text-red-700">Error loading reports. Please try again later.</span>
+        </div>
+
+        <!-- Reports Container -->
+        <div id="reports-container" class="hidden"></div>
+
+        <!-- PDF Viewer Modal -->
+        <div id="pdf-modal" class="fixed inset-0 bg-black bg-opacity-50 hidden z-50 flex items-center justify-center p-4">
+            <div class="bg-white rounded-lg w-full max-w-4xl h-[80vh] flex flex-col">
+                <div class="flex items-center justify-between p-4 border-b">
+                    <h3 id="pdf-title" class="font-semibold text-gray-800">Report</h3>
+                    <div class="flex gap-2">
+                        <a id="pdf-new-tab" href="#" target="_blank" class="px-3 py-1.5 bg-gray-100 hover:bg-gray-200 rounded text-sm transition">
+                            Open in New Tab
+                        </a>
+                        <button onclick="closePdfViewer()" class="px-3 py-1.5 bg-gray-100 hover:bg-gray-200 rounded text-sm transition">
+                            Close
+                        </button>
+                    </div>
+                </div>
+                <iframe id="pdf-iframe" class="flex-1 w-full" src=""></iframe>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-gray-800 text-gray-300 py-6 px-4 mt-8">
+        <div class="max-w-6xl mx-auto text-center text-sm">
+            <p class="font-medium">Little Rock Parks & Recreation Commission</p>
+            <p class="mt-1 text-gray-400">City of Little Rock, Arkansas</p>
+        </div>
+    </footer>
+
+    <script>
+        // Division display names
+        const DIVISIONS = {
+            admin: 'Administration',
+            operations: 'Operations',
+            recreation: 'Recreation',
+            volunteer: 'Volunteer Services',
+            safety: 'Safety'
+        };
+
+        // Convert YYYYMM to display format
+        function formatPeriod(period) {
+            const year = period.substring(0, 4);
+            const month = parseInt(period.substring(4, 6));
+            const months = ['January', 'February', 'March', 'April', 'May', 'June',
+                           'July', 'August', 'September', 'October', 'November', 'December'];
+            return `${months[month - 1]} ${year}`;
+        }
+
+        // State
+        let reports = [];
+        let currentView = 'month';
+
+        // Load reports data
+        async function loadReports() {
+            try {
+                const response = await fetch('reports.json');
+                if (!response.ok) throw new Error('Failed to load');
+                const data = await response.json();
+                reports = data.reports || [];
+                document.getElementById('loading').classList.add('hidden');
+                document.getElementById('reports-container').classList.remove('hidden');
+                renderReports();
+            } catch (err) {
+                document.getElementById('loading').classList.add('hidden');
+                document.getElementById('error').classList.remove('hidden');
+                console.error('Error loading reports:', err);
+            }
+        }
+
+        // Set view mode
+        function setView(view) {
+            currentView = view;
+            document.getElementById('btn-by-month').className = view === 'month'
+                ? 'px-4 py-2 rounded-lg font-medium transition text-sm bg-green-600 text-white'
+                : 'px-4 py-2 rounded-lg font-medium transition text-sm bg-white text-gray-600 hover:bg-gray-50';
+            document.getElementById('btn-by-division').className = view === 'division'
+                ? 'px-4 py-2 rounded-lg font-medium transition text-sm bg-green-600 text-white'
+                : 'px-4 py-2 rounded-lg font-medium transition text-sm bg-white text-gray-600 hover:bg-gray-50';
+            renderReports();
+        }
+
+        // Render reports based on current view
+        function renderReports() {
+            const container = document.getElementById('reports-container');
+
+            if (currentView === 'month') {
+                renderByMonth(container);
+            } else {
+                renderByDivision(container);
+            }
+        }
+
+        // Render grouped by month
+        function renderByMonth(container) {
+            // Group by period
+            const byPeriod = {};
+            reports.forEach(r => {
+                if (!byPeriod[r.period]) byPeriod[r.period] = [];
+                byPeriod[r.period].push(r);
+            });
+
+            // Sort periods descending (newest first)
+            const periods = Object.keys(byPeriod).sort().reverse();
+
+            let html = '';
+            periods.forEach(period => {
+                html += `
+                    <div class="mb-6">
+                        <h2 class="text-lg font-semibold text-gray-800 mb-3 pb-2 border-b">${formatPeriod(period)}</h2>
+                        <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-3">
+                            ${byPeriod[period].map(r => reportCard(r)).join('')}
+                        </div>
+                    </div>
+                `;
+            });
+
+            container.innerHTML = html;
+        }
+
+        // Render grouped by division
+        function renderByDivision(container) {
+            // Group by division
+            const byDivision = {};
+            reports.forEach(r => {
+                if (!byDivision[r.division]) byDivision[r.division] = [];
+                byDivision[r.division].push(r);
+            });
+
+            // Sort divisions by display name
+            const divisions = Object.keys(byDivision).sort((a, b) =>
+                DIVISIONS[a].localeCompare(DIVISIONS[b])
+            );
+
+            let html = '';
+            divisions.forEach(division => {
+                // Sort reports by period descending
+                const sorted = byDivision[division].sort((a, b) => b.period.localeCompare(a.period));
+                html += `
+                    <div class="mb-6">
+                        <h2 class="text-lg font-semibold text-gray-800 mb-3 pb-2 border-b">${DIVISIONS[division]}</h2>
+                        <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
+                            ${sorted.map(r => reportCardByDivision(r)).join('')}
+                        </div>
+                    </div>
+                `;
+            });
+
+            container.innerHTML = html;
+        }
+
+        // Report card for by-month view
+        function reportCard(report) {
+            return `
+                <button onclick="openPdfViewer('${report.file}', '${DIVISIONS[report.division]} - ${formatPeriod(report.period)}')"
+                        class="bg-white rounded-lg p-3 shadow hover:shadow-md transition text-left group">
+                    <div class="text-green-600 mb-2">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                        </svg>
+                    </div>
+                    <div class="text-sm font-medium text-gray-800 group-hover:text-green-600 transition">${DIVISIONS[report.division]}</div>
+                </button>
+            `;
+        }
+
+        // Report card for by-division view
+        function reportCardByDivision(report) {
+            return `
+                <button onclick="openPdfViewer('${report.file}', '${DIVISIONS[report.division]} - ${formatPeriod(report.period)}')"
+                        class="bg-white rounded-lg p-3 shadow hover:shadow-md transition text-left group">
+                    <div class="text-green-600 mb-2">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                        </svg>
+                    </div>
+                    <div class="text-sm font-medium text-gray-800 group-hover:text-green-600 transition">${formatPeriod(report.period)}</div>
+                </button>
+            `;
+        }
+
+        // Open PDF viewer
+        function openPdfViewer(file, title) {
+            document.getElementById('pdf-title').textContent = title;
+            document.getElementById('pdf-iframe').src = file;
+            document.getElementById('pdf-new-tab').href = file;
+            document.getElementById('pdf-modal').classList.remove('hidden');
+            document.body.style.overflow = 'hidden';
+        }
+
+        // Close PDF viewer
+        function closePdfViewer() {
+            document.getElementById('pdf-modal').classList.add('hidden');
+            document.getElementById('pdf-iframe').src = '';
+            document.body.style.overflow = '';
+        }
+
+        // Close modal on escape key
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') closePdfViewer();
+        });
+
+        // Close modal on backdrop click
+        document.getElementById('pdf-modal').addEventListener('click', (e) => {
+            if (e.target.id === 'pdf-modal') closePdfViewer();
+        });
+
+        // Initialize
+        loadReports();
+    </script>
+</body>
+</html>
