@@ -88,7 +88,8 @@
             operations: 'Operations',
             recreation: 'Recreation',
             volunteer: 'Volunteer Services',
-            safety: 'Safety'
+            safety: 'Safety',
+            reference: 'Reference Materials'
         };
 
         // Convert YYYYMM to display format
@@ -173,9 +174,11 @@
 
         // Render grouped by division
         function renderByDivision(container) {
-            // Group by division
+            // Group by division (exclude reference documents)
             const byDivision = {};
             reports.forEach(r => {
+                // Skip reference documents in division view
+                if (r.division === 'reference') return;
                 if (!byDivision[r.division]) byDivision[r.division] = [];
                 byDivision[r.division].push(r);
             });
