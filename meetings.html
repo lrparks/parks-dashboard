@@ -170,15 +170,24 @@
                         <!-- Video Embed -->
                         ${hasVideo ? `
                             <div class="mb-4">
-                                <div class="relative w-full" style="padding-bottom: 56.25%;">
-                                    <iframe
-                                        class="absolute inset-0 w-full h-full rounded-lg"
-                                        src="https://www.youtube.com/embed/${meeting.youtube}"
-                                        title="${meeting.title}"
-                                        frameborder="0"
-                                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                                        allowfullscreen>
-                                    </iframe>
+                                <div class="relative w-full video-container" style="padding-bottom: 56.25%;" data-video-id="${meeting.youtube}">
+                                    <!-- YouTube Thumbnail (Click to Load) -->
+                                    <div class="absolute inset-0 cursor-pointer video-thumbnail group" onclick="loadVideo(this)">
+                                        <img
+                                            src="https://img.youtube.com/vi/${meeting.youtube}/maxresdefault.jpg"
+                                            alt="${meeting.title}"
+                                            class="w-full h-full object-cover rounded-lg"
+                                            onerror="this.src='https://img.youtube.com/vi/${meeting.youtube}/hqdefault.jpg'"
+                                        />
+                                        <!-- Play Button Overlay -->
+                                        <div class="absolute inset-0 flex items-center justify-center bg-black bg-opacity-30 group-hover:bg-opacity-40 transition rounded-lg">
+                                            <div class="bg-red-600 rounded-full p-4 group-hover:scale-110 transition transform">
+                                                <svg class="w-12 h-12 text-white" fill="currentColor" viewBox="0 0 24 24">
+                                                    <path d="M8 5v14l11-7z"/>
+                                                </svg>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         ` : `
@@ -295,6 +304,25 @@
                     </div>
                 </div>
             `;
+        }
+
+        // Load video on thumbnail click (lazy loading)
+        function loadVideo(thumbnail) {
+            const container = thumbnail.parentElement;
+            const videoId = container.dataset.videoId;
+
+            // Create iframe element
+            const iframe = document.createElement('iframe');
+            iframe.className = 'absolute inset-0 w-full h-full rounded-lg';
+            iframe.src = `https://www.youtube.com/embed/${videoId}?autoplay=1`;
+            iframe.title = 'YouTube video player';
+            iframe.frameBorder = '0';
+            iframe.allow = 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture';
+            iframe.allowFullscreen = true;
+
+            // Replace thumbnail with iframe
+            container.innerHTML = '';
+            container.appendChild(iframe);
         }
 
         // Initialize
