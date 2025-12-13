@@ -1,25 +1,327 @@
 {
   "meetings": [
     {
+      "period": "202511",
+      "title": "November 2025 - Parks Commission Meeting",
+      "youtube": "XExNsrvLEgo",
+      "minutes": null,
+      "transcript": "transcripts/202511_November 2025 - Parks Commission Meeting.txt"
+    },
+    {
+      "period": "202510",
+      "title": "October 2025 - Parks Commission Meeting",
+      "youtube": "3V8E1sYfGS0",
+      "minutes": null,
+      "transcript": "transcripts/202510_October 2025 - Parks Commission Meeting.txt"
+    },
+    {
+      "period": "202509",
+      "title": "September 2025 - Parks Commission Meeting",
+      "youtube": "jFfUhFWlWg0",
+      "minutes": null,
+      "transcript": "transcripts/202509_September 2025 - Parks Commission Meeting.txt"
+    },
+    {
+      "period": "202508",
+      "title": "August 2025 - Parks Commission Meeting",
+      "youtube": "G3KP3tyWqUg",
+      "minutes": null,
+      "transcript": "transcripts/202508_August 2025 - Parks Commission Meeting.txt"
+    },
+    {
+      "period": "202507",
+      "title": "July 2025 - Parks Commission Meeting",
+      "youtube": "UEFPcCyCpdM",
+      "minutes": null,
+      "transcript": "transcripts/202507_July 2025 - Parks Commission Meeting.txt"
+    },
+    {
+      "period": "202506",
+      "title": "June 2025 - Parks Commission Meeting",
+      "youtube": "mLmcAp9E-_Y",
+      "minutes": null,
+      "transcript": "transcripts/202506_June 2025 - Parks Commission Meeting.txt"
+    },
+    {
+      "period": "202505",
+      "title": "May 2025 - Parks Commission Meeting",
+      "youtube": "1nVieTWMGHM",
+      "minutes": null,
+      "transcript": "transcripts/202505_May 2025 - Parks Commission Meeting.txt"
+    },
+    {
+      "period": "202504",
+      "title": "April 2025 - Parks Commission Meeting",
+      "youtube": "7Sg3xZLWoVM",
+      "minutes": null,
+      "transcript": "transcripts/202504_April 2025 - Parks Commission Meeting.txt"
+    },
+    {
+      "period": "202503",
+      "title": "March 2025 - Parks Commission Meeting",
+      "youtube": "L9iQlzibks8",
+      "minutes": null,
+      "transcript": "transcripts/202503_March 2025 - Parks Commission Meeting.txt"
+    },
+    {
+      "period": "202502",
+      "title": "February 2025 - Parks Commission Meeting",
+      "youtube": "G56sOPftNpg",
+      "minutes": null,
+      "transcript": "transcripts/202502_February 2025 - Parks Commission Meeting.txt"
+    },
+    {
+      "period": "202501",
+      "title": "January 2025 - Parks Commission Meeting",
+      "youtube": "U8ubGJM863s",
+      "minutes": null,
+      "transcript": "transcripts/202501_January 2025 - Parks Commission Meeting.txt"
+    },
+    {
       "period": "202412",
-      "title": "December 2024 Commission Meeting",
-      "youtube": "VIDEO_ID",
-      "minutes": "pdfs/202412-minutes.pdf",
-      "transcript": "transcripts/202412_Commission_Meeting.txt"
+      "title": "December 2024 - Parks Commission Meeting",
+      "youtube": "BXWdkrLch0s",
+      "minutes": null,
+      "transcript": "transcripts/202412_December 2024 - Parks Commission Meeting.txt"
     },
     {
       "period": "202411",
-      "title": "November 2024 Commission Meeting",
-      "youtube": "VIDEO_ID",
-      "minutes": "pdfs/202411-minutes.pdf",
-      "transcript": "transcripts/202411_Commission_Meeting.txt"
+      "title": "November 2024 - Parks Commission Meeting",
+      "youtube": "Nozx53CIMlo",
+      "minutes": null,
+      "transcript": "transcripts/202411_November 2024 - Parks Commission Meeting.txt"
     },
     {
       "period": "202410",
-      "title": "October 2024 Commission Meeting",
-      "youtube": "VIDEO_ID",
-      "minutes": "pdfs/202410-minutes.pdf",
-      "transcript": "transcripts/202410_Commission_Meeting.txt"
+      "title": "October 2024 - Parks Commission Meeting",
+      "youtube": "bnCl3DAlpmI",
+      "minutes": null,
+      "transcript": "transcripts/202410_October 2024 - Parks Commission Meeting.txt"
+    },
+    {
+      "period": "202409",
+      "title": "September 2024 - Parks Commission Meeting",
+      "youtube": "gH9HISZWjjg",
+      "minutes": null,
+      "transcript": "transcripts/202409_September 2024 - Parks Commission Meeting.txt"
+    },
+    {
+      "period": "202408",
+      "title": "August 2024 - Parks Commission Meeting",
+      "youtube": "wJBkFiKZJZY",
+      "minutes": null,
+      "transcript": "transcripts/202408_August 2024 - Parks Commission Meeting.txt"
+    },
+    {
+      "period": "202407",
+      "title": "July 2024 - Parks Commission Meeting",
+      "youtube": "fEbBUtFdwEk",
+      "minutes": null,
+      "transcript": "transcripts/202407_July 2024 - Parks Commission Meeting.txt"
+    },
+    {
+      "period": "202406",
+      "title": "June 2024 - Parks Commission Meeting",
+      "youtube": "paMx7EMhD6M",
+      "minutes": null,
+      "transcript": null
+    },
+    {
+      "period": "202405",
+      "title": "May 2024 - Parks Commission Meeting",
+      "youtube": "YeG985PVc7A",
+      "minutes": null,
+      "transcript": null
+    },
+    {
+      "period": "202404",
+      "title": "April 2024 - Parks Commission Meeting",
+      "youtube": "DKsfjLcHSzk",
+      "minutes": null,
+      "transcript": null
+    },
+    {
+      "period": "202403",
+      "title": "March 2024 - Parks Commission Meeting",
+      "youtube": "I5GkbaT-lVQ",
+      "minutes": null,
+      "transcript": null
+    },
+    {
+      "period": "202402",
+      "title": "February 2024 - Parks Commission Meeting",
+      "youtube": "wg0QK1JJYvU",
+      "minutes": null,
+      "transcript": null
+    },
+    {
+      "period": "202401",
+      "title": "January 2024 - Parks Commission Meeting",
+      "youtube": "-jG9rAgfgbs",
+      "minutes": null,
+      "transcript": null
+    },
+    {
+      "period": "202312",
+      "title": "December 2023 - Parks Commission Meeting",
+      "youtube": "MbJacNO90gU",
+      "minutes": null,
+      "transcript": null
+    },
+    {
+      "period": "202311",
+      "title": "November 2023 - Parks Commission Meeting",
+      "youtube": "PnsrnVXAumM",
+      "minutes": null,
+      "transcript": null
+    },
+    {
+      "period": "202310",
+      "title": "October 2023 - Parks Commission Meeting",
+      "youtube": "JO7m5SoWY9M",
+      "minutes": null,
+      "transcript": null
+    },
+    {
+      "period": "202309",
+      "title": "September 2023 - Parks Commission Meeting",
+      "youtube": "BfFNsuIbjdU",
+      "minutes": null,
+      "transcript": null
+    },
+    {
+      "period": "202308",
+      "title": "August 2023 - Parks Commission Meeting",
+      "youtube": "liU19c003OU",
+      "minutes": null,
+      "transcript": null
+    },
+    {
+      "period": "202307",
+      "title": "July 2023 - Parks Commission Meeting",
+      "youtube": "Vvduyy1CnPk",
+      "minutes": null,
+      "transcript": null
+    },
+    {
+      "period": "202306",
+      "title": "June 2023 - Parks Commission Meeting",
+      "youtube": "aTZnFoJCUmA",
+      "minutes": null,
+      "transcript": null
+    },
+    {
+      "period": "202305",
+      "title": "May 2023 - Parks Commission Meeting",
+      "youtube": "ZV3r3OR99xQ",
+      "minutes": null,
+      "transcript": null
+    },
+    {
+      "period": "202304",
+      "title": "April 2023 - Parks Commission Meeting",
+      "youtube": "umQ5W4FL2y4",
+      "minutes": null,
+      "transcript": null
+    },
+    {
+      "period": "202303",
+      "title": "March 2023 - Parks Commission Meeting",
+      "youtube": "KeR3XLr_ufs",
+      "minutes": null,
+      "transcript": null
+    },
+    {
+      "period": "202302",
+      "title": "February 2023 - Parks Commission Meeting",
+      "youtube": "SGwTKp3uFzU",
+      "minutes": null,
+      "transcript": null
+    },
+    {
+      "period": "202301",
+      "title": "January 2023 - Parks Commission Meeting",
+      "youtube": "cPVPDTy1iUQ",
+      "minutes": null,
+      "transcript": null
+    },
+    {
+      "period": "202212",
+      "title": "December 2022 - Parks Commission Meeting",
+      "youtube": "5HXTNPV4MHY",
+      "minutes": null,
+      "transcript": null
+    },
+    {
+      "period": "202211",
+      "title": "November 2022 - Parks Commission Meeting",
+      "youtube": "yIEc8gm5GnM",
+      "minutes": null,
+      "transcript": null
+    },
+    {
+      "period": "202210",
+      "title": "October 2022 - Parks Commission Meeting",
+      "youtube": "KFpidoG_nEU",
+      "minutes": null,
+      "transcript": null
+    },
+    {
+      "period": "202209",
+      "title": "September 2022 - Parks Commission Meeting",
+      "youtube": "uZMr_iTDOH8",
+      "minutes": null,
+      "transcript": null
+    },
+    {
+      "period": "202208",
+      "title": "August 2022 - Parks Commission Meeting",
+      "youtube": "DACi27ZMsRE",
+      "minutes": null,
+      "transcript": null
+    },
+    {
+      "period": "202207",
+      "title": "July 2022 - Parks Commission Meeting",
+      "youtube": "yoV5vAANuyk",
+      "minutes": null,
+      "transcript": null
+    },
+    {
+      "period": "202206",
+      "title": "June 2022 - Parks Commission Meeting",
+      "youtube": "obtn2d7x3_w",
+      "minutes": null,
+      "transcript": null
+    },
+    {
+      "period": "202205",
+      "title": "May 2022 - Parks Commission Meeting",
+      "youtube": "NF-ZEIW4jug",
+      "minutes": null,
+      "transcript": null
+    },
+    {
+      "period": "202204",
+      "title": "April 2022 - Parks Commission Meeting",
+      "youtube": "GkSSDlMtS6U",
+      "minutes": null,
+      "transcript": null
+    },
+    {
+      "period": "202203",
+      "title": "March 2022 - Parks Commission Meeting",
+      "youtube": "CfBsREJBwdE",
+      "minutes": null,
+      "transcript": null
+    }
+  ],
+  "special_events": [
+    {
+      "period": "202504",
+      "title": "Impact The Rock: A Day of Unity & Service",
+      "youtube": "d7h_GCBRDHo",
+      "transcript": "transcripts/202504_Impact The Rock- A Day of Unity & Service.txt"
     }
   ]
 }
