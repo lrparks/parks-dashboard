@@ -122,6 +122,7 @@
     {"period": "202510", "division": "safety", "file": "pdfs/202510-safety.pdf"},
     {"period": "202510", "division": "volunteer", "file": "pdfs/202510-volunteer.pdf"},
     {"period": "202511", "division": "admin", "file": "pdfs/202511-admin.pdf"},
+    {"period": "202511", "division": "operations", "file": "pdfs/202511-operations.pdf"},
     {"period": "202511", "division": "recreation", "file": "pdfs/202511-recreation.pdf"},
     {"period": "202511", "division": "safety", "file": "pdfs/202511-safety.pdf"},
     {"period": "202511", "division": "volunteer", "file": "pdfs/202511-volunteer.pdf"},
