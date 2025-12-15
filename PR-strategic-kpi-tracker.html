@@ -1,0 +1,534 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>P&R KPI Tracker - Little Rock Parks & Recreation</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body { margin: 0; padding: 0; }
+        @media print {
+            .no-print { display: none !important; }
+            body { print-color-adjust: exact; -webkit-print-color-adjust: exact; }
+            .category-section { page-break-inside: avoid; }
+        }
+        .kpi-table th {
+            position: sticky;
+            top: 0;
+            z-index: 10;
+            background: white;
+        }
+        .category-header {
+            cursor: pointer;
+            user-select: none;
+        }
+        .category-header:hover {
+            opacity: 0.9;
+        }
+        .progress-bar {
+            height: 20px;
+            background: #e5e7eb;
+            border-radius: 4px;
+            overflow: hidden;
+            position: relative;
+        }
+        .progress-fill {
+            height: 100%;
+            transition: width 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: white;
+        }
+        .tooltip {
+            position: relative;
+            display: inline-block;
+        }
+        .tooltip .tooltiptext {
+            visibility: hidden;
+            background-color: #1f2937;
+            color: white;
+            text-align: left;
+            border-radius: 6px;
+            padding: 8px 12px;
+            position: absolute;
+            z-index: 1000;
+            bottom: 125%;
+            left: 50%;
+            transform: translateX(-50%);
+            white-space: normal;
+            min-width: 200px;
+            max-width: 400px;
+            font-size: 0.875rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        .tooltip:hover .tooltiptext {
+            visibility: visible;
+        }
+        @media (max-width: 768px) {
+            .kpi-table {
+                font-size: 0.75rem;
+            }
+            .kpi-table th,
+            .kpi-table td {
+                padding: 0.5rem 0.25rem;
+            }
+        }
+    </style>
+</head>
+<body class="min-h-screen bg-gray-100">
+    <!-- Navigation Header -->
+    <nav class="bg-green-700 text-white no-print">
+        <div class="max-w-7xl mx-auto px-4 py-3">
+            <div class="flex flex-wrap items-center justify-between gap-2">
+                <a href="index.html" class="font-semibold hover:text-green-200 transition">LR Parks Commission</a>
+                <div class="flex gap-1 text-sm">
+                    <a href="dashboard.html" class="px-2 sm:px-3 py-1.5 rounded hover:bg-green-600 transition">Dashboard</a>
+                    <a href="reports.html" class="px-2 sm:px-3 py-1.5 rounded hover:bg-green-600 transition">Reports</a>
+                    <a href="meetings.html" class="px-2 sm:px-3 py-1.5 rounded hover:bg-green-600 transition">Meetings</a>
+                    <a href="PR-strategic-kpi-tracker.html" class="px-2 sm:px-3 py-1.5 rounded bg-green-600">
+                        <span class="sm:hidden">KPIs</span>
+                        <span class="hidden sm:inline">P&R KPI Tracker</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Header -->
+    <header class="bg-white shadow-sm no-print">
+        <div class="max-w-7xl mx-auto px-4 py-6">
+            <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+                <div>
+                    <h1 class="text-3xl font-bold text-gray-900">P&R KPI Tracker</h1>
+                    <p class="text-gray-600 mt-1">Monitoring Progress on Parks & Recreation Strategic Goals (2024-2030)</p>
+                    <p class="text-sm text-gray-500 mt-2">
+                        <span id="report-period">Current Year: 2025</span> |
+                        <span id="last-updated">Last updated: Loading...</span>
+                    </p>
+                </div>
+                <div class="flex gap-2">
+                    <button onclick="exportToCSV()" class="px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700 transition text-sm">
+                        Export CSV
+                    </button>
+                    <button onclick="window.print()" class="px-4 py-2 bg-gray-600 text-white rounded hover:bg-gray-700 transition text-sm">
+                        Print
+                    </button>
+                    <button onclick="refreshData()" class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition text-sm">
+                        Refresh Data
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Strategic Plan Reference Note -->
+    <div class="max-w-7xl mx-auto px-4 pt-6 pb-2 no-print">
+        <div class="bg-blue-50 border-l-4 border-blue-600 p-4 rounded">
+            <p class="text-gray-800 text-sm">
+                <strong>About these KPIs:</strong> The Key Performance Indicators detailed below were put forward by the Parks & Recreation Division and adopted by the Little Rock Board of Directors in the
+                <a href="pdfs/202509-reference-strategic-plan.pdf" target="_blank" class="text-blue-700 hover:text-blue-900 underline font-medium">2025-2030 Parks & Recreation Strategic Plan</a>.
+            </p>
+        </div>
+    </div>
+
+    <!-- Loading Indicator -->
+    <div id="loading" class="max-w-7xl mx-auto px-4 py-8 text-center">
+        <div class="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-green-600"></div>
+        <p class="mt-4 text-gray-600">Loading KPI data from Google Sheets...</p>
+    </div>
+
+    <!-- Error Display -->
+    <div id="error" class="max-w-7xl mx-auto px-4 py-8 hidden">
+        <div class="bg-red-50 border border-red-200 rounded-lg p-6 text-center">
+            <p class="text-red-800 font-semibold">Error loading data</p>
+            <p class="text-red-600 mt-2" id="error-message"></p>
+            <button onclick="refreshData()" class="mt-4 px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700 transition">
+                Retry
+            </button>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <main id="content" class="max-w-7xl mx-auto px-4 py-8 hidden">
+        <div id="kpi-categories"></div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-gray-800 text-gray-300 py-6 px-4 mt-12">
+        <div class="max-w-7xl mx-auto text-center text-sm">
+            <p class="font-medium">Little Rock Parks & Recreation Commission</p>
+            <p class="mt-1 text-gray-400">Data sourced from Parks Commission Google Sheets</p>
+            <p class="mt-1 text-gray-400">Reference: Strategic Plan 2025-2030 (Pages 32-33)</p>
+            <p class="mt-2 text-gray-400">
+                <a href="index.html" class="hover:text-white transition">← Back to Dashboard Home</a>
+            </p>
+        </div>
+    </footer>
+
+    <script>
+        // Category configuration with colors
+        const CATEGORY_CONFIG = {
+            'Health & Well-Being': {
+                color: '#3b82f6',
+                bgColor: '#dbeafe',
+                description: 'Physical and mental wellness programs and facilities'
+            },
+            'Environmental Resilience': {
+                color: '#22c55e',
+                bgColor: '#dcfce7',
+                description: 'Sustainability, conservation, and ecological initiatives'
+            },
+            'Equity & Accessibility': {
+                color: '#a855f7',
+                bgColor: '#f3e8ff',
+                description: 'Inclusive access and programs for all communities'
+            },
+            'Outdoor Recreation': {
+                color: '#f97316',
+                bgColor: '#ffedd5',
+                description: 'Trails, outdoor activities, and adventure programs'
+            },
+            'Partnerships & Engagement': {
+                color: '#14b8a6',
+                bgColor: '#ccfbf1',
+                description: 'Community partnerships and volunteer programs'
+            },
+            'Marketing & Communications': {
+                color: '#ec4899',
+                bgColor: '#fce7f3',
+                description: 'Outreach, social media, and inclusive communications'
+            }
+        };
+
+        // Google Sheets CSV URL
+        const CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vR7EssEYbL9FMH06UyzCUntYGlCm7xDd3fFdniFI9ELcD7PhdvFMgWor2VAY6yKtlkPnFeoUOOalrt7/pub?gid=597349438&single=true&output=csv';
+
+        // CORS proxy for local testing
+        const CORS_PROXY = 'https://corsproxy.io/?';
+        const USE_CORS_PROXY = window.location.protocol === 'file:';
+        const getUrl = (url) => USE_CORS_PROXY ? CORS_PROXY + encodeURIComponent(url) : url;
+
+        // Store global data
+        let globalKPIData = [];
+
+        // Parse CSV text into array of objects
+        function parseCSV(text) {
+            const lines = text.trim().split('\n');
+            const headers = parseCSVLine(lines[0]);
+            const data = [];
+
+            for (let i = 1; i < lines.length; i++) {
+                if (!lines[i].trim()) continue;
+                const values = parseCSVLine(lines[i]);
+                const row = {};
+                headers.forEach((header, index) => {
+                    row[header] = values[index] || '';
+                });
+                data.push(row);
+            }
+
+            return data;
+        }
+
+        // Parse a single CSV line handling quotes
+        function parseCSVLine(line) {
+            const result = [];
+            let current = '';
+            let inQuotes = false;
+
+            for (let i = 0; i < line.length; i++) {
+                const char = line[i];
+                if (char === '"') {
+                    inQuotes = !inQuotes;
+                } else if (char === ',' && !inQuotes) {
+                    result.push(current.trim());
+                    current = '';
+                } else {
+                    current += char;
+                }
+            }
+            result.push(current.trim());
+            return result;
+        }
+
+        // Group KPIs by category
+        function groupByCategory(data) {
+            const grouped = {};
+            data.forEach(kpi => {
+                const category = kpi.Category;
+                if (!grouped[category]) {
+                    grouped[category] = [];
+                }
+                grouped[category].push(kpi);
+            });
+            return grouped;
+        }
+
+        // Calculate progress for a KPI
+        function calculateProgress(kpi) {
+            const goal = kpi.Five_Year_Goal;
+            if (!goal || goal === '---' || goal === '') {
+                return { percent: null, status: 'gray', message: 'No goal set' };
+            }
+
+            // Handle percentage goals
+            if (goal.includes('%')) {
+                const targetPercent = parseFloat(goal);
+                // Check current year columns for latest data
+                const years = ['Year_2030', 'Year_2029', 'Year_2028', 'Year_2027', 'Year_2026', 'Year_2025'];
+                let currentValue = null;
+
+                for (const year of years) {
+                    const val = kpi[year];
+                    if (val && val !== '---' && val !== '') {
+                        currentValue = parseFloat(val);
+                        break;
+                    }
+                }
+
+                if (currentValue === null) {
+                    return { percent: 0, status: 'gray', message: 'No data yet' };
+                }
+
+                const progress = (currentValue / targetPercent) * 100;
+                let status = 'green';
+                if (progress < 50) status = 'red';
+                else if (progress < 90) status = 'yellow';
+
+                return { percent: Math.min(progress, 100), status, message: `${currentValue}% of ${targetPercent}% goal` };
+            }
+
+            // Handle range goals (e.g., "15-20% annually")
+            if (goal.includes('-')) {
+                return { percent: null, status: 'gray', message: 'Range target' };
+            }
+
+            // Handle count goals
+            if (goal.includes('by')) {
+                return { percent: null, status: 'gray', message: 'Multi-year target' };
+            }
+
+            return { percent: null, status: 'gray', message: 'Goal tracked' };
+        }
+
+        // Get progress bar HTML
+        function getProgressBar(progress) {
+            if (progress.percent === null) {
+                return `<span class="text-xs text-gray-600">${progress.message}</span>`;
+            }
+
+            const colors = {
+                green: '#22c55e',
+                yellow: '#fbbf24',
+                red: '#ef4444',
+                gray: '#9ca3af'
+            };
+
+            return `
+                <div class="progress-bar">
+                    <div class="progress-fill" style="width: ${progress.percent}%; background-color: ${colors[progress.status]}">
+                        ${progress.percent > 15 ? Math.round(progress.percent) + '%' : ''}
+                    </div>
+                </div>
+                <div class="text-xs text-gray-600 mt-1">${progress.message}</div>
+            `;
+        }
+
+        // Format value with unit
+        function formatValue(value, unit) {
+            if (!value || value === '---' || value === '') return '---';
+
+            if (unit === '%') return value + '%';
+            if (unit === 'miles') return value + ' mi';
+            if (unit === 'hours') return value + ' hrs';
+            if (unit === 'count') return value;
+
+            return value;
+        }
+
+        // Render KPI categories
+        function renderKPIs(data) {
+            const grouped = groupByCategory(data);
+            const container = document.getElementById('kpi-categories');
+            container.innerHTML = '';
+
+            Object.keys(grouped).forEach(category => {
+                const config = CATEGORY_CONFIG[category] || { color: '#6b7280', bgColor: '#f3f4f6' };
+                const kpis = grouped[category];
+
+                const categoryId = category.replace(/\s+/g, '-').toLowerCase();
+
+                const section = document.createElement('div');
+                section.className = 'category-section mb-8';
+                section.innerHTML = `
+                    <div class="category-header rounded-lg shadow-md overflow-hidden" onclick="toggleCategory('${categoryId}')">
+                        <div class="p-4 text-white" style="background-color: ${config.color}">
+                            <div class="flex items-center justify-between">
+                                <div>
+                                    <h2 class="text-xl font-bold">${category}</h2>
+                                    <p class="text-sm opacity-90 mt-1">${config.description}</p>
+                                    <p class="text-xs opacity-75 mt-1">${kpis.length} KPIs</p>
+                                </div>
+                                <div class="text-2xl" id="toggle-${categoryId}">▼</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="content-${categoryId}" class="mt-4 bg-white rounded-lg shadow overflow-x-auto">
+                        <table class="kpi-table w-full text-sm">
+                            <thead>
+                                <tr class="bg-gray-50 border-b-2 border-gray-200">
+                                    <th class="text-left p-3 font-semibold text-gray-700">KPI Name</th>
+                                    <th class="text-center p-3 font-semibold text-gray-700">Unit</th>
+                                    <th class="text-center p-3 font-semibold text-gray-700">2024</th>
+                                    <th class="text-center p-3 font-semibold text-gray-700">2025</th>
+                                    <th class="text-center p-3 font-semibold text-gray-700">2026</th>
+                                    <th class="text-center p-3 font-semibold text-gray-700">2027</th>
+                                    <th class="text-center p-3 font-semibold text-gray-700">2028</th>
+                                    <th class="text-center p-3 font-semibold text-gray-700">2029</th>
+                                    <th class="text-center p-3 font-semibold text-gray-700">2030</th>
+                                    <th class="text-left p-3 font-semibold text-gray-700">5-Year Goal</th>
+                                    <th class="text-left p-3 font-semibold text-gray-700" style="min-width: 150px;">Progress</th>
+                                    <th class="text-left p-3 font-semibold text-gray-700">Notes</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                ${kpis.map((kpi, index) => {
+                                    const progress = calculateProgress(kpi);
+                                    const rowBg = index % 2 === 0 ? 'bg-white' : 'bg-gray-50';
+
+                                    return `
+                                        <tr class="${rowBg} border-b border-gray-200 hover:bg-${config.bgColor.replace('#', '')} transition">
+                                            <td class="p-3">
+                                                <div class="tooltip">
+                                                    <span class="font-medium text-gray-900">${kpi.KPI_Name}</span>
+                                                    <span class="tooltiptext">
+                                                        <strong>KPI #${kpi.KPI_ID}</strong><br>
+                                                        Category: ${category}<br>
+                                                        ${kpi.Five_Year_Goal ? 'Goal: ' + kpi.Five_Year_Goal : 'No specific goal set'}
+                                                    </span>
+                                                </div>
+                                            </td>
+                                            <td class="p-3 text-center text-gray-600">${kpi.Unit}</td>
+                                            <td class="p-3 text-center text-gray-700">${formatValue(kpi.Baseline_2024, kpi.Unit)}</td>
+                                            <td class="p-3 text-center text-gray-700">${formatValue(kpi.Year_2025, kpi.Unit)}</td>
+                                            <td class="p-3 text-center text-gray-700">${formatValue(kpi.Year_2026, kpi.Unit)}</td>
+                                            <td class="p-3 text-center text-gray-700">${formatValue(kpi.Year_2027, kpi.Unit)}</td>
+                                            <td class="p-3 text-center text-gray-700">${formatValue(kpi.Year_2028, kpi.Unit)}</td>
+                                            <td class="p-3 text-center text-gray-700">${formatValue(kpi.Year_2029, kpi.Unit)}</td>
+                                            <td class="p-3 text-center text-gray-700">${formatValue(kpi.Year_2030, kpi.Unit)}</td>
+                                            <td class="p-3 text-gray-700">${kpi.Five_Year_Goal || '---'}</td>
+                                            <td class="p-3">${getProgressBar(progress)}</td>
+                                            <td class="p-3 text-gray-600 text-xs">${kpi.Notes || ''}</td>
+                                        </tr>
+                                    `;
+                                }).join('')}
+                            </tbody>
+                        </table>
+                    </div>
+                `;
+
+                container.appendChild(section);
+            });
+
+            // Update last updated time
+            document.getElementById('last-updated').textContent = 'Last updated: ' + new Date().toLocaleString();
+        }
+
+        // Toggle category visibility
+        function toggleCategory(categoryId) {
+            const content = document.getElementById('content-' + categoryId);
+            const toggle = document.getElementById('toggle-' + categoryId);
+
+            if (content.style.display === 'none') {
+                content.style.display = 'block';
+                toggle.textContent = '▼';
+            } else {
+                content.style.display = 'none';
+                toggle.textContent = '▶';
+            }
+        }
+
+        // Export to CSV
+        function exportToCSV() {
+            if (!globalKPIData || globalKPIData.length === 0) {
+                alert('No data available to export');
+                return;
+            }
+
+            const headers = Object.keys(globalKPIData[0]);
+            const csvContent = [
+                headers.join(','),
+                ...globalKPIData.map(row =>
+                    headers.map(header => {
+                        const value = row[header] || '';
+                        // Escape quotes and wrap in quotes if contains comma
+                        if (value.includes(',') || value.includes('"')) {
+                            return '"' + value.replace(/"/g, '""') + '"';
+                        }
+                        return value;
+                    }).join(',')
+                )
+            ].join('\n');
+
+            const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+            const link = document.createElement('a');
+            const url = URL.createObjectURL(blob);
+            link.setAttribute('href', url);
+            link.setAttribute('download', 'strategic-kpi-tracker-' + new Date().toISOString().split('T')[0] + '.csv');
+            link.style.visibility = 'hidden';
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        }
+
+        // Load data from Google Sheets
+        async function loadData() {
+            const loading = document.getElementById('loading');
+            const error = document.getElementById('error');
+            const content = document.getElementById('content');
+
+            loading.classList.remove('hidden');
+            error.classList.add('hidden');
+            content.classList.add('hidden');
+
+            try {
+                const response = await fetch(getUrl(CSV_URL));
+                if (!response.ok) {
+                    throw new Error('Failed to fetch data: ' + response.statusText);
+                }
+
+                const text = await response.text();
+                const data = parseCSV(text);
+
+                if (!data || data.length === 0) {
+                    throw new Error('No data received from Google Sheets');
+                }
+
+                globalKPIData = data;
+                renderKPIs(data);
+
+                loading.classList.add('hidden');
+                content.classList.remove('hidden');
+
+            } catch (err) {
+                console.error('Error loading data:', err);
+                loading.classList.add('hidden');
+                error.classList.remove('hidden');
+                document.getElementById('error-message').textContent = err.message;
+            }
+        }
+
+        // Refresh data
+        function refreshData() {
+            loadData();
+        }
+
+        // Initialize on page load
+        document.addEventListener('DOMContentLoaded', loadData);
+    </script>
+</body>
+</html>
