@@ -1,0 +1,548 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tennis Economic Impact Calculator - Rebsamen Tennis Center</title>
+    <script src="https://unpkg.com/react@18/umd/react.development.js" crossorigin></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js" crossorigin></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body { margin: 0; padding: 0; }
+        @media print {
+            .no-print { display: none !important; }
+            body { print-color-adjust: exact; -webkit-print-color-adjust: exact; }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation Header -->
+    <nav class="bg-green-700 text-white no-print">
+        <div class="max-w-6xl mx-auto px-4 py-3">
+            <div class="flex flex-wrap items-center justify-between gap-2">
+                <a href="index.html" class="font-semibold hover:text-green-200 transition">LR Parks Commission</a>
+                <div class="flex gap-1 text-sm">
+                    <a href="reports.html" class="px-2 sm:px-3 py-1.5 rounded hover:bg-green-600 transition">Reports</a>
+                    <a href="meetings.html" class="px-2 sm:px-3 py-1.5 rounded hover:bg-green-600 transition">Meetings</a>
+                    <a href="dashboard.html" class="px-2 sm:px-3 py-1.5 rounded hover:bg-green-600 transition">Dashboard</a>
+                    <a href="PR-strategic-kpi-tracker.html" class="px-2 sm:px-3 py-1.5 rounded hover:bg-green-600 transition">
+                        <span class="sm:hidden">KPIs</span>
+                        <span class="hidden sm:inline">P&R KPI Tracker</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div id="root"></div>
+
+    <script type="text/babel">
+        const { useState, useMemo } = React;
+
+        // Icon Components (inline SVG replacements for lucide-react)
+        const Plus = ({size = 20, className = ""}) => (
+            <svg width={size} height={size} viewBox="0 0 24 24" fill="none"
+                 stroke="currentColor" strokeWidth="2" strokeLinecap="round"
+                 strokeLinejoin="round" className={className}>
+                <line x1="12" y1="5" x2="12" y2="19"></line>
+                <line x1="5" y1="12" x2="19" y2="12"></line>
+            </svg>
+        );
+
+        const Trash2 = ({size = 18, className = ""}) => (
+            <svg width={size} height={size} viewBox="0 0 24 24" fill="none"
+                 stroke="currentColor" strokeWidth="2" strokeLinecap="round"
+                 strokeLinejoin="round" className={className}>
+                <polyline points="3 6 5 6 21 6"></polyline>
+                <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+                <line x1="10" y1="11" x2="10" y2="17"></line>
+                <line x1="14" y1="11" x2="14" y2="17"></line>
+            </svg>
+        );
+
+        const TrendingUp = ({size = 24, className = ""}) => (
+            <svg width={size} height={size} viewBox="0 0 24 24" fill="none"
+                 stroke="currentColor" strokeWidth="2" strokeLinecap="round"
+                 strokeLinejoin="round" className={className}>
+                <polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline>
+                <polyline points="17 6 23 6 23 12"></polyline>
+            </svg>
+        );
+
+        const Calendar = ({size = 24, className = ""}) => (
+            <svg width={size} height={size} viewBox="0 0 24 24" fill="none"
+                 stroke="currentColor" strokeWidth="2" strokeLinecap="round"
+                 strokeLinejoin="round" className={className}>
+                <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                <line x1="16" y1="2" x2="16" y2="6"></line>
+                <line x1="8" y1="2" x2="8" y2="6"></line>
+                <line x1="3" y1="10" x2="21" y2="10"></line>
+            </svg>
+        );
+
+        const TennisImpactCalculator = () => {
+            const [tournaments, setTournaments] = useState([
+                { id: 1, name: 'Polar Bear Jr', date: '2025-03-08', year: 2025, players: 224, overnight: 177, regionalDayTrip: 12, days: 2 },
+                { id: 3, name: 'LR Level 4', date: '2025-04-19', year: 2025, players: 179, overnight: 152, regionalDayTrip: 7, days: 2 },
+                { id: 6, name: 'Southern 16s', date: '2025-06-05', year: 2025, players: 175, overnight: 160, regionalDayTrip: 4, days: 2 },
+                { id: 8, name: 'Summer Jr Classic', date: '2025-07-18', year: 2025, players: 189, overnight: 146, regionalDayTrip: 14, days: 2 },
+                { id: 10, name: 'Razorback Jr', date: '2025-08-08', year: 2025, players: 160, overnight: 113, regionalDayTrip: 9, days: 2 },
+                { id: 11, name: 'Lvl4 Team', date: '2025-10-25', year: 2025, players: 201, overnight: 187, regionalDayTrip: 0, days: 2 }
+            ]);
+
+            const [showDayTrip, setShowDayTrip] = useState(true);
+            const [selectedYear, setSelectedYear] = useState('all');
+
+            const assumptions = {
+                junior: { partySize: 3.0, dailySpending: 300, lodgingPct: 0.40, restaurantPct: 0.25, transportPct: 0.12, retailPct: 0.10, entertainmentPct: 0.08, otherPct: 0.05 },
+                dayTrip: { dailySpending: 100, restaurantPct: 0.55, transportPct: 0.30, retailPct: 0.15 },
+                taxRates: { hotel: 0.13625, restaurant: 0.11, retail: 0.08625, hotelAPTax: 0.04, hotelCityTax: 0.01125, restaurantAPTax: 0.02, restaurantCityTax: 0.015, retailCityTax: 0.01125 },
+                incomeMultiplier: 0.60,
+                captureRate: 0.65
+            };
+
+            const addTournament = () => {
+                const newId = tournaments.length > 0 ? Math.max(...tournaments.map(t => t.id)) + 1 : 1;
+                const currentYear = new Date().getFullYear();
+                setTournaments([...tournaments, { id: newId, name: '', date: '', year: currentYear, players: 0, overnight: 0, regionalDayTrip: 0, days: 2 }]);
+            };
+
+            const removeTournament = (id) => {
+                setTournaments(tournaments.filter(t => t.id !== id));
+            };
+
+            const updateTournament = (id, field, value) => {
+                setTournaments(tournaments.map(t => t.id === id ? { ...t, [field]: value } : t));
+            };
+
+            const calculateImpact = (tournament) => {
+                const config = assumptions.junior;
+                const nonlocalPct = tournament.players > 0 ? (tournament.overnight / tournament.players) : 0;
+                const directSpendingOvernight = tournament.overnight * tournament.days * config.dailySpending;
+
+                const lodgingSpend = directSpendingOvernight * config.lodgingPct;
+                const restaurantSpendOvernight = directSpendingOvernight * config.restaurantPct;
+                const transportSpendOvernight = directSpendingOvernight * config.transportPct;
+                const retailSpendOvernight = directSpendingOvernight * config.retailPct;
+                const entertainmentSpend = directSpendingOvernight * config.entertainmentPct;
+
+                const directSpendingDay = tournament.regionalDayTrip * tournament.days * assumptions.dayTrip.dailySpending;
+                const restaurantSpendDay = directSpendingDay * assumptions.dayTrip.restaurantPct;
+                const transportSpendDay = directSpendingDay * assumptions.dayTrip.transportPct;
+                const retailSpendDay = directSpendingDay * assumptions.dayTrip.retailPct;
+
+                const totalAttendees = (tournament.overnight + tournament.regionalDayTrip) * config.partySize;
+                const totalAttendeesOvernight = tournament.overnight * config.partySize;
+                const totalAttendeesDay = tournament.regionalDayTrip * config.partySize;
+                const directSpending = directSpendingOvernight + directSpendingDay;
+                const restaurantSpend = restaurantSpendOvernight + restaurantSpendDay;
+                const transportSpend = transportSpendOvernight + transportSpendDay;
+                const retailSpend = retailSpendOvernight + retailSpendDay;
+
+                const hotelTax = lodgingSpend * assumptions.taxRates.hotel;
+                const hotelAPTax = lodgingSpend * assumptions.taxRates.hotelAPTax;
+                const hotelCityTax = lodgingSpend * assumptions.taxRates.hotelCityTax;
+
+                const restaurantTax = restaurantSpend * assumptions.taxRates.restaurant;
+                const restaurantAPTax = restaurantSpend * assumptions.taxRates.restaurantAPTax;
+                const restaurantCityTax = restaurantSpend * assumptions.taxRates.restaurantCityTax;
+
+                const retailTax = (retailSpend + entertainmentSpend) * assumptions.taxRates.retail;
+                const retailCityTax = (retailSpend + entertainmentSpend) * assumptions.taxRates.retailCityTax;
+
+                const totalTax = hotelTax + restaurantTax + retailTax;
+                const totalAPTax = hotelAPTax + restaurantAPTax;
+                const totalCityTax = hotelCityTax + restaurantCityTax + retailCityTax;
+
+                const restaurantTaxOvernight = restaurantSpendOvernight * assumptions.taxRates.restaurant;
+                const restaurantAPTaxOvernight = restaurantSpendOvernight * assumptions.taxRates.restaurantAPTax;
+                const restaurantCityTaxOvernight = restaurantSpendOvernight * assumptions.taxRates.restaurantCityTax;
+
+                const retailTaxOvernight = (retailSpendOvernight + entertainmentSpend) * assumptions.taxRates.retail;
+                const retailCityTaxOvernight = (retailSpendOvernight + entertainmentSpend) * assumptions.taxRates.retailCityTax;
+
+                const totalTaxOvernight = hotelTax + restaurantTaxOvernight + retailTaxOvernight;
+                const totalAPTaxOvernight = hotelAPTax + restaurantAPTaxOvernight;
+                const totalCityTaxOvernight = hotelCityTax + restaurantCityTaxOvernight + retailCityTaxOvernight;
+
+                const totalEconomicImpact = directSpending * assumptions.incomeMultiplier * assumptions.captureRate;
+                const totalEconomicImpactOvernight = directSpendingOvernight * assumptions.incomeMultiplier * assumptions.captureRate;
+
+                const roomNights = tournament.overnight * tournament.days;
+
+                return { nonlocalPct, totalAttendees, totalAttendeesOvernight, totalAttendeesDay, directSpending, directSpendingOvernight, directSpendingDay, lodgingSpend, restaurantSpend, transportSpend, retailSpend, hotelTax, restaurantTax, retailTax, totalTax, totalAPTax, totalCityTax, totalTaxOvernight, totalAPTaxOvernight, totalCityTaxOvernight, totalEconomicImpact, totalEconomicImpactOvernight, roomNights };
+            };
+
+            const availableYears = useMemo(() => {
+                const years = [...new Set(tournaments.map(t => t.year))].sort((a, b) => b - a);
+                return years;
+            }, [tournaments]);
+
+            const filteredTournaments = useMemo(() => {
+                if (selectedYear === 'all') return tournaments;
+                return tournaments.filter(t => t.year === parseInt(selectedYear));
+            }, [tournaments, selectedYear]);
+
+            const results = useMemo(() =>
+                filteredTournaments.map(t => ({ ...t, impact: calculateImpact(t) })),
+                [filteredTournaments]
+            );
+
+            const totals = useMemo(() => {
+                return results.reduce((acc, r) => ({
+                    tournaments: acc.tournaments + 1,
+                    players: acc.players + r.players,
+                    overnight: acc.overnight + r.overnight,
+                    regionalDayTrip: acc.regionalDayTrip + r.regionalDayTrip,
+                    attendees: acc.attendees + (showDayTrip ? r.impact.totalAttendees : r.impact.totalAttendeesOvernight),
+                    directSpending: acc.directSpending + (showDayTrip ? r.impact.directSpending : r.impact.directSpendingOvernight),
+                    totalTax: acc.totalTax + (showDayTrip ? r.impact.totalTax : r.impact.totalTaxOvernight),
+                    apTax: acc.apTax + (showDayTrip ? r.impact.totalAPTax : r.impact.totalAPTaxOvernight),
+                    cityTax: acc.cityTax + (showDayTrip ? r.impact.totalCityTax : r.impact.totalCityTaxOvernight),
+                    roomNights: acc.roomNights + r.impact.roomNights
+                }), { tournaments: 0, players: 0, overnight: 0, regionalDayTrip: 0, attendees: 0, directSpending: 0, totalTax: 0, apTax: 0, cityTax: 0, roomNights: 0 });
+            }, [results, showDayTrip]);
+
+            const yearComparison = useMemo(() => {
+                const comparison = {};
+                availableYears.forEach(year => {
+                    const yearTournaments = tournaments.filter(t => t.year === year);
+                    const yearResults = yearTournaments.map(t => ({ ...t, impact: calculateImpact(t) }));
+                    const yearTotal = yearResults.reduce((acc, r) => ({
+                        tournaments: acc.tournaments + 1,
+                        players: acc.players + r.players,
+                        overnight: acc.overnight + r.overnight,
+                        directSpending: acc.directSpending + (showDayTrip ? r.impact.directSpending : r.impact.directSpendingOvernight),
+                        apTax: acc.apTax + (showDayTrip ? r.impact.totalAPTax : r.impact.totalAPTaxOvernight),
+                        cityTax: acc.cityTax + (showDayTrip ? r.impact.totalCityTax : r.impact.totalCityTaxOvernight),
+                        roomNights: acc.roomNights + r.impact.roomNights
+                    }), { tournaments: 0, players: 0, overnight: 0, directSpending: 0, apTax: 0, cityTax: 0, roomNights: 0 });
+                    comparison[year] = yearTotal;
+                });
+                return comparison;
+            }, [tournaments, availableYears, showDayTrip]);
+
+            const fmt = (val) => `$${Math.round(val).toLocaleString()}`;
+            const pct = (val) => `${Math.round(val * 100)}%`;
+
+            return (
+                <div className="min-h-screen bg-gradient-to-br from-green-50 via-blue-50 to-purple-50 p-4 md:p-8">
+                    <div className="max-w-7xl mx-auto bg-white rounded-xl shadow-2xl p-6 md:p-8">
+                        <div className="border-b pb-4 mb-6">
+                            <h1 className="text-3xl font-bold text-gray-800 mb-2">Rebsamen Tennis Center</h1>
+                            <h2 className="text-xl text-gray-600">Junior Tournament Economic Impact Analysis</h2>
+                        </div>
+
+                        <div className="mb-6 flex items-center gap-4 bg-blue-50 p-4 rounded-lg">
+                            <Calendar className="text-blue-600" size={24} />
+                            <label className="font-semibold text-gray-700">View Year:</label>
+                            <select
+                                value={selectedYear}
+                                onChange={(e) => setSelectedYear(e.target.value)}
+                                className="px-4 py-2 border border-blue-300 rounded-lg bg-white font-medium"
+                            >
+                                <option value="all">All Years</option>
+                                {availableYears.map(year => (
+                                    <option key={year} value={year}>{year}</option>
+                                ))}
+                            </select>
+                            <div className="ml-auto">
+                                <label className="flex items-center gap-2 text-sm text-gray-600">
+                                    <input type="checkbox" checked={showDayTrip} onChange={(e) => setShowDayTrip(e.target.checked)} className="w-4 h-4" />
+                                    Include Regional Day-Trip Visitors
+                                </label>
+                            </div>
+                        </div>
+
+                        {/* 2×3 Grid - 2 rows, 3 columns */}
+                        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+                            {/* Row 1 */}
+                            <div className="bg-purple-50 p-4 rounded-lg border-l-4 border-purple-500">
+                                <div className="text-sm text-gray-600 font-semibold">Total Tournaments</div>
+                                <div className="text-3xl font-bold text-gray-800">{totals.tournaments}</div>
+                                <div className="text-xs text-gray-500 mt-1">6 Junior</div>
+                            </div>
+
+                            <div className="bg-yellow-50 p-4 rounded-lg border-l-4 border-yellow-500">
+                                <div className="text-sm text-gray-600 font-semibold">City General Fund Tax</div>
+                                <div className="text-3xl font-bold text-gray-800">{fmt(totals.cityTax)}</div>
+                                <div className="text-xs text-gray-500 mt-1">Little Rock operations</div>
+                            </div>
+
+                            <div className="bg-green-50 p-4 rounded-lg border-l-4 border-green-500">
+                                <div className="text-sm text-gray-600 font-semibold">Direct Spending</div>
+                                <div className="text-3xl font-bold text-gray-800">{fmt(totals.directSpending)}</div>
+                                <div className="text-xs text-gray-500 mt-1">{totals.roomNights.toLocaleString()} room nights</div>
+                            </div>
+
+                            {/* Row 2 */}
+                            <div className="bg-purple-50 p-4 rounded-lg border-l-4 border-purple-500">
+                                <div className="text-sm text-gray-600 font-semibold">Total Competitors</div>
+                                <div className="text-3xl font-bold text-gray-800">{totals.players.toLocaleString()}</div>
+                                <div className="text-xs text-gray-500 mt-1">{totals.overnight} overnight ({pct(totals.players > 0 ? totals.overnight/totals.players : 0)})</div>
+                            </div>
+
+                            <div className="bg-yellow-50 p-4 rounded-lg border-l-4 border-yellow-500">
+                                <div className="text-sm text-gray-600 font-semibold">A&P Commission Tax</div>
+                                <div className="text-3xl font-bold text-gray-800">{fmt(totals.apTax)}</div>
+                                <div className="text-xs text-gray-500 mt-1">Tourism promotion fund</div>
+                            </div>
+
+                            <div className="bg-green-50 p-4 rounded-lg border-l-4 border-green-500">
+                                <div className="text-sm text-gray-600 font-semibold">Economic Impact</div>
+                                <div className="text-3xl font-bold text-gray-800">{fmt(totals.directSpending * assumptions.incomeMultiplier * assumptions.captureRate)}</div>
+                                <div className="text-xs text-gray-500 mt-1">Indirect & induced benefit (0.60 multiplier × 0.65 capture)</div>
+                            </div>
+                        </div>
+
+                        {availableYears.length > 1 && (
+                            <div className="mb-6 border-t pt-6">
+                                <div className="flex items-center gap-2 mb-4">
+                                    <TrendingUp className="text-blue-600" size={24} />
+                                    <h3 className="text-xl font-bold text-gray-800">Year-over-Year Comparison</h3>
+                                </div>
+                                <div className="overflow-x-auto">
+                                    <table className="w-full text-sm">
+                                        <thead className="bg-gray-100 border-b-2 border-gray-300">
+                                            <tr>
+                                                <th className="p-2 text-left">Year</th>
+                                                <th className="p-2 text-right">Tournaments</th>
+                                                <th className="p-2 text-right">Players</th>
+                                                <th className="p-2 text-right">Overnight</th>
+                                                <th className="p-2 text-right">Room Nights</th>
+                                                <th className="p-2 text-right">Direct $</th>
+                                                <th className="p-2 text-right">A&P Tax</th>
+                                                <th className="p-2 text-right">City Tax</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {availableYears.map(year => (
+                                                <tr key={year} className="border-b hover:bg-gray-50">
+                                                    <td className="p-2 font-semibold">{year}</td>
+                                                    <td className="p-2 text-right">{yearComparison[year].tournaments}</td>
+                                                    <td className="p-2 text-right">{yearComparison[year].players}</td>
+                                                    <td className="p-2 text-right">{yearComparison[year].overnight}</td>
+                                                    <td className="p-2 text-right">{yearComparison[year].roomNights.toLocaleString()}</td>
+                                                    <td className="p-2 text-right font-medium">{fmt(yearComparison[year].directSpending)}</td>
+                                                    <td className="p-2 text-right font-medium text-amber-700">{fmt(yearComparison[year].apTax)}</td>
+                                                    <td className="p-2 text-right font-medium text-orange-700">{fmt(yearComparison[year].cityTax)}</td>
+                                                </tr>
+                                            ))}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        )}
+
+                        <div className="border-t pt-6">
+                            <div className="flex justify-between items-center mb-4">
+                                <h2 className="text-xl font-bold text-gray-800">Tournament Data Entry</h2>
+                                <button onClick={addTournament} className="flex items-center gap-2 bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition">
+                                    <Plus size={20} />
+                                    Add Tournament
+                                </button>
+                            </div>
+
+                            <div className="overflow-x-auto">
+                                <table className="w-full text-sm">
+                                    <thead className="bg-gray-100 border-b-2 border-gray-300">
+                                        <tr>
+                                            <th className="p-2 text-left">Tournament Name</th>
+                                            <th className="p-2 text-left">Date</th>
+                                            <th className="p-2 text-right">Year</th>
+                                            <th className="p-2 text-right">Players</th>
+                                            <th className="p-2 text-right">Overnight</th>
+                                            <th className="p-2 text-right">Regional Day</th>
+                                            <th className="p-2 text-right">Days</th>
+                                            <th className="p-2 text-right">Non-Local %</th>
+                                            <th className="p-2 text-right">Direct $</th>
+                                            <th className="p-2 text-right">A&P Tax</th>
+                                            <th className="p-2 text-right">City Tax</th>
+                                            <th className="p-2"></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {tournaments.map(tournament => {
+                                            const impact = calculateImpact(tournament);
+                                            return (
+                                                <tr key={tournament.id} className="border-b hover:bg-gray-50">
+                                                    <td className="p-2"><input type="text" value={tournament.name} onChange={(e) => updateTournament(tournament.id, 'name', e.target.value)} className="w-full px-2 py-1 border rounded" placeholder="Tournament name" /></td>
+                                                    <td className="p-2"><input type="date" value={tournament.date} onChange={(e) => updateTournament(tournament.id, 'date', e.target.value)} className="w-full px-2 py-1 border rounded" /></td>
+                                                    <td className="p-2"><input type="number" value={tournament.year} onChange={(e) => updateTournament(tournament.id, 'year', parseInt(e.target.value) || new Date().getFullYear())} className="w-20 px-2 py-1 border rounded text-right" min="2020" max="2030" /></td>
+                                                    <td className="p-2"><input type="number" value={tournament.players} onChange={(e) => updateTournament(tournament.id, 'players', parseInt(e.target.value) || 0)} className="w-20 px-2 py-1 border rounded text-right" min="0" /></td>
+                                                    <td className="p-2"><input type="number" value={tournament.overnight} onChange={(e) => updateTournament(tournament.id, 'overnight', parseInt(e.target.value) || 0)} className="w-20 px-2 py-1 border rounded text-right" min="0" /></td>
+                                                    <td className="p-2"><input type="number" value={tournament.regionalDayTrip} onChange={(e) => updateTournament(tournament.id, 'regionalDayTrip', parseInt(e.target.value) || 0)} className="w-20 px-2 py-1 border rounded text-right" min="0" title="30+ min drive, multi-day tournaments (Conway, Cabot, etc.)" /></td>
+                                                    <td className="p-2"><input type="number" value={tournament.days} onChange={(e) => updateTournament(tournament.id, 'days', parseFloat(e.target.value) || 1)} className="w-16 px-2 py-1 border rounded text-right" min="1" max="7" step="0.5" /></td>
+                                                    <td className="p-2 text-right font-medium">{pct(impact.nonlocalPct)}</td>
+                                                    <td className="p-2 text-right font-medium">{fmt(showDayTrip ? impact.directSpending : impact.directSpendingOvernight)}</td>
+                                                    <td className="p-2 text-right font-medium text-amber-700">{fmt(showDayTrip ? impact.totalAPTax : impact.totalAPTaxOvernight)}</td>
+                                                    <td className="p-2 text-right font-medium text-orange-700">{fmt(showDayTrip ? impact.totalCityTax : impact.totalCityTaxOvernight)}</td>
+                                                    <td className="p-2"><button onClick={() => removeTournament(tournament.id)} className="text-red-600 hover:text-red-800"><Trash2 size={18} /></button></td>
+                                                </tr>
+                                            );
+                                        })}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                        {/* 50/50 Split: Methodology & Formulas */}
+                        <div className="mt-6 border-t pt-6">
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                {/* LEFT: Methodology */}
+                                <div>
+                                    <h3 className="font-bold text-gray-800 mb-3">Methodology & Assumptions</h3>
+                                    <div className="space-y-2 text-xs text-gray-600">
+                                        <div className="bg-gray-50 p-3 rounded">
+                                            <div className="font-semibold text-gray-800 mb-1">Junior Tournaments</div>
+                                            <div>• Party size: 3.0 people per overnight player</div>
+                                            <div>• Daily spending: $300 per party</div>
+                                            <div>• Based on USTA & academic research</div>
+                                        </div>
+                                        <div className="bg-gray-50 p-3 rounded">
+                                            <div className="font-semibold text-gray-800 mb-1">Regional Day-Trip</div>
+                                            <div>• Party size: 3.0 people</div>
+                                            <div>• Daily spending: $100 per party</div>
+                                            <div>• Arkansas residents 30-60min away</div>
+                                            <div>• Examples: Conway, Cabot, Benton</div>
+                                        </div>
+                                        <div className="bg-gray-50 p-3 rounded">
+                                            <div className="font-semibold text-gray-800 mb-1">Little Rock Tax Rates</div>
+                                            <div>• Hotel/Lodging: 13.625% total</div>
+                                            <div className="ml-3">- 4.0% A&P Commission</div>
+                                            <div className="ml-3">- 1.125% City General Fund</div>
+                                            <div>• Restaurant/Food: 11.0% total</div>
+                                            <div className="ml-3">- 2.0% A&P Commission</div>
+                                            <div className="ml-3">- 1.5% City General Fund</div>
+                                            <div>• Retail/Other: 8.625% total</div>
+                                            <div className="ml-3">- 1.125% City General Fund</div>
+                                        </div>
+                                        <div className="bg-gray-50 p-3 rounded">
+                                            <div className="font-semibold text-gray-800 mb-1">Economic Impact</div>
+                                            <div>• Income multiplier: 0.60</div>
+                                            <div>• Capture rate: 65%</div>
+                                            <div>• Indiana University methodology</div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                {/* RIGHT: Formulas */}
+                                <div>
+                                    <h3 className="font-bold text-gray-800 mb-3">Detailed Calculation Formulas</h3>
+                                    <div className="bg-blue-50 p-4 rounded-lg space-y-3 text-xs text-gray-700 max-h-[600px] overflow-y-auto">
+                                        <div>
+                                            <div className="font-semibold text-gray-800 mb-1">Step 1: Attendees</div>
+                                            <div className="ml-2 space-y-0.5">
+                                                <div>Overnight Attendees = Overnight Players × 3.0</div>
+                                                <div>Day-Trip Attendees = Regional Players × 3.0</div>
+                                                <div>Total = Overnight + Day-Trip</div>
+                                            </div>
+                                        </div>
+
+                                        <div>
+                                            <div className="font-semibold text-gray-800 mb-1">Step 2: Room Nights</div>
+                                            <div className="ml-2">Room Nights = Overnight Players × Days</div>
+                                            <div className="ml-2 text-gray-600 italic text-xs">Note: Days can be 1.5, 2.5, etc.</div>
+                                        </div>
+
+                                        <div>
+                                            <div className="font-semibold text-gray-800 mb-1">Step 3: Direct Spending</div>
+                                            <div className="ml-2 space-y-0.5">
+                                                <div>Overnight = Overnight × Days × $300</div>
+                                                <div>Day-Trip = Regional × Days × $100</div>
+                                                <div>Total = Overnight + Day-Trip</div>
+                                            </div>
+                                        </div>
+
+                                        <div>
+                                            <div className="font-semibold text-gray-800 mb-1">Step 4: Spending Categories (Overnight)</div>
+                                            <div className="ml-2 space-y-0.5">
+                                                <div>Lodging = Overnight Spending × 40%</div>
+                                                <div>Restaurant = Overnight Spending × 25%</div>
+                                                <div>Transport = Overnight Spending × 12%</div>
+                                                <div>Retail = Overnight Spending × 10%</div>
+                                                <div>Entertainment = Overnight Spending × 8%</div>
+                                            </div>
+                                        </div>
+
+                                        <div>
+                                            <div className="font-semibold text-gray-800 mb-1">Step 5: Spending Categories (Day-Trip)</div>
+                                            <div className="ml-2 space-y-0.5">
+                                                <div>Restaurant = Day-Trip Spending × 55%</div>
+                                                <div>Transport = Day-Trip Spending × 30%</div>
+                                                <div>Retail = Day-Trip Spending × 15%</div>
+                                            </div>
+                                        </div>
+
+                                        <div>
+                                            <div className="font-semibold text-gray-800 mb-1">Step 6: Total Categories</div>
+                                            <div className="ml-2 space-y-0.5">
+                                                <div>Total Restaurant = Overnight Rest. + Day-Trip Rest.</div>
+                                                <div>Total Transport = Overnight Trans. + Day-Trip Trans.</div>
+                                                <div>Total Retail = Overnight Retail + Day-Trip Retail</div>
+                                            </div>
+                                        </div>
+
+                                        <div>
+                                            <div className="font-semibold text-gray-800 mb-1">Step 7: Hotel Tax</div>
+                                            <div className="ml-2 space-y-0.5">
+                                                <div>Total Hotel Tax = Lodging × 13.625%</div>
+                                                <div className="ml-2">A&P = Lodging × 4.0%</div>
+                                                <div className="ml-2">City = Lodging × 1.125%</div>
+                                            </div>
+                                        </div>
+
+                                        <div>
+                                            <div className="font-semibold text-gray-800 mb-1">Step 8: Restaurant Tax</div>
+                                            <div className="ml-2 space-y-0.5">
+                                                <div>Total Restaurant Tax = Total Restaurant × 11.0%</div>
+                                                <div className="ml-2">A&P = Total Restaurant × 2.0%</div>
+                                                <div className="ml-2">City = Total Restaurant × 1.5%</div>
+                                            </div>
+                                        </div>
+
+                                        <div>
+                                            <div className="font-semibold text-gray-800 mb-1">Step 9: Retail Tax</div>
+                                            <div className="ml-2 space-y-0.5">
+                                                <div>Total Retail Tax = (Retail + Entertainment) × 8.625%</div>
+                                                <div className="ml-2">City = (Retail + Entertainment) × 1.125%</div>
+                                                <div className="text-gray-600 italic">No A&P tax on retail</div>
+                                            </div>
+                                        </div>
+
+                                        <div>
+                                            <div className="font-semibold text-gray-800 mb-1">Step 10: Sum All Taxes</div>
+                                            <div className="ml-2 space-y-0.5">
+                                                <div>Total Tax = Hotel + Restaurant + Retail</div>
+                                                <div>Total A&P = A&P Hotel + A&P Restaurant</div>
+                                                <div>Total City = City Hotel + City Restaurant + City Retail</div>
+                                            </div>
+                                        </div>
+
+                                        <div>
+                                            <div className="font-semibold text-gray-800 mb-1">Step 11: Economic Impact</div>
+                                            <div className="ml-2">Economic Impact = Direct Spending × 0.60 × 0.65</div>
+                                            <div className="ml-2 text-gray-600 italic">Indirect & induced benefits</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            );
+        };
+
+        ReactDOM.render(<TennisImpactCalculator />, document.getElementById('root'));
+    </script>
+
+    <footer class="bg-gray-800 text-gray-300 py-6 px-4 mt-auto">
+        <div class="max-w-4xl mx-auto text-center text-sm">
+            <p class="font-medium">Little Rock Parks & Recreation Commission</p>
+            <p class="mt-1 text-gray-400">City of Little Rock, Arkansas</p>
+            <p class="mt-1 text-gray-400"><a href="about.html" class="hover:text-white transition-colors">Independently maintained as a public resource</a></p>
+        </div>
+    </footer>
+</body>
+</html>
