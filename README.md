@@ -32,16 +32,17 @@ Effective oversight requires access to performance data, trend analysis, and the
 
 ```
 parks-dashboard/
-├── index.html                    # Landing page [✓]
-├── dashboard.html                # Main dashboard [in progress]
-├── reports.html                  # Division report browser [✓]
-├── meetings.html                 # Meeting archive [✓]
-├── reports.json                  # Report metadata [✓]
-├── meetings.json                 # Meeting metadata [✓]
-├── pdfs/                         # Division reports [✓]
+├── index.html                            # Landing page [✓]
+├── reports.html                          # Division report browser [✓]
+├── meetings.html                         # Meeting archive [✓]
+├── dashboard.html                        # Main dashboard [in progress]
+├── PR-strategic-kpi-tracker.html.html    # KPIs from Strategic Plan 2025-2030 [in progress]
+├── reports.json                          # Report metadata [✓]
+├── meetings.json                         # Meeting metadata [✓]
+├── pdfs/                                 # Division reports [✓]
 │   └── YYYYMM-division.pdf
-└── transcripts/                  # YouTube auto-transcripts [✓]
-    └── YYYYMM_Title.txt          # (not 100% accurate)
+└── transcripts/                          # YouTube auto-transcripts [✓]
+    └── YYYYMM_Title.txt                  # (not 100% accurate)
 ```
 
 ## Data Sources
@@ -51,6 +52,7 @@ parks-dashboard/
 - **Current Data** (gid=1349162393): Monthly metrics
 - **Historical Data** (gid=1744427153): Time-series trends  
 - **Benchmarks** (gid=2039065708): Peer comparisons
+- **Parks & Recreation KPIs from 2025-2030 Strategic Plan** (gid=597349438): KPI Trends with 2024 Baseline
 
 [View Sheets](https://docs.google.com/spreadsheets/d/1B7PqWIRj1YUJq7rDKqqsLnrEmJMZR3e4NXD8B9pURmM/)
 
@@ -137,6 +139,7 @@ Per [LRC §2-330](https://library.municode.com/ar/little_rock/codes/code_of_ordi
 - **Meeting Videos**: [YouTube Playlist](https://www.youtube.com/playlist?list=PLSXmGY5EaMipmi0a0kqiGcFUsKuj-A9J3)
 - **NRPA Benchmarks**: https://www.nrpa.org/publications-research/ParkMetrics/
 - **City P&R Dept**: https://www.littlerock.gov/departments/parks-recreation/
+- **Parks & Recreation 2025-2030 Strategic Plan**: [View Report](https://www.littlerock.gov/media/24449/strategic-plan-final-2025-2030-21825.pdf)
 
 ---
 
