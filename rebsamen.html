@@ -18,22 +18,7 @@
 </head>
 <body>
     <!-- Navigation Header -->
-    <nav class="bg-green-700 text-white no-print">
-        <div class="max-w-6xl mx-auto px-4 py-3">
-            <div class="flex flex-wrap items-center justify-between gap-2">
-                <a href="index.html" class="font-semibold hover:text-green-200 transition">LR Parks Commission</a>
-                <div class="flex gap-1 text-sm">
-                    <a href="reports.html" class="px-2 sm:px-3 py-1.5 rounded hover:bg-green-600 transition">Reports</a>
-                    <a href="meetings.html" class="px-2 sm:px-3 py-1.5 rounded hover:bg-green-600 transition">Meetings</a>
-                    <a href="dashboard.html" class="px-2 sm:px-3 py-1.5 rounded hover:bg-green-600 transition">Dashboard</a>
-                    <a href="PR-strategic-kpi-tracker.html" class="px-2 sm:px-3 py-1.5 rounded hover:bg-green-600 transition">
-                        <span class="sm:hidden">KPIs</span>
-                        <span class="hidden sm:inline">P&R KPI Tracker</span>
-                    </a>
-                </div>
-            </div>
-        </div>
-    </nav>
+    <div id="site-header"></div>
 
     <div id="root"></div>
 
@@ -707,12 +692,15 @@
         ReactDOM.render(<TennisImpactCalculator />, document.getElementById('root'));
     </script>
 
-    <footer class="bg-gray-800 text-gray-300 py-6 px-4 mt-auto">
-        <div class="max-w-4xl mx-auto text-center text-sm">
-            <p class="font-medium">Little Rock Parks & Recreation Commission</p>
-            <p class="mt-1 text-gray-400">City of Little Rock, Arkansas</p>
-            <p class="mt-1 text-gray-400"><a href="about.html" class="hover:text-white transition-colors">Independently maintained as a public resource</a></p>
-        </div>
-    </footer>
+    <!-- Footer -->
+    <div id="site-footer"></div>
+
+    <!-- Component Loader -->
+    <script src="js/components.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            loadSiteComponents({ basePath: 'components' });
+        });
+    </script>
 </body>
 </html>

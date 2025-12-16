@@ -80,22 +80,15 @@
 </head>
 <body class="min-h-screen bg-gray-100">
     <!-- Navigation Header -->
-    <nav class="bg-green-700 text-white no-print">
-        <div class="max-w-7xl mx-auto px-4 py-3">
-            <div class="flex flex-wrap items-center justify-between gap-2">
-                <a href="index.html" class="font-semibold hover:text-green-200 transition">LR Parks Commission</a>
-                <div class="flex gap-1 text-sm">
-                    <a href="reports.html" class="px-2 sm:px-3 py-1.5 rounded hover:bg-green-600 transition">Reports</a>
-                    <a href="meetings.html" class="px-2 sm:px-3 py-1.5 rounded hover:bg-green-600 transition">Meetings</a>
-                    <a href="dashboard.html" class="px-2 sm:px-3 py-1.5 rounded hover:bg-green-600 transition">Dashboard</a>
-                    <a href="PR-strategic-kpi-tracker.html" class="px-2 sm:px-3 py-1.5 rounded bg-green-600">
-                        <span class="sm:hidden">KPIs</span>
-                        <span class="hidden sm:inline">P&R KPI Tracker</span>
-                    </a>
-                </div>
-            </div>
-        </div>
-    </nav>
+    <div id="site-header"></div>
+
+    <!-- Component Loader (header only - page has unique footer) -->
+    <script src="js/components.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            loadSiteComponents({ basePath: 'components', footer: false });
+        });
+    </script>
 
     <!-- Header -->
     <header class="bg-white shadow-sm no-print">
