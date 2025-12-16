@@ -32,17 +32,35 @@ Effective oversight requires access to performance data, trend analysis, and the
 
 ```
 parks-dashboard/
-├── index.html                            # Landing page [✓]
-├── reports.html                          # Division report browser [✓]
-├── meetings.html                         # Meeting archive [✓]
-├── dashboard.html                        # Main dashboard [in progress]
-├── PR-strategic-kpi-tracker.html.html    # KPIs from Strategic Plan 2025-2030 [in progress]
-├── reports.json                          # Report metadata [✓]
-├── meetings.json                         # Meeting metadata [✓]
-├── pdfs/                                 # Division reports [✓]
+├── index.html                    # Landing page
+├── about.html                    # About this dashboard
+├── reports.html                  # Division report browser
+├── meetings.html                 # Meeting archive
+├── dashboard.html                # Main dashboard (React)
+├── rebsamen.html                 # Tennis economic calculator (React, unlisted)
+├── PR-strategic-kpi-tracker.html # KPIs from Strategic Plan 2025-2030
+│
+├── components/                   # Shared HTML components
+│   ├── header.html               # Site navigation
+│   └── footer.html               # Site footer
+│
+├── js/                           # Shared JavaScript
+│   ├── common.js                 # Utilities (CSV parsing, date formatting)
+│   ├── components.js             # Component loader
+│   └── modal.js                  # Reusable modal system
+│
+├── styles.css                    # Compiled Tailwind CSS
+├── tailwind.config.js            # Tailwind configuration
+├── src/input.css                 # Tailwind source
+│
+├── reports.json                  # Report metadata
+├── meetings.json                 # Meeting metadata
+├── robots.txt                    # Search engine blocking
+│
+├── pdfs/                         # Division reports
 │   └── YYYYMM-division.pdf
-└── transcripts/                          # YouTube auto-transcripts [✓]
-    └── YYYYMM_Title.txt                  # (not 100% accurate)
+└── transcripts/                  # YouTube auto-transcripts
+    └── YYYYMM_Title.txt
 ```
 
 ## Data Sources
@@ -91,14 +109,12 @@ Per [LRC §2-330](https://library.municode.com/ar/little_rock/codes/code_of_ordi
 - Google Sheets integration with live data feeds
 - Report browser with PDF viewer (month/division navigation)
 - Meeting archive with videos and transcripts
+- KPI Tracker (Strategic Plan 2025-2030)
+- Shared component system (header/footer)
 - GitHub Pages deployment
 
-### 🚧 In Progress
-- Automated PDF data extraction
-
 ### 📋 Planned
-- Historical trend visualizations
-- Mobile-responsive improvements
+- Historical trend visualizations (charts/graphs)
 - Cross-report search functionality
 
 ## Monthly Data Workflow
@@ -126,11 +142,24 @@ Per [LRC §2-330](https://library.municode.com/ar/little_rock/codes/code_of_ordi
 
 ## Technical Stack
 
-- **Frontend**: React 18, Tailwind CSS
+- **Frontend**: Vanilla JS (most pages), React 18 (dashboard, rebsamen)
+- **Styling**: Tailwind CSS (compiled)
 - **Data**: Google Sheets published CSV endpoints
-- **Hosting**: GitHub Pages
-- **PDF Rendering**: pdf.js
+- **Hosting**: GitHub Pages (static)
+- **PDF Rendering**: Browser native / iframe
 - **Video**: YouTube embeds
+- **Search Indexing**: Blocked via robots.txt
+
+## Local Development
+
+```bash
+# Start local server
+python3 -m http.server 8000
+# View at http://localhost:8000
+
+# Rebuild Tailwind CSS (after adding new Tailwind classes)
+npx tailwindcss -i ./src/input.css -o ./styles.css
+```
 
 ## Resources
 
