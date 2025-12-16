@@ -1,17 +1,29 @@
 # Parks Dashboard Refactoring Plan
 **Target Environment:** GitHub Pages (Static Hosting)
 **Goals:** Simple maintenance, mobile-friendly, no hosting costs
-**Strategy:** Vanilla JS component loading (no build step required)
+**Strategy:** Vanilla JS component loading with Tailwind CSS build step
 
 ---
 
 ## 🎯 Core Principles
 
 1. **No server-side processing** - GitHub Pages is static only
-2. **No build tools required** - Keep deployment simple (just git push)
+2. **Minimal build tooling** - Only Tailwind CSS compilation required (see Build Setup below)
 3. **Client-side component loading** - Use JavaScript to load shared HTML
-4. **Mobile-first** - Continue using Tailwind CSS
+4. **Mobile-first** - Continue using compiled Tailwind CSS
 5. **Progressive enhancement** - Pages work even if JS fails
+
+### Build Setup (Current)
+The project now uses compiled Tailwind CSS instead of CDN:
+- **Config:** `tailwind.config.js` - defines which files to scan for classes
+- **Input:** `src/input.css` - Tailwind directives
+- **Output:** `styles.css` - compiled CSS (committed to repo)
+- **Build command:** `npx tailwindcss -i ./src/input.css -o ./styles.css`
+
+⚠️ **Important:** When adding `/components/` directory, update `tailwind.config.js`:
+```javascript
+content: ["./*.html", "./components/**/*.html", "./js/**/*.js"]
+```
 
 ---
 
@@ -19,12 +31,13 @@
 
 ```
 parks-dashboard/
-├── index.html
-├── about.html
-├── meetings.html
-├── reports.html
-├── dashboard.html
-├── PR-strategic-kpi-tracker.html
+├── index.html                    # Homepage
+├── about.html                    # About page
+├── meetings.html                 # Commission meetings
+├── reports.html                  # Reports archive
+├── dashboard.html                # Data dashboard (currently uses React)
+├── rebsamen.html                 # Rebsamen Golf Course / USTA comparison
+├── PR-strategic-kpi-tracker.html # KPI tracking page
 │
 ├── components/           # NEW - Shared HTML components
 │   ├── header.html      # Common site header/nav
@@ -35,14 +48,28 @@ parks-dashboard/
 │   ├── components.js    # Component loader
 │   └── modal.js         # Reusable modal functionality
 │
-├── css/                 # OPTIONAL - Custom styles if needed
-│   └── custom.css       # Any non-Tailwind styles
+├── src/                 # Tailwind source
+│   └── input.css        # Tailwind directives
+│
+├── styles.css           # Compiled Tailwind CSS (generated)
+├── tailwind.config.js   # Tailwind configuration
 │
 └── data/                # Existing data files
     ├── meetings.csv
     ├── reports.csv
     └── ...
 ```
+
+### All Pages (7 total)
+| Page | Description | Special Considerations |
+|------|-------------|----------------------|
+| `index.html` | Homepage | Uses `<header>` instead of `<nav>` |
+| `about.html` | About/info page | Mixed header styling |
+| `meetings.html` | Commission meetings list | CSV data loading, modal viewer |
+| `reports.html` | Reports archive | CSV data loading, modal viewer |
+| `dashboard.html` | Data visualizations | **Uses React** (Phase 4 decision) |
+| `rebsamen.html` | Golf/USTA comparison | Comparison tables |
+| `PR-strategic-kpi-tracker.html` | KPI metrics | Inline styles (Phase 3 cleanup) |
 
 ---
 
@@ -161,6 +188,11 @@ document.addEventListener('DOMContentLoaded', () => {
                    data-page="dashboard">
                     Dashboard
                 </a>
+                <a href="/rebsamen.html"
+                   class="px-2 sm:px-3 py-1.5 rounded hover:bg-green-600 transition"
+                   data-page="rebsamen">
+                    Rebsamen
+                </a>
                 <a href="/PR-strategic-kpi-tracker.html"
                    class="px-2 sm:px-3 py-1.5 rounded hover:bg-green-600 transition"
                    data-page="kpi">
@@ -171,6 +203,8 @@ document.addEventListener('DOMContentLoaded', () => {
     </div>
 </nav>
 ```
+
+**Note:** With 6 nav items, consider testing on mobile to ensure navigation doesn't overflow. May need a hamburger menu if too crowded.
 
 **Active Page Highlighting:**
 Add to `/js/components.js`:
@@ -193,7 +227,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 ```
 
 #### Step 2.3: Update Each HTML Page
-**For:** `meetings.html`, `reports.html`, `dashboard.html`, `PR-strategic-kpi-tracker.html`
+**For:** `meetings.html`, `reports.html`, `dashboard.html`, `rebsamen.html`, `PR-strategic-kpi-tracker.html`
 
 **Changes:**
 1. Replace `<nav>...</nav>` with `<div id="site-header"></div>`
@@ -213,6 +247,13 @@ document.addEventListener('DOMContentLoaded', async () => {
 - `index.html` - Uses `<header>` instead of `<nav>`, may want different treatment
 - `about.html` - Has mixed header, needs custom approach
 
+#### Step 2.4: Rebuild Tailwind CSS
+After creating components, update config and rebuild:
+```bash
+# Update tailwind.config.js content array first, then:
+npx tailwindcss -i ./src/input.css -o ./styles.css
+```
+
 ---
 
 ### **PHASE 3: Standardization (Low Risk)**
@@ -230,6 +271,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 **Files to Update:**
 - `index.html` - Change from `max-w-4xl` to `max-w-6xl`
 - `about.html` - Change from `max-w-4xl` to `max-w-6xl`
+- `rebsamen.html` - Verify container width consistency
 - `PR-strategic-kpi-tracker.html` - Change from `max-w-7xl` to `max-w-6xl`
 
 #### Step 3.2: Consolidate Loading/Error States
@@ -363,11 +405,19 @@ All refactoring maintains current mobile design:
 # Create test branch
 git checkout -b refactor/phase-1-utilities
 
-# Make changes, test locally
-# Use Python simple server or similar
+# Make changes
+
+# Rebuild Tailwind CSS (required after HTML/JS changes that use new classes)
+npx tailwindcss -i ./src/input.css -o ./styles.css
+
+# Test locally with Python simple server
 python3 -m http.server 8000
 
 # Test in browser at localhost:8000
+
+# Commit changes (including updated styles.css)
+git add .
+git commit -m "Phase X: description"
 
 # Deploy to GitHub Pages test branch
 git push origin refactor/phase-1-utilities
@@ -429,15 +479,15 @@ git push origin refactor/phase-1-utilities
 
 | Category | Before | After | Reduction |
 |----------|--------|-------|-----------|
-| Footer HTML | ~50 lines × 5 files = 250 lines | 1 × 10 lines = 10 lines | **96% reduction** |
-| Nav HTML | ~20 lines × 4 files = 80 lines | 1 × 25 lines = 25 lines | **69% reduction** |
+| Footer HTML | ~50 lines × 7 files = 350 lines | 1 × 10 lines = 10 lines | **97% reduction** |
+| Nav HTML | ~20 lines × 5 files = 100 lines | 1 × 30 lines = 30 lines | **70% reduction** |
 | Modal HTML/JS | ~40 lines × 2 files = 80 lines | 1 × 30 lines = 30 lines | **63% reduction** |
 | Utilities (formatPeriod, etc) | ~30 lines × 2 files = 60 lines | 1 × 15 lines = 15 lines | **75% reduction** |
-| **TOTAL** | **~470 lines** | **~80 lines** | **83% reduction** |
+| **TOTAL** | **~590 lines** | **~85 lines** | **86% reduction** |
 
 **Maintenance Impact:**
-- Change footer → Edit 1 file instead of 5
-- Update navigation → Edit 1 file instead of 4
+- Change footer → Edit 1 file instead of 7
+- Update navigation → Edit 1 file instead of 5
 - Fix modal bug → Fix 1 file instead of 2
 - Add utility function → Add to 1 file, available everywhere
 
@@ -553,14 +603,21 @@ Ready to begin? Here's your first task:
 git checkout -b refactor/phase-1-foundation
 
 # 2. Create directory structure
-mkdir -p js components css
+mkdir -p js components
 
-# 3. Create first file: js/common.js
+# 3. Update tailwind.config.js to include new directories
+# Change content to: ["./*.html", "./components/**/*.html", "./js/**/*.js"]
+
+# 4. Create first file: js/common.js
 # (Extract formatPeriod and parseCSV functions)
 
-# 4. Test locally
+# 5. Test locally
+python3 -m http.server 8000
 
-# 5. Commit and push
+# 6. Rebuild Tailwind (if any new classes were used)
+npx tailwindcss -i ./src/input.css -o ./styles.css
+
+# 7. Commit and push
 git add .
 git commit -m "Phase 1: Add shared JavaScript utilities"
 git push origin refactor/phase-1-foundation
