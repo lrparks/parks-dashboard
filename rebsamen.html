@@ -78,6 +78,8 @@
 
             const [showDayTrip, setShowDayTrip] = useState(true);
             const [selectedYear, setSelectedYear] = useState('all');
+            const [selectedLevel, setSelectedLevel] = useState('all');
+            const [selectedTournament, setSelectedTournament] = useState('all');
 
             const assumptions = {
                 junior: { partySize: 3.0, dailySpending: 300, lodgingPct: 0.40, restaurantPct: 0.25, transportPct: 0.12, retailPct: 0.10, entertainmentPct: 0.08, otherPct: 0.05 },
@@ -168,10 +170,24 @@
                 return years;
             }, [tournaments]);
 
+            const availableLevels = useMemo(() => {
+                const levels = [...new Set(tournaments.map(t => t.level).filter(l => l !== ''))].sort((a, b) => b - a);
+                return levels;
+            }, [tournaments]);
+
+            const availableTournamentNames = useMemo(() => {
+                const names = [...new Set(tournaments.map(t => t.name).filter(n => n !== ''))].sort();
+                return names;
+            }, [tournaments]);
+
             const filteredTournaments = useMemo(() => {
-                if (selectedYear === 'all') return tournaments;
-                return tournaments.filter(t => t.year === parseInt(selectedYear));
-            }, [tournaments, selectedYear]);
+                return tournaments.filter(t => {
+                    if (selectedYear !== 'all' && t.year !== parseInt(selectedYear)) return false;
+                    if (selectedLevel !== 'all' && t.level !== parseInt(selectedLevel)) return false;
+                    if (selectedTournament !== 'all' && t.name !== selectedTournament) return false;
+                    return true;
+                });
+            }, [tournaments, selectedYear, selectedLevel, selectedTournament]);
 
             const results = useMemo(() =>
                 filteredTournaments.map(t => ({ ...t, impact: calculateImpact(t) })),
@@ -225,17 +241,39 @@
                             <h2 className="text-xl text-gray-600">Junior Tournament Economic Impact Analysis</h2>
                         </div>
 
-                        <div className="mb-6 flex items-center gap-4 bg-blue-50 p-4 rounded-lg">
+                        <div className="mb-6 flex flex-wrap items-center gap-4 bg-blue-50 p-4 rounded-lg">
                             <Calendar className="text-blue-600" size={24} />
                             <label className="font-semibold text-gray-700">View Year:</label>
                             <select
                                 value={selectedYear}
                                 onChange={(e) => setSelectedYear(e.target.value)}
-                                className="px-4 py-2 border border-blue-300 rounded-lg bg-white font-medium"
+                                className="px-3 py-2 border border-blue-300 rounded-lg bg-white font-medium"
                             >
                                 <option value="all">All Years</option>
                                 {availableYears.map(year => (
                                     <option key={year} value={year}>{year}</option>
+                                ))}
+                            </select>
+                            <label className="font-semibold text-gray-700">Level:</label>
+                            <select
+                                value={selectedLevel}
+                                onChange={(e) => setSelectedLevel(e.target.value)}
+                                className="px-3 py-2 border border-blue-300 rounded-lg bg-white font-medium"
+                            >
+                                <option value="all">All Levels</option>
+                                {availableLevels.map(level => (
+                                    <option key={level} value={level}>{level}</option>
+                                ))}
+                            </select>
+                            <label className="font-semibold text-gray-700">Tournament:</label>
+                            <select
+                                value={selectedTournament}
+                                onChange={(e) => setSelectedTournament(e.target.value)}
+                                className="px-3 py-2 border border-blue-300 rounded-lg bg-white font-medium"
+                            >
+                                <option value="all">All Tournaments</option>
+                                {availableTournamentNames.map(name => (
+                                    <option key={name} value={name}>{name}</option>
                                 ))}
                             </select>
                             <div className="ml-auto">
