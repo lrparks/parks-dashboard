@@ -69,26 +69,26 @@
         const TennisImpactCalculator = () => {
             const [tournaments, setTournaments] = useState([
                 // 2025 Tournaments
-                { id: 1, name: 'Polar Bear', year: 2025, level: 5, players: 224, male: 0, female: 0, inState: 84, regionalDayTrip: 12, overnight: 177, days: 2 },
-                { id: 2, name: 'LR Open', year: 2025, level: 4, players: 179, male: 0, female: 0, inState: 39, regionalDayTrip: 7, overnight: 152, days: 2 },
-                { id: 3, name: 'Southern 16s', year: 2025, level: 3, players: 175, male: 0, female: 0, inState: 24, regionalDayTrip: 4, overnight: 160, days: 2 },
-                { id: 4, name: 'LR Summer', year: 2025, level: 5, players: 189, male: 0, female: 0, inState: 76, regionalDayTrip: 14, overnight: 146, days: 2 },
-                { id: 5, name: 'Razorback', year: 2025, level: 5, players: 160, male: 0, female: 0, inState: 77, regionalDayTrip: 9, overnight: 113, days: 2 },
-                { id: 6, name: 'Team', year: 2025, level: 4, players: 201, male: 0, female: 0, inState: 0, regionalDayTrip: 0, overnight: 187, days: 2 },
+                { id: 1, name: 'Polar Bear', year: 2025, level: 5, players: 224, male: 0, female: 0, inState: 84, regionalDayTrip: 12, overnight: 177, days: 3 },
+                { id: 2, name: 'LR Level 4', year: 2025, level: 4, players: 179, male: 0, female: 0, inState: 39, regionalDayTrip: 7, overnight: 152, days: 3 },
+                { id: 3, name: 'Southern 16s', year: 2025, level: 3, players: 175, male: 0, female: 0, inState: 24, regionalDayTrip: 4, overnight: 160, days: 3 },
+                { id: 4, name: 'LR Summer', year: 2025, level: 5, players: 189, male: 0, female: 0, inState: 76, regionalDayTrip: 14, overnight: 146, days: 3 },
+                { id: 5, name: 'Razorback', year: 2025, level: 5, players: 160, male: 0, female: 0, inState: 77, regionalDayTrip: 9, overnight: 113, days: 3 },
+                { id: 6, name: 'Team', year: 2025, level: 4, players: 96, male: 0, female: 0, inState: 0, regionalDayTrip: 0, overnight: 187, days: 3 },
                 // 2023 Tournaments
-                { id: 7, name: 'Southern 16s', year: 2023, level: 3, players: 198, male: 115, female: 83, inState: 29, regionalDayTrip: 3, overnight: 183, days: 2 },
-                { id: 8, name: 'LR Open', year: 2023, level: 4, players: 206, male: 105, female: 101, inState: 40, regionalDayTrip: 3, overnight: 185, days: 2 },
-                { id: 9, name: 'Team', year: 2023, level: 4, players: 102, male: 52, female: 50, inState: 10, regionalDayTrip: 0, overnight: 97, days: 2 },
-                { id: 10, name: 'LR Summer', year: 2023, level: 5, players: 111, male: 76, female: 35, inState: 55, regionalDayTrip: 9, overnight: 72, days: 2 },
-                { id: 11, name: 'Polar Bear', year: 2023, level: 5, players: 235, male: 115, female: 120, inState: 101, regionalDayTrip: 10, overnight: 186, days: 2 },
-                { id: 12, name: 'Razorback', year: 2023, level: 5, players: 144, male: 88, female: 56, inState: 89, regionalDayTrip: 10, overnight: 91, days: 2 },
+                { id: 7, name: 'Southern 16s', year: 2023, level: 3, players: 198, male: 115, female: 83, inState: 29, regionalDayTrip: 3, overnight: 183, days: 3 },
+                { id: 8, name: 'LR Level 4', year: 2023, level: 4, players: 206, male: 105, female: 101, inState: 40, regionalDayTrip: 3, overnight: 185, days: 3 },
+                { id: 9, name: 'Team', year: 2023, level: 4, players: 102, male: 52, female: 50, inState: 10, regionalDayTrip: 0, overnight: 97, days: 3 },
+                { id: 10, name: 'LR Summer', year: 2023, level: 5, players: 111, male: 76, female: 35, inState: 55, regionalDayTrip: 9, overnight: 72, days: 3 },
+                { id: 11, name: 'Polar Bear', year: 2023, level: 5, players: 235, male: 115, female: 120, inState: 101, regionalDayTrip: 10, overnight: 186, days: 3 },
+                { id: 12, name: 'Razorback', year: 2023, level: 5, players: 144, male: 88, female: 56, inState: 89, regionalDayTrip: 10, overnight: 91, days: 3 },
                 // 2024 Tournaments
-                { id: 13, name: 'Southern 16s', year: 2024, level: 3, players: 200, male: 119, female: 81, inState: 31, regionalDayTrip: 4, overnight: 186, days: 2 },
-                { id: 14, name: 'LR Open', year: 2024, level: 4, players: 167, male: 109, female: 58, inState: 29, regionalDayTrip: 3, overnight: 148, days: 2 },
-                { id: 15, name: 'Team', year: 2024, level: 4, players: 97, male: 49, female: 48, inState: 6, regionalDayTrip: 1, overnight: 91, days: 2 },
-                { id: 16, name: 'LR Summer', year: 2024, level: 5, players: 130, male: 87, female: 43, inState: 53, regionalDayTrip: 11, overnight: 96, days: 2 },
-                { id: 17, name: 'Polar Bear', year: 2024, level: 5, players: 237, male: 131, female: 106, inState: 71, regionalDayTrip: 9, overnight: 198, days: 2 },
-                { id: 18, name: 'Razorback', year: 2024, level: 5, players: 131, male: 88, female: 43, inState: 64, regionalDayTrip: 5, overnight: 99, days: 2 }  
+                { id: 13, name: 'Southern 16s', year: 2024, level: 3, players: 200, male: 119, female: 81, inState: 31, regionalDayTrip: 4, overnight: 186, days: 3 },
+                { id: 14, name: 'LR Level 4', year: 2024, level: 4, players: 167, male: 109, female: 58, inState: 29, regionalDayTrip: 3, overnight: 148, days: 3 },
+                { id: 15, name: 'Team', year: 2024, level: 4, players: 97, male: 49, female: 48, inState: 6, regionalDayTrip: 1, overnight: 91, days: 3 },
+                { id: 16, name: 'LR Summer', year: 2024, level: 5, players: 130, male: 87, female: 43, inState: 53, regionalDayTrip: 11, overnight: 96, days: 3 },
+                { id: 17, name: 'Polar Bear', year: 2024, level: 5, players: 237, male: 131, female: 106, inState: 71, regionalDayTrip: 9, overnight: 198, days: 3 },
+                { id: 18, name: 'Razorback', year: 2024, level: 5, players: 131, male: 88, female: 43, inState: 64, regionalDayTrip: 5, overnight: 99, days: 3 }  
             ]);
 
             const [showDayTrip, setShowDayTrip] = useState(true);
@@ -774,6 +774,7 @@
     </script>
 </body>
 </html>
+
 
 
 
