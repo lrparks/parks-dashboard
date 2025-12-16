@@ -1,0 +1,20 @@
+{
+  "name": "parks-dashboard",
+  "version": "1.0.0",
+  "description": "**An independent analytical tool that supports commission oversight and advisory roles**",
+  "main": "tailwind.config.js",
+  "scripts": {
+    "build": "tailwindcss -i ./src/input.css -o ./styles.css --minify",
+    "watch": "tailwindcss -i ./src/input.css -o ./styles.css --watch"
+  },
+  "repository": {
+    "type": "git",
+    "url": "http://local_proxy@127.0.0.1:49445/git/lrparks/parks-dashboard"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "tailwindcss": "^3.4.19"
+  }
+}
