@@ -68,12 +68,12 @@
 
         const TennisImpactCalculator = () => {
             const [tournaments, setTournaments] = useState([
-                { id: 1, name: 'Polar Bear Jr', date: '2025-03-08', year: 2025, players: 224, overnight: 177, regionalDayTrip: 12, days: 2 },
-                { id: 3, name: 'LR Level 4', date: '2025-04-19', year: 2025, players: 179, overnight: 152, regionalDayTrip: 7, days: 2 },
-                { id: 6, name: 'Southern 16s', date: '2025-06-05', year: 2025, players: 175, overnight: 160, regionalDayTrip: 4, days: 2 },
-                { id: 8, name: 'Summer Jr Classic', date: '2025-07-18', year: 2025, players: 189, overnight: 146, regionalDayTrip: 14, days: 2 },
-                { id: 10, name: 'Razorback Jr', date: '2025-08-08', year: 2025, players: 160, overnight: 113, regionalDayTrip: 9, days: 2 },
-                { id: 11, name: 'Lvl4 Team', date: '2025-10-25', year: 2025, players: 201, overnight: 187, regionalDayTrip: 0, days: 2 }
+                { id: 1, name: 'Polar Bear Jr', year: 2025, level: '', players: 224, male: 0, female: 0, inState: 0, regionalDayTrip: 12, overnight: 177, days: 2 },
+                { id: 3, name: 'LR Level 4', year: 2025, level: '', players: 179, male: 0, female: 0, inState: 0, regionalDayTrip: 7, overnight: 152, days: 2 },
+                { id: 6, name: 'Southern 16s', year: 2025, level: '', players: 175, male: 0, female: 0, inState: 0, regionalDayTrip: 4, overnight: 160, days: 2 },
+                { id: 8, name: 'Summer Jr Classic', year: 2025, level: '', players: 189, male: 0, female: 0, inState: 0, regionalDayTrip: 14, overnight: 146, days: 2 },
+                { id: 10, name: 'Razorback Jr', year: 2025, level: '', players: 160, male: 0, female: 0, inState: 0, regionalDayTrip: 9, overnight: 113, days: 2 },
+                { id: 11, name: 'Lvl4 Team', year: 2025, level: '', players: 201, male: 0, female: 0, inState: 0, regionalDayTrip: 0, overnight: 187, days: 2 }
             ]);
 
             const [showDayTrip, setShowDayTrip] = useState(true);
@@ -90,7 +90,7 @@
             const addTournament = () => {
                 const newId = tournaments.length > 0 ? Math.max(...tournaments.map(t => t.id)) + 1 : 1;
                 const currentYear = new Date().getFullYear();
-                setTournaments([...tournaments, { id: newId, name: '', date: '', year: currentYear, players: 0, overnight: 0, regionalDayTrip: 0, days: 2 }]);
+                setTournaments([...tournaments, { id: newId, name: '', year: currentYear, level: '', players: 0, male: 0, female: 0, inState: 0, regionalDayTrip: 0, overnight: 0, days: 2 }]);
             };
 
             const removeTournament = (id) => {
@@ -358,14 +358,17 @@
                                 <table className="w-full text-sm">
                                     <thead className="bg-gray-100 border-b-2 border-gray-300">
                                         <tr>
-                                            <th className="p-2 text-left">Tournament Name</th>
-                                            <th className="p-2 text-left">Date</th>
                                             <th className="p-2 text-right">Year</th>
+                                            <th className="p-2 text-left">Tournament</th>
+                                            <th className="p-2 text-right">Level</th>
                                             <th className="p-2 text-right">Players</th>
+                                            <th className="p-2 text-right">Male</th>
+                                            <th className="p-2 text-right">Female</th>
+                                            <th className="p-2 text-right">In-State</th>
+                                            <th className="p-2 text-right">Regional</th>
                                             <th className="p-2 text-right">Overnight</th>
-                                            <th className="p-2 text-right">Regional Day</th>
                                             <th className="p-2 text-right">Days</th>
-                                            <th className="p-2 text-right">Non-Local %</th>
+                                            <th className="p-2 text-right">Overnight %</th>
                                             <th className="p-2 text-right">Direct $</th>
                                             <th className="p-2 text-right">A&P Tax</th>
                                             <th className="p-2 text-right">City Tax</th>
@@ -377,13 +380,27 @@
                                             const impact = calculateImpact(tournament);
                                             return (
                                                 <tr key={tournament.id} className="border-b hover:bg-gray-50">
-                                                    <td className="p-2"><input type="text" value={tournament.name} onChange={(e) => updateTournament(tournament.id, 'name', e.target.value)} className="w-full px-2 py-1 border rounded" placeholder="Tournament name" /></td>
-                                                    <td className="p-2"><input type="date" value={tournament.date} onChange={(e) => updateTournament(tournament.id, 'date', e.target.value)} className="w-full px-2 py-1 border rounded" /></td>
                                                     <td className="p-2"><input type="number" value={tournament.year} onChange={(e) => updateTournament(tournament.id, 'year', parseInt(e.target.value) || new Date().getFullYear())} className="w-20 px-2 py-1 border rounded text-right" min="2020" max="2030" /></td>
+                                                    <td className="p-2"><input type="text" value={tournament.name} onChange={(e) => updateTournament(tournament.id, 'name', e.target.value)} className="w-full px-2 py-1 border rounded" placeholder="Tournament name" /></td>
+                                                    <td className="p-2">
+                                                        <select value={tournament.level} onChange={(e) => updateTournament(tournament.id, 'level', e.target.value === '' ? '' : parseInt(e.target.value))} className="w-16 px-2 py-1 border rounded text-right">
+                                                            <option value="">-</option>
+                                                            <option value="7">7</option>
+                                                            <option value="6">6</option>
+                                                            <option value="5">5</option>
+                                                            <option value="4">4</option>
+                                                            <option value="3">3</option>
+                                                            <option value="2">2</option>
+                                                            <option value="1">1</option>
+                                                        </select>
+                                                    </td>
                                                     <td className="p-2"><input type="number" value={tournament.players} onChange={(e) => updateTournament(tournament.id, 'players', parseInt(e.target.value) || 0)} className="w-20 px-2 py-1 border rounded text-right" min="0" /></td>
-                                                    <td className="p-2"><input type="number" value={tournament.overnight} onChange={(e) => updateTournament(tournament.id, 'overnight', parseInt(e.target.value) || 0)} className="w-20 px-2 py-1 border rounded text-right" min="0" /></td>
-                                                    <td className="p-2"><input type="number" value={tournament.regionalDayTrip} onChange={(e) => updateTournament(tournament.id, 'regionalDayTrip', parseInt(e.target.value) || 0)} className="w-20 px-2 py-1 border rounded text-right" min="0" title="30+ min drive, multi-day tournaments (Conway, Cabot, etc.)" /></td>
-                                                    <td className="p-2"><input type="number" value={tournament.days} onChange={(e) => updateTournament(tournament.id, 'days', parseFloat(e.target.value) || 1)} className="w-16 px-2 py-1 border rounded text-right" min="1" max="7" step="0.5" /></td>
+                                                    <td className="p-2"><input type="number" value={tournament.male} onChange={(e) => updateTournament(tournament.id, 'male', parseInt(e.target.value) || 0)} className="w-16 px-2 py-1 border rounded text-right" min="0" /></td>
+                                                    <td className="p-2"><input type="number" value={tournament.female} onChange={(e) => updateTournament(tournament.id, 'female', parseInt(e.target.value) || 0)} className="w-16 px-2 py-1 border rounded text-right" min="0" /></td>
+                                                    <td className="p-2"><input type="number" value={tournament.inState} onChange={(e) => updateTournament(tournament.id, 'inState', parseInt(e.target.value) || 0)} className="w-16 px-2 py-1 border rounded text-right" min="0" /></td>
+                                                    <td className="p-2"><input type="number" value={tournament.regionalDayTrip} onChange={(e) => updateTournament(tournament.id, 'regionalDayTrip', parseInt(e.target.value) || 0)} className="w-16 px-2 py-1 border rounded text-right" min="0" title="30+ min drive, multi-day tournaments (Conway, Cabot, etc.)" /></td>
+                                                    <td className="p-2"><input type="number" value={tournament.overnight} onChange={(e) => updateTournament(tournament.id, 'overnight', parseInt(e.target.value) || 0)} className="w-16 px-2 py-1 border rounded text-right" min="0" /></td>
+                                                    <td className="p-2"><input type="number" value={tournament.days} onChange={(e) => updateTournament(tournament.id, 'days', parseFloat(e.target.value) || 1)} className="w-14 px-2 py-1 border rounded text-right" min="1" max="7" step="0.5" /></td>
                                                     <td className="p-2 text-right font-medium">{pct(impact.nonlocalPct)}</td>
                                                     <td className="p-2 text-right font-medium">{fmt(showDayTrip ? impact.directSpending : impact.directSpendingOvernight)}</td>
                                                     <td className="p-2 text-right font-medium text-amber-700">{fmt(showDayTrip ? impact.totalAPTax : impact.totalAPTaxOvernight)}</td>
