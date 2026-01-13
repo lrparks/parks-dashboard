@@ -33,6 +33,7 @@ jobs:
           import os
           from pathlib import Path
           import re
+          import sys
           
           REPORTS_JSON = "reports.json"
           PDFS_FOLDER = "pdfs"
@@ -105,9 +106,12 @@ jobs:
           
           if not missing_pdfs:
               print("✓ All PDF files already in reports.json")
-              with open(os.environ.get('GITHUB_OUTPUT', '/dev/stdout'), 'a') as f:
-                  f.write('REPORTS_UPDATED=false\n')
-              exit(0)
+              # Write to GITHUB_OUTPUT properly
+              output_file = os.environ.get('GITHUB_OUTPUT', '')
+              if output_file:
+                  with open(output_file, 'a') as f:
+                      f.write('REPORTS_UPDATED=false\n')
+              sys.exit(0)
           
           print(f"➕ Adding {len(missing_pdfs)} new entries:")
           for pdf in sorted(missing_pdfs, key=lambda x: (x['period'], x['division'])):
@@ -127,9 +131,11 @@ jobs:
           print(f"  Reports after:  {len(data['reports'])}")
           
           # Set output for commit step
-          with open(os.environ['GITHUB_OUTPUT'], 'a') as f:
-              f.write(f"REPORTS_UPDATED=true\n")
-              f.write(f"REPORTS_ADDED={len(missing_pdfs)}\n")
+          output_file = os.environ.get('GITHUB_OUTPUT', '')
+          if output_file:
+              with open(output_file, 'a') as f:
+                  f.write('REPORTS_UPDATED=true\n')
+                  f.write(f'REPORTS_ADDED={len(missing_pdfs)}\n')
           EOF
       
       - name: Update meetings.json
@@ -140,6 +146,7 @@ jobs:
           import os
           from pathlib import Path
           import re
+          import sys
           
           MEETINGS_JSON = "meetings.json"
           TRANSCRIPTS_FOLDER = "transcripts"
@@ -279,9 +286,12 @@ jobs:
           
           if not missing_transcripts and not updated_transcripts:
               print("✓ All transcripts already in meetings.json")
-              with open(os.environ.get('GITHUB_OUTPUT', '/dev/stdout'), 'a') as f:
-                  f.write('MEETINGS_UPDATED=false\n')
-              exit(0)
+              # Write to GITHUB_OUTPUT properly
+              output_file = os.environ.get('GITHUB_OUTPUT', '')
+              if output_file:
+                  with open(output_file, 'a') as f:
+                      f.write('MEETINGS_UPDATED=false\n')
+              sys.exit(0)
           
           if missing_transcripts:
               print(f"➕ Adding {len(missing_transcripts)} new meetings:")
@@ -304,9 +314,11 @@ jobs:
           print(f"  Meetings after:  {len(data['meetings'])}")
           
           # Set output for commit step
-          with open(os.environ['GITHUB_OUTPUT'], 'a') as f:
-              f.write(f"MEETINGS_UPDATED=true\n")
-              f.write(f"MEETINGS_ADDED={len(missing_transcripts)}\n")
+          output_file = os.environ.get('GITHUB_OUTPUT', '')
+          if output_file:
+              with open(output_file, 'a') as f:
+                  f.write('MEETINGS_UPDATED=true\n')
+                  f.write(f'MEETINGS_ADDED={len(missing_transcripts)}\n')
           EOF
       
       - name: Commit and push changes
