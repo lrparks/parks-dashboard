@@ -1,0 +1,358 @@
+name: Auto-update Reports and Meetings JSON
+
+on:
+  push:
+    paths:
+      - 'pdfs/**/*.pdf'
+      - 'transcripts/**/*.txt'
+  workflow_dispatch:  # Allows manual trigger from GitHub UI
+
+jobs:
+  update-json-files:
+    runs-on: ubuntu-latest
+    
+    permissions:
+      contents: write  # Required to commit changes back to repo
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # Get full history for proper commits
+      
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+      
+      - name: Update reports.json
+        id: update-reports
+        run: |
+          python3 << 'EOF'
+          import json
+          import os
+          from pathlib import Path
+          import re
+          
+          REPORTS_JSON = "reports.json"
+          PDFS_FOLDER = "pdfs"
+          
+          def parse_filename(filename):
+              """Parse PDF filename to extract period and division."""
+              name = filename.replace('.pdf', '')
+              pattern = r'^(\d{6})-([a-z]+)(?:-(.+))?$'
+              match = re.match(pattern, name)
+              
+              if not match:
+                  return None
+              
+              period = match.group(1)
+              division = match.group(2)
+              
+              if len(period) != 6 or not period.isdigit():
+                  return None
+              
+              year = int(period[:4])
+              month = int(period[4:6])
+              
+              if year < 2022 or year > 2030:
+                  return None
+              if month < 1 or month > 12:
+                  return None
+              
+              return {
+                  'period': period,
+                  'division': division,
+                  'file': f'pdfs/{filename}'
+              }
+          
+          def scan_pdfs_folder(folder_path):
+              """Scan pdfs folder and return list of all PDF files."""
+              if not Path(folder_path).exists():
+                  return []
+              
+              pdf_files = []
+              for filename in os.listdir(folder_path):
+                  if filename.endswith('.pdf'):
+                      parsed = parse_filename(filename)
+                      if parsed:
+                          pdf_files.append(parsed)
+                      else:
+                          print(f"⚠️  Skipping invalid filename: {filename}")
+              
+              return pdf_files
+          
+          # Main logic
+          print("📂 Scanning pdfs/ folder...")
+          scanned_pdfs = scan_pdfs_folder(PDFS_FOLDER)
+          print(f"   Found {len(scanned_pdfs)} valid PDF files")
+          
+          # Load or create reports.json
+          if Path(REPORTS_JSON).exists():
+              print(f"📂 Loading {REPORTS_JSON}...")
+              with open(REPORTS_JSON, 'r', encoding='utf-8') as f:
+                  data = json.load(f)
+              existing_count = len(data['reports'])
+              print(f"   Loaded {existing_count} existing entries")
+          else:
+              print(f"📂 Creating new {REPORTS_JSON}...")
+              data = {'reports': []}
+              existing_count = 0
+          
+          # Find missing entries
+          existing_entries = {(r['period'], r['division'], r['file']) for r in data['reports']}
+          missing_pdfs = [pdf for pdf in scanned_pdfs if (pdf['period'], pdf['division'], pdf['file']) not in existing_entries]
+          
+          if not missing_pdfs:
+              print("✓ All PDF files already in reports.json")
+              print("REPORTS_UPDATED=false" >> os.environ.get('GITHUB_OUTPUT', '/dev/stdout'))
+              exit(0)
+          
+          print(f"➕ Adding {len(missing_pdfs)} new entries:")
+          for pdf in sorted(missing_pdfs, key=lambda x: (x['period'], x['division'])):
+              print(f"   - {pdf['period']} / {pdf['division']:12s} → {pdf['file']}")
+          
+          # Add and sort
+          data['reports'].extend(missing_pdfs)
+          data['reports'].sort(key=lambda x: (x['period'], x['division']))
+          
+          # Save
+          with open(REPORTS_JSON, 'w', encoding='utf-8') as f:
+              json.dump(data, f, indent=2)
+          
+          print(f"✓ Updated {REPORTS_JSON}")
+          print(f"  Reports before: {existing_count}")
+          print(f"  Reports added:  {len(missing_pdfs)}")
+          print(f"  Reports after:  {len(data['reports'])}")
+          
+          # Set output for commit step
+          with open(os.environ['GITHUB_OUTPUT'], 'a') as f:
+              f.write(f"REPORTS_UPDATED=true\n")
+              f.write(f"REPORTS_ADDED={len(missing_pdfs)}\n")
+          EOF
+      
+      - name: Update meetings.json
+        id: update-meetings
+        run: |
+          python3 << 'EOF'
+          import json
+          import os
+          from pathlib import Path
+          import re
+          
+          MEETINGS_JSON = "meetings.json"
+          TRANSCRIPTS_FOLDER = "transcripts"
+          
+          def parse_transcript_filename(filename):
+              """
+              Parse transcript filename to extract period and title.
+              Expected format: YYYYMM_Title.txt
+              """
+              if not filename.endswith('.txt'):
+                  return None
+              
+              name = filename.replace('.txt', '')
+              
+              # Split on first underscore
+              parts = name.split('_', 1)
+              if len(parts) != 2:
+                  return None
+              
+              period = parts[0]
+              title = parts[1].replace('_', ' ')
+              
+              # Validate period
+              if len(period) != 6 or not period.isdigit():
+                  return None
+              
+              year = int(period[:4])
+              month = int(period[4:6])
+              
+              if year < 2022 or year > 2030:
+                  return None
+              if month < 1 or month > 12:
+                  return None
+              
+              return {
+                  'period': period,
+                  'title': title,
+                  'transcript': f'transcripts/{filename}'
+              }
+          
+          def extract_video_id_from_transcript(filepath):
+              """
+              Extract YouTube video ID from transcript file header.
+              Looks for: Video ID: <id>
+              """
+              try:
+                  with open(filepath, 'r', encoding='utf-8') as f:
+                      # Read first 20 lines (header should be in first few lines)
+                      for i, line in enumerate(f):
+                          if i > 20:  # Don't read entire file
+                              break
+                          
+                          # Look for "Video ID: XXXXXXXXXXX"
+                          if 'Video ID:' in line:
+                              # Extract the ID after "Video ID:"
+                              video_id = line.split('Video ID:')[1].strip()
+                              # Clean up any extra text after the ID
+                              video_id = video_id.split()[0] if video_id else ''
+                              if video_id and len(video_id) == 11:  # YouTube IDs are 11 chars
+                                  return video_id
+                  return None
+              except Exception as e:
+                  print(f"⚠️  Could not read transcript {filepath}: {e}")
+                  return None
+          
+          def scan_transcripts_folder(folder_path):
+              """Scan transcripts folder for .txt files."""
+              if not Path(folder_path).exists():
+                  return []
+              
+              transcript_files = []
+              for filename in os.listdir(folder_path):
+                  if filename.endswith('.txt') and not filename.startswith('.'):
+                      parsed = parse_transcript_filename(filename)
+                      if parsed:
+                          transcript_files.append(parsed)
+                      else:
+                          print(f"⚠️  Skipping invalid transcript filename: {filename}")
+              
+              return transcript_files
+          
+          # Main logic
+          print("\n📂 Scanning transcripts/ folder...")
+          scanned_transcripts = scan_transcripts_folder(TRANSCRIPTS_FOLDER)
+          print(f"   Found {len(scanned_transcripts)} valid transcript files")
+          
+          # Load or create meetings.json
+          if Path(MEETINGS_JSON).exists():
+              print(f"📂 Loading {MEETINGS_JSON}...")
+              with open(MEETINGS_JSON, 'r', encoding='utf-8') as f:
+                  data = json.load(f)
+              existing_count = len(data['meetings'])
+              print(f"   Loaded {existing_count} existing entries")
+          else:
+              print(f"📂 Creating new {MEETINGS_JSON}...")
+              data = {'meetings': []}
+              existing_count = 0
+          
+          # Find missing entries
+          existing_periods = {m['period'] for m in data['meetings']}
+          missing_transcripts = []
+          updated_transcripts = []
+          
+          for transcript in scanned_transcripts:
+              period = transcript['period']
+              transcript_path = transcript['transcript']
+              
+              # Extract video ID from transcript file
+              video_id = extract_video_id_from_transcript(transcript_path)
+              
+              # Check if period exists
+              existing_meeting = next((m for m in data['meetings'] if m['period'] == period), None)
+              
+              if existing_meeting:
+                  # Update transcript path if different
+                  if existing_meeting.get('transcript') != transcript_path:
+                      existing_meeting['transcript'] = transcript_path
+                      updated_transcripts.append(transcript)
+                  
+                  # Update video ID if found and not already set
+                  if video_id and not existing_meeting.get('youtube'):
+                      existing_meeting['youtube'] = video_id
+                      print(f"   🎬 Added video ID for {period}: {video_id}")
+              else:
+                  # New meeting entry
+                  meeting_entry = {
+                      'period': period,
+                      'title': transcript['title'],
+                      'youtube': video_id if video_id else '',
+                      'minutes': f'pdfs/{period}-minutes.pdf',
+                      'transcript': transcript_path
+                  }
+                  data['meetings'].append(meeting_entry)
+                  missing_transcripts.append(transcript)
+                  if video_id:
+                      print(f"   🎬 New meeting with video ID: {period} → {video_id}")
+          
+          if not missing_transcripts and not updated_transcripts:
+              print("✓ All transcripts already in meetings.json")
+              print("MEETINGS_UPDATED=false" >> os.environ.get('GITHUB_OUTPUT', '/dev/stdout'))
+              exit(0)
+          
+          if missing_transcripts:
+              print(f"➕ Adding {len(missing_transcripts)} new meetings:")
+              for t in sorted(missing_transcripts, key=lambda x: x['period']):
+                  print(f"   - {t['period']} → {t['title']}")
+          
+          if updated_transcripts:
+              print(f"🔄 Updated {len(updated_transcripts)} transcript paths")
+          
+          # Sort by period (reverse chronological)
+          data['meetings'].sort(key=lambda x: x['period'], reverse=True)
+          
+          # Save
+          with open(MEETINGS_JSON, 'w', encoding='utf-8') as f:
+              json.dump(data, f, indent=2)
+          
+          print(f"✓ Updated {MEETINGS_JSON}")
+          print(f"  Meetings before: {existing_count}")
+          print(f"  Meetings added:  {len(missing_transcripts)}")
+          print(f"  Meetings after:  {len(data['meetings'])}")
+          
+          # Set output for commit step
+          with open(os.environ['GITHUB_OUTPUT'], 'a') as f:
+              f.write(f"MEETINGS_UPDATED=true\n")
+              f.write(f"MEETINGS_ADDED={len(missing_transcripts)}\n")
+          EOF
+      
+      - name: Commit and push changes
+        if: steps.update-reports.outputs.REPORTS_UPDATED == 'true' || steps.update-meetings.outputs.MEETINGS_UPDATED == 'true'
+        run: |
+          git config --local user.email "github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
+          
+          # Stage changed JSON files
+          git add reports.json meetings.json
+          
+          # Create commit message
+          COMMIT_MSG="Auto-update JSON files"
+          
+          if [ "${{ steps.update-reports.outputs.REPORTS_UPDATED }}" == "true" ]; then
+            COMMIT_MSG="$COMMIT_MSG\n- Added ${{ steps.update-reports.outputs.REPORTS_ADDED }} reports"
+          fi
+          
+          if [ "${{ steps.update-meetings.outputs.MEETINGS_UPDATED }}" == "true" ]; then
+            COMMIT_MSG="$COMMIT_MSG\n- Added ${{ steps.update-meetings.outputs.MEETINGS_ADDED }} meetings"
+          fi
+          
+          git commit -m "$(echo -e "$COMMIT_MSG")"
+          git push
+      
+      - name: Summary
+        if: always()
+        run: |
+          echo "## 📊 Auto-update Summary" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          
+          if [ "${{ steps.update-reports.outputs.REPORTS_UPDATED }}" == "true" ]; then
+            echo "### ✅ reports.json updated" >> $GITHUB_STEP_SUMMARY
+            echo "- Added ${{ steps.update-reports.outputs.REPORTS_ADDED }} new report(s)" >> $GITHUB_STEP_SUMMARY
+            echo "" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "### ℹ️ reports.json - no changes" >> $GITHUB_STEP_SUMMARY
+            echo "" >> $GITHUB_STEP_SUMMARY
+          fi
+          
+          if [ "${{ steps.update-meetings.outputs.MEETINGS_UPDATED }}" == "true" ]; then
+            echo "### ✅ meetings.json updated" >> $GITHUB_STEP_SUMMARY
+            echo "- Added ${{ steps.update-meetings.outputs.MEETINGS_ADDED }} new meeting(s)" >> $GITHUB_STEP_SUMMARY
+            echo "" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "### ℹ️ meetings.json - no changes" >> $GITHUB_STEP_SUMMARY
+            echo "" >> $GITHUB_STEP_SUMMARY
+          fi
+          
+          echo "---" >> $GITHUB_STEP_SUMMARY
+          echo "Changes automatically committed and pushed to repository" >> $GITHUB_STEP_SUMMARY
