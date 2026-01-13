@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Meeting Calendar - Little Rock Parks & Recreation Commission</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .meeting-day {
+            background: linear-gradient(135deg, #16a34a 0%, #15803d 100%);
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+        .meeting-day:hover {
+            transform: scale(1.1);
+            z-index: 10;
+        }
+        .today {
+            box-shadow: inset 0 0 0 2px #3b82f6;
+        }
+        .note-badge {
+            position: absolute;
+            top: -4px;
+            right: -4px;
+            width: 8px;
+            height: 8px;
+            background: #f59e0b;
+            border-radius: 50%;
+        }
+    </style>
+</head>
+<body class="bg-gray-100 min-h-screen">
+    <!-- Header -->
+    <div class="bg-green-700 text-white py-4 px-6">
+        <div class="max-w-6xl mx-auto flex justify-between items-center">
+            <div>
+                <h1 class="text-xl font-bold">Little Rock Parks & Recreation</h1>
+                <p class="text-green-200 text-sm">Commission Meeting Calendar</p>
+            </div>
+            <a href="index.html" class="text-green-200 hover:text-white text-sm">← Back to Home</a>
+        </div>
+    </div>
+
+    <div class="max-w-6xl mx-auto p-6">
+        <!-- Year Navigation -->
+        <div class="flex justify-center items-center gap-4 mb-6">
+            <button onclick="changeYear(-1)" class="px-4 py-2 bg-white rounded-lg shadow hover:bg-gray-50">← Previous Year</button>
+            <h2 id="yearDisplay" class="text-2xl font-bold text-gray-800">2026</h2>
+            <button onclick="changeYear(1)" class="px-4 py-2 bg-white rounded-lg shadow hover:bg-gray-50">Next Year →</button>
+        </div>
+
+        <!-- Legend -->
+        <div class="flex justify-center gap-6 mb-6 text-sm">
+            <div class="flex items-center gap-2">
+                <div class="w-6 h-6 rounded meeting-day flex items-center justify-center text-xs">14</div>
+                <span class="text-gray-600">Commission Meeting</span>
+            </div>
+            <div class="flex items-center gap-2">
+                <div class="w-6 h-6 rounded bg-white border-2 border-blue-500 flex items-center justify-center text-xs">13</div>
+                <span class="text-gray-600">Today</span>
+            </div>
+            <div class="flex items-center gap-2 relative">
+                <div class="w-6 h-6 rounded meeting-day flex items-center justify-center text-xs relative">
+                    18
+                    <span class="note-badge"></span>
+                </div>
+                <span class="text-gray-600">Has Note</span>
+            </div>
+        </div>
+
+        <!-- Calendar Grid -->
+        <div id="calendarGrid" class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-4">
+            <!-- Months will be generated here -->
+        </div>
+
+        <!-- Upcoming Meetings List -->
+        <div class="mt-8 bg-white rounded-lg shadow-md p-6">
+            <h3 class="text-lg font-bold text-gray-800 mb-4">📅 Upcoming Meetings</h3>
+            <div id="upcomingList" class="space-y-2">
+                <!-- Generated dynamically -->
+            </div>
+        </div>
+
+        <!-- Meeting Detail Modal -->
+        <div id="modal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+            <div class="bg-white rounded-lg shadow-xl p-6 max-w-md mx-4">
+                <div class="flex justify-between items-start mb-4">
+                    <h3 id="modalTitle" class="text-lg font-bold text-gray-800"></h3>
+                    <button onclick="closeModal()" class="text-gray-400 hover:text-gray-600">✕</button>
+                </div>
+                <div id="modalContent" class="space-y-2 text-gray-600">
+                </div>
+                <div class="mt-4 pt-4 border-t flex gap-2">
+                    <a id="modalCalLink" href="#" class="flex-1 text-center px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700">
+                        Add to Calendar
+                    </a>
+                    <button onclick="closeModal()" class="px-4 py-2 bg-gray-200 rounded hover:bg-gray-300">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Meeting data - easily editable!
+        // Format: { date: "YYYY-MM-DD", time: "HH:MM", location: "...", room: "...", note: "..." }
+        const meetings = {
+            2026: [
+                { date: "2026-01-14", time: "11:45", location: "Little Rock City Hall", room: "Board Room" },
+                { date: "2026-02-11", time: "11:45", location: "Little Rock City Hall", room: "Board Room" },
+                { date: "2026-03-11", time: "11:45", location: "Little Rock City Hall", room: "Board Room" },
+                { date: "2026-04-08", time: "11:45", location: "Little Rock City Hall", room: "Board Room" },
+                { date: "2026-05-13", time: "11:45", location: "Little Rock City Hall", room: "Board Room", note: "City Employee Luncheon - All of Parks Leadership and City Directors will be absent" },
+                { date: "2026-06-10", time: "11:45", location: "Little Rock City Hall", room: "Board Room" },
+                { date: "2026-07-08", time: "11:45", location: "Little Rock City Hall", room: "Board Room" },
+                { date: "2026-08-12", time: "11:45", location: "Little Rock City Hall", room: "Board Room" },
+                { date: "2026-09-09", time: "11:45", location: "Little Rock City Hall", room: "Board Room" },
+                { date: "2026-10-14", time: "11:45", location: "Little Rock City Hall", room: "Board Room" },
+                { date: "2026-11-18", time: "11:45", location: "Little Rock City Hall", room: "Board Room", note: "3rd Wednesday - Moved due to Veterans Day Holiday" },
+                { date: "2026-12-09", time: "11:45", location: "Little Rock City Hall", room: "Board Room" }
+            ],
+            2025: [
+                { date: "2025-01-08", time: "11:45", location: "Little Rock City Hall", room: "Board Room" },
+                { date: "2025-02-12", time: "11:45", location: "Little Rock City Hall", room: "Board Room" },
+                { date: "2025-03-12", time: "11:45", location: "Little Rock City Hall", room: "Board Room" },
+                { date: "2025-04-09", time: "11:45", location: "Little Rock City Hall", room: "Board Room" },
+                { date: "2025-05-14", time: "11:45", location: "Little Rock City Hall", room: "Board Room" },
+                { date: "2025-06-11", time: "11:45", location: "Little Rock City Hall", room: "Board Room" },
+                { date: "2025-07-09", time: "11:45", location: "Little Rock City Hall", room: "Board Room" },
+                { date: "2025-08-13", time: "11:45", location: "Little Rock City Hall", room: "Board Room" },
+                { date: "2025-09-10", time: "11:45", location: "Little Rock City Hall", room: "Board Room" },
+                { date: "2025-10-08", time: "11:45", location: "Little Rock City Hall", room: "Board Room" },
+                { date: "2025-11-12", time: "11:45", location: "Little Rock City Hall", room: "Board Room" },
+                { date: "2025-12-10", time: "11:45", location: "Little Rock City Hall", room: "Board Room" }
+            ]
+        };
+
+        let currentYear = 2026;
+        const monthNames = ["January", "February", "March", "April", "May", "June", 
+                           "July", "August", "September", "October", "November", "December"];
+        const dayNames = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+
+        function getMeetingForDate(year, month, day) {
+            const dateStr = `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+            const yearMeetings = meetings[year] || [];
+            return yearMeetings.find(m => m.date === dateStr);
+        }
+
+        function generateMonth(year, month) {
+            const firstDay = new Date(year, month, 1).getDay();
+            const daysInMonth = new Date(year, month + 1, 0).getDate();
+            const today = new Date();
+            
+            let html = `
+                <div class="bg-white rounded-lg shadow p-4">
+                    <h3 class="text-center font-bold text-gray-700 mb-2">${monthNames[month]}</h3>
+                    <div class="grid grid-cols-7 gap-1 text-xs text-center text-gray-500 mb-1">
+                        ${dayNames.map(d => `<div>${d[0]}</div>`).join('')}
+                    </div>
+                    <div class="grid grid-cols-7 gap-1">
+            `;
+            
+            // Empty cells before first day
+            for (let i = 0; i < firstDay; i++) {
+                html += `<div class="h-8"></div>`;
+            }
+            
+            // Days of month
+            for (let day = 1; day <= daysInMonth; day++) {
+                const meeting = getMeetingForDate(year, month, day);
+                const isToday = today.getFullYear() === year && today.getMonth() === month && today.getDate() === day;
+                
+                let classes = "h-8 w-8 flex items-center justify-center text-sm rounded relative";
+                if (meeting) {
+                    classes += " meeting-day";
+                } else if (isToday) {
+                    classes += " today bg-white";
+                } else {
+                    classes += " text-gray-600 hover:bg-gray-100";
+                }
+                
+                const noteIndicator = meeting?.note ? '<span class="note-badge"></span>' : '';
+                const onclick = meeting ? `onclick="showMeeting('${meeting.date}')"` : '';
+                
+                html += `<div class="${classes}" ${onclick}>${day}${noteIndicator}</div>`;
+            }
+            
+            html += `</div></div>`;
+            return html;
+        }
+
+        function renderCalendar() {
+            document.getElementById('yearDisplay').textContent = currentYear;
+            
+            let html = '';
+            for (let month = 0; month < 12; month++) {
+                html += generateMonth(currentYear, month);
+            }
+            document.getElementById('calendarGrid').innerHTML = html;
+            
+            renderUpcomingMeetings();
+        }
+
+        function renderUpcomingMeetings() {
+            const today = new Date();
+            const allMeetings = [];
+            
+            // Collect all meetings from all years
+            Object.entries(meetings).forEach(([year, yearMeetings]) => {
+                yearMeetings.forEach(m => {
+                    const meetingDate = new Date(m.date + 'T' + m.time);
+                    if (meetingDate >= today) {
+                        allMeetings.push({ ...m, dateObj: meetingDate });
+                    }
+                });
+            });
+            
+            // Sort by date and take next 5
+            allMeetings.sort((a, b) => a.dateObj - b.dateObj);
+            const upcoming = allMeetings.slice(0, 5);
+            
+            let html = '';
+            if (upcoming.length === 0) {
+                html = '<p class="text-gray-500 text-sm">No upcoming meetings scheduled.</p>';
+            } else {
+                upcoming.forEach(m => {
+                    const dateObj = new Date(m.date);
+                    const dayName = dayNames[dateObj.getDay()];
+                    const monthName = monthNames[dateObj.getMonth()];
+                    const day = dateObj.getDate();
+                    const year = dateObj.getFullYear();
+                    
+                    html += `
+                        <div class="flex items-center gap-4 p-3 bg-gray-50 rounded-lg hover:bg-gray-100 cursor-pointer" onclick="showMeeting('${m.date}')">
+                            <div class="text-center bg-green-600 text-white rounded p-2 min-w-16">
+                                <div class="text-xs">${monthName.slice(0,3)}</div>
+                                <div class="text-xl font-bold">${day}</div>
+                            </div>
+                            <div class="flex-1">
+                                <div class="font-medium text-gray-800">${dayName}, ${monthName} ${day}, ${year}</div>
+                                <div class="text-sm text-gray-500">${m.time} AM • ${m.room}</div>
+                                ${m.note ? `<div class="text-xs text-amber-600 mt-1">⚠️ ${m.note}</div>` : ''}
+                            </div>
+                        </div>
+                    `;
+                });
+            }
+            
+            document.getElementById('upcomingList').innerHTML = html;
+        }
+
+        function showMeeting(dateStr) {
+            const year = parseInt(dateStr.split('-')[0]);
+            const meeting = (meetings[year] || []).find(m => m.date === dateStr);
+            if (!meeting) return;
+            
+            const dateObj = new Date(meeting.date);
+            const dayName = dayNames[dateObj.getDay()];
+            const monthName = monthNames[dateObj.getMonth()];
+            const day = dateObj.getDate();
+            const year2 = dateObj.getFullYear();
+            
+            document.getElementById('modalTitle').textContent = `${dayName}, ${monthName} ${day}, ${year2}`;
+            
+            let content = `
+                <div class="flex items-center gap-2">
+                    <span class="text-gray-400">🕐</span>
+                    <span>${meeting.time} AM</span>
+                </div>
+                <div class="flex items-center gap-2">
+                    <span class="text-gray-400">📍</span>
+                    <span>${meeting.room}, ${meeting.location}</span>
+                </div>
+            `;
+            
+            if (meeting.note) {
+                content += `
+                    <div class="mt-2 p-2 bg-amber-50 border border-amber-200 rounded text-amber-800 text-sm">
+                        ⚠️ ${meeting.note}
+                    </div>
+                `;
+            }
+            
+            document.getElementById('modalContent').innerHTML = content;
+            
+            // Generate .ics calendar link
+            const startDate = meeting.date.replace(/-/g, '') + 'T114500';
+            const endDate = meeting.date.replace(/-/g, '') + 'T130000';
+            const icsContent = `BEGIN:VCALENDAR
+VERSION:2.0
+BEGIN:VEVENT
+DTSTART:${startDate}
+DTEND:${endDate}
+SUMMARY:Parks Commission Meeting
+LOCATION:${meeting.room}, ${meeting.location}
+DESCRIPTION:${meeting.note || 'Regular monthly commission meeting'}
+END:VEVENT
+END:VCALENDAR`;
+            
+            const blob = new Blob([icsContent], { type: 'text/calendar' });
+            const url = URL.createObjectURL(blob);
+            document.getElementById('modalCalLink').href = url;
+            document.getElementById('modalCalLink').download = `parks-commission-${meeting.date}.ics`;
+            
+            document.getElementById('modal').classList.remove('hidden');
+        }
+
+        function closeModal() {
+            document.getElementById('modal').classList.add('hidden');
+        }
+
+        function changeYear(delta) {
+            currentYear += delta;
+            renderCalendar();
+        }
+
+        // Close modal on escape key
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') closeModal();
+        });
+
+        // Close modal on backdrop click
+        document.getElementById('modal').addEventListener('click', (e) => {
+            if (e.target.id === 'modal') closeModal();
+        });
+
+        // Initial render
+        renderCalendar();
+    </script>
+</body>
+</html>
