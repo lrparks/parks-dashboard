@@ -123,7 +123,8 @@
                 const response = await fetch('meetings.json');
                 if (!response.ok) throw new Error('Failed to load');
                 const data = await response.json();
-                meetingsData = data.meetings || [];
+                const today = new Date().toISOString().split('T')[0];
+                meetingsData = (data.meetings || []).filter(m => !m.date || m.date <= today);
 
                 document.getElementById('loading').classList.add('hidden');
                 document.getElementById('meetings-container').classList.remove('hidden');
