@@ -573,22 +573,22 @@
         staffCompleted: '---', 
         staffTotal: '---', 
         target: '100%',
-        status: 'âš ï¸' 
+        status: '⚠️' 
       },
       facilityInspections: { 
         completion: '---%', 
         completed: '---', 
         total: '22', 
         target: '100%',
-        status: 'âš ï¸' 
+        status: '⚠️' 
       },
       fireSafety: {
-        extinguishers: { completion: '---%', completed: '---', total: '27', status: 'âš ï¸' },
-        alarms: { completion: '---%', completed: '---', total: '17', status: 'âš ï¸' },
-        controlPanels: { completion: '---%', completed: '---', total: '9', status: 'âš ï¸' },
+        extinguishers: { completion: '---%', completed: '---', total: '27', status: '⚠️' },
+        alarms: { completion: '---%', completed: '---', total: '17', status: '⚠️' },
+        controlPanels: { completion: '---%', completed: '---', total: '9', status: '⚠️' },
       },
       aed: {
-        operationalChecks: { completion: '---%', completed: '---', total: '19', status: 'âš ï¸' },
+        operationalChecks: { completion: '---%', completed: '---', total: '19', status: '⚠️' },
         recertsOutstanding: ['[Staff Name 1]', '[Staff Name 2]', '[Staff Name 3]'],
       },
       playgrounds: {
@@ -700,10 +700,10 @@
 
   const StatusBadge = ({ status }) => {
     const colors = {
-      'ðŸŸ¢': 'bg-green-100 text-green-800',
-      'ðŸŸ¡': 'bg-yellow-100 text-yellow-800',
-      'ðŸ”´': 'bg-red-100 text-red-800',
-      'âš ï¸': 'bg-orange-100 text-orange-800',
+      '🟢': 'bg-green-100 text-green-800',
+      '🟡': 'bg-yellow-100 text-yellow-800',
+      '🔴': 'bg-red-100 text-red-800',
+      '⚠️': 'bg-orange-100 text-orange-800',
       'On Track': 'bg-green-100 text-green-800',
       'At Risk': 'bg-yellow-100 text-yellow-800',
       'Over Budget': 'bg-red-100 text-red-800',
@@ -857,33 +857,33 @@
             <div className="bg-orange-50 rounded-lg p-2 text-center">
               <div className="text-lg font-bold text-orange-600">{data.admin.staffing.vacancies}</div>
               <div className="text-xs text-gray-500">Vacancies</div>
-              <div className="text-xs text-orange-500">âš ï¸</div>
+              <div className="text-xs text-orange-500">⚠️</div>
             </div>
             <div className="bg-orange-50 rounded-lg p-2 text-center">
               <div className="text-lg font-bold text-orange-600">{data.safety.training.completion}</div>
               <div className="text-xs text-gray-500">Safety Training</div>
-              <div className="text-xs text-orange-500">âš ï¸</div>
+              <div className="text-xs text-orange-500">⚠️</div>
             </div>
             <div className="bg-red-50 rounded-lg p-2 text-center">
               <div className="text-lg font-bold text-red-600">{data.safety.activeHazards.length}</div>
               <div className="text-xs text-gray-500">Hazards</div>
-              <div className="text-xs text-red-500">ðŸ”´</div>
+              <div className="text-xs text-red-500">🔴</div>
             </div>
             <div className="bg-yellow-50 rounded-lg p-2 text-center">
               <div className="text-lg font-bold text-yellow-700">{data.summary?.facilityClosure || '1'}</div>
               <div className="text-xs text-gray-500">Closures</div>
-              <div className="text-xs text-yellow-500">ðŸŸ¡</div>
+              <div className="text-xs text-yellow-500">🟡</div>
             </div>
           </div>
 
           {/* ECONOMIC DRIVERS - 2x2 Compact Grid */}
           <div className="bg-white rounded-lg shadow-md p-3">
-            <h3 className="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-2">ðŸ’° Economic Drivers</h3>
+            <h3 className="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-2">💰 Economic Drivers</h3>
             <div className="grid grid-cols-2 gap-3">
               {/* Jim Dailey */}
               <div className="bg-gray-50 rounded p-2">
                 <div className="flex items-center gap-1 mb-1">
-                  <span>ðŸ‹ï¸</span>
+                  <span>🏋️</span>
                   <span className="text-xs font-semibold text-gray-700">Jim Dailey Fitness</span>
                 </div>
                 <div className="space-y-0.5 text-xs">
@@ -896,7 +896,7 @@
               {/* Golf */}
               <div className="bg-gray-50 rounded p-2">
                 <div className="flex items-center gap-1 mb-1">
-                  <span>â›³</span>
+                  <span>⛳</span>
                   <span className="text-xs font-semibold text-gray-700">Golf (Rebsamen + First Tee)</span>
                 </div>
                 <div className="space-y-0.5 text-xs">
@@ -909,7 +909,7 @@
               {/* Tennis */}
               <div className="bg-gray-50 rounded p-2">
                 <div className="flex items-center gap-1 mb-1">
-                  <span>ðŸŽ¾</span>
+                  <span>🎾</span>
                   <span className="text-xs font-semibold text-gray-700">Tennis (Rebsamen)</span>
                 </div>
                 <div className="space-y-0.5 text-xs">
@@ -922,7 +922,7 @@
               {/* Museum */}
               <div className="bg-gray-50 rounded p-2">
                 <div className="flex items-center gap-1 mb-1">
-                  <span>ðŸ›ï¸</span>
+                  <span>🏛️</span>
                   <span className="text-xs font-semibold text-gray-700">Museum of Military History</span>
                 </div>
                 <div className="space-y-0.5 text-xs">
@@ -938,7 +938,7 @@
           <div className="grid grid-cols-2 gap-3">
             {/* Youth Engagement */}
             <div className="bg-white rounded-lg shadow-md p-3">
-              <h3 className="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-2">ðŸ‘¦ Youth Engagement</h3>
+              <h3 className="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-2">👦 Youth Engagement</h3>
               <div className="grid grid-cols-2 gap-2">
                 <div className="bg-blue-50 rounded p-2 text-center">
                   <div className="text-xl font-bold text-blue-700">{data.recreation.youthEngagement.summerCamp.current}</div>
@@ -955,7 +955,7 @@
             
             {/* Volunteer Impact */}
             <div className="bg-white rounded-lg shadow-md p-3">
-              <h3 className="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-2">ðŸ¤ Volunteer Impact</h3>
+              <h3 className="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-2">🤝 Volunteer Impact</h3>
               <div className="grid grid-cols-2 gap-2">
                 <div className="bg-purple-50 rounded p-2 text-center">
                   <div className="text-xl font-bold text-purple-700">{data.volunteers.totalHours.ytd}</div>
@@ -973,7 +973,7 @@
 
           {/* CAPITAL PROJECTS - Traffic Light List */}
           <div className="bg-white rounded-lg shadow-md p-3">
-            <h3 className="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-2">ðŸ—ï¸ Capital Projects</h3>
+            <h3 className="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-2">🏗️ Capital Projects</h3>
             <div className="space-y-1">
               {data.operations.capitalProjects.map((project, idx) => (
                 <div key={idx} className="flex items-center gap-2 text-xs py-1 border-b border-gray-50 last:border-0">
@@ -992,7 +992,7 @@
 
           {/* ITEMS REQUIRING ATTENTION */}
           <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-3">
-            <h4 className="font-semibold text-yellow-800 text-xs mb-2">âš ï¸ Items Requiring Attention</h4>
+            <h4 className="font-semibold text-yellow-800 text-xs mb-2">⚠️ Items Requiring Attention</h4>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-2 text-xs">
               <div className="flex justify-between"><span>PIT Funding:</span><span className="font-semibold">{data.admin.pitFunding.remaining} expires {data.admin.pitFunding.expirationDate}</span></div>
               <div className="flex justify-between"><span>Safety Training:</span><span className="font-semibold text-orange-600">{data.safety.training.completion} (target 100%)</span></div>
@@ -1007,7 +1007,7 @@
           ========================================== */}
       {activeTab === 'ytd' && (
         <div className="space-y-4">
-          <MetricCard title="Year-to-Date: Programs & Facilities" icon="ðŸ“Š">
+          <MetricCard title="Year-to-Date: Programs & Facilities" icon="📊">
             <div className="mb-2 flex justify-end gap-4 text-xs text-gray-500 font-medium">
               <span className="w-20 text-right">YTD 2025</span>
               <span className="w-20 text-right">YTD 2024</span>
@@ -1020,14 +1020,14 @@
             <DataRow label="Pavilion Rentals" current={data.recreation.rentals.pavilionRentals.ytd} priorYear={data.recreation.rentals.pavilionRentals.priorYtd} />
           </MetricCard>
 
-          <MetricCard title="Year-to-Date: Volunteer Impact" icon="ðŸ¤">
+          <MetricCard title="Year-to-Date: Volunteer Impact" icon="🤝">
             <div className="grid grid-cols-2 gap-4">
               <StatBox value={data.volunteers.totalHours.ytd} label="Total Volunteer Hours" sublabel={`PY: ${data.volunteers.totalHours.priorYtd}`} color="purple" />
               <StatBox value={data.volunteers.yoyTrend} label="YoY Change" sublabel="vs Q1-Q3 2024" color="purple" />
             </div>
           </MetricCard>
 
-          <MetricCard title="Year-to-Date: Financial" icon="ðŸ’°">
+          <MetricCard title="Year-to-Date: Financial" icon="💰">
             <div className="grid grid-cols-2 gap-6">
               <div>
                 <h4 className="text-sm font-medium text-gray-700 mb-3">Expenditures</h4>
@@ -1051,7 +1051,7 @@
           ========================================== */}
       {activeTab === 'admin' && (
         <div className="space-y-4">
-          <MetricCard title="Revenue" icon="ðŸ’µ">
+          <MetricCard title="Revenue" icon="💵">
             <div className="grid grid-cols-2 gap-4">
               <div>
                 <h4 className="text-sm font-medium text-gray-700 mb-2">Monthly</h4>
@@ -1068,7 +1068,7 @@
             </div>
           </MetricCard>
 
-          <MetricCard title="Staffing" icon="ðŸ‘¥">
+          <MetricCard title="Staffing" icon="👥">
             <div className="grid grid-cols-3 gap-3 mb-4">
               <StatBox value={data.admin.staffing.filledPositions} label="Filled" sublabel={`of ${data.admin.staffing.budgetedFTEs}`} color="gray" />
               <StatBox value={data.admin.staffing.vacancies} label="Vacancies" sublabel={data.admin.staffing.vacancyRate} color="orange" />
@@ -1084,7 +1084,7 @@
             </div>
           </MetricCard>
 
-          <MetricCard title="PIT Funding Tracker" icon="â°">
+          <MetricCard title="PIT Funding Tracker" icon="⏰">
             <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-3">
               <div className="flex justify-between items-start mb-3">
                 <div>
@@ -1104,7 +1104,7 @@
             </div>
           </MetricCard>
 
-          <MetricCard title="Accreditation & Training" icon="ðŸ“œ">
+          <MetricCard title="Accreditation & Training" icon="📜">
             <DataRow label="Accreditation Status" current={data.admin.accreditation.status} />
             <DataRow label="Next Milestone" current={data.admin.accreditation.nextMilestone} />
             <div className="mt-3">
@@ -1124,7 +1124,7 @@
           ========================================== */}
       {activeTab === 'operations' && (
         <div className="space-y-4">
-          <MetricCard title="Maintenance" icon="ðŸ”§">
+          <MetricCard title="Maintenance" icon="🔧">
             <div className="grid grid-cols-3 gap-3">
               <StatBox value={data.operations.maintenance.litterCollected.ytd} label={`Litter (${data.operations.maintenance.litterCollected.unit})`} sublabel={`PY: ${data.operations.maintenance.litterCollected.priorYtd}`} color="gray" />
               <StatBox value={`${data.operations.maintenance.mowingCycles.completed}/${data.operations.maintenance.mowingCycles.scheduled}`} label="Mowing Cycles" color="gray" />
@@ -1132,7 +1132,7 @@
             </div>
           </MetricCard>
 
-          <MetricCard title="Capital Projects" icon="ðŸ—ï¸">
+          <MetricCard title="Capital Projects" icon="🏗️">
             <table className="w-full text-sm">
               <thead>
                 <tr className="text-left text-gray-500 text-xs uppercase">
@@ -1157,7 +1157,7 @@
             </table>
           </MetricCard>
 
-          <MetricCard title="Account-Level Variance" icon="ðŸ“‹">
+          <MetricCard title="Account-Level Variance" icon="📋">
             <table className="w-full text-sm">
               <thead>
                 <tr className="text-left text-gray-500 text-xs uppercase">
@@ -1182,7 +1182,7 @@
             </table>
           </MetricCard>
 
-          <MetricCard title="Facility Status" icon="ðŸ¢">
+          <MetricCard title="Facility Status" icon="🏢">
             <table className="w-full text-sm">
               <thead>
                 <tr className="text-left text-gray-500 text-xs uppercase">
@@ -1211,7 +1211,7 @@
       {activeTab === 'recreation' && (
         <div className="space-y-4">
           {/* JIM DAILEY - FIRST */}
-          <MetricCard title="Jim Dailey Fitness & Aquatics" icon="ðŸ‹ï¸">
+          <MetricCard title="Jim Dailey Fitness & Aquatics" icon="🏋️">
             <div className="grid grid-cols-2 gap-4">
               <div>
                 <h4 className="text-xs font-medium text-gray-500 mb-2">FITNESS</h4>
@@ -1232,7 +1232,7 @@
           </MetricCard>
 
           {/* COMMUNITY CENTERS - SECOND */}
-          <MetricCard title="Community Centers" icon="ðŸ ">
+          <MetricCard title="Community Centers" icon="🏠">
             <table className="w-full text-sm">
               <thead>
                 <tr className="text-left text-gray-500 text-xs uppercase">
@@ -1259,7 +1259,7 @@
           </MetricCard>
 
           {/* MUSEUM */}
-          <MetricCard title="Museum of Military History" icon="ðŸ›ï¸">
+          <MetricCard title="Museum of Military History" icon="🏛️">
             <div className="grid grid-cols-3 gap-3 mb-3">
               <StatBox value={data.recreation.museum.attendance.current} label="Monthly Attendance" sublabel={`PY: ${data.recreation.museum.attendance.priorYear}`} color="blue" />
               <StatBox value={data.recreation.museum.attendance.percentOfGoal} label="YTD vs Goal" sublabel={`Goal: ${data.recreation.museum.attendance.annualGoal}`} color="green" />
@@ -1269,7 +1269,7 @@
           </MetricCard>
 
           {/* YOUTH ENGAGEMENT - THIRD */}
-          <MetricCard title="Youth Engagement" icon="ðŸ‘¦">
+          <MetricCard title="Youth Engagement" icon="👦">
             <div className="grid grid-cols-4 md:grid-cols-8 gap-2">
               {Object.entries(data.recreation.youthEngagement).map(([sport, vals]) => (
                 <div key={sport} className="text-center p-2 bg-gray-50 rounded">
@@ -1282,7 +1282,7 @@
           </MetricCard>
 
           {/* GOLF - FOURTH */}
-          <MetricCard title="Golf Operations (Rebsamen + First Tee)" icon="â›³">
+          <MetricCard title="Golf Operations (Rebsamen + First Tee)" icon="⛳">
             <div className="grid grid-cols-2 gap-4 mb-4">
               <div>
                 <h4 className="text-xs font-medium text-gray-500 mb-2">PERFORMANCE</h4>
@@ -1304,7 +1304,7 @@
           </MetricCard>
 
           {/* TENNIS - FOURTH (with Golf) - LESSONS REMOVED */}
-          <MetricCard title="Tennis Operations (Rebsamen Tennis Center)" icon="ðŸŽ¾">
+          <MetricCard title="Tennis Operations (Rebsamen Tennis Center)" icon="🎾">
             <div className="grid grid-cols-2 gap-4 mb-4">
               <div>
                 <h4 className="text-xs font-medium text-gray-500 mb-2">PERFORMANCE</h4>
@@ -1332,21 +1332,21 @@
           </MetricCard>
 
           {/* RENTALS - FIFTH */}
-          <MetricCard title="Rentals" icon="ðŸ•ï¸">
+          <MetricCard title="Rentals" icon="🏕️">
             <DataRow label="Pavilion Rentals" current={data.recreation.rentals.pavilionRentals.current} priorYear={data.recreation.rentals.pavilionRentals.priorYear} />
             <DataRow label="Pavilion Revenue" current={data.recreation.rentals.pavilionRevenue.current} priorYear={data.recreation.rentals.pavilionRevenue.priorYear} />
-            <p className="text-xs text-orange-600 mt-2">âš ï¸ Suspension Period: {data.recreation.rentals.suspensionPeriod}</p>
+            <p className="text-xs text-orange-600 mt-2">⚠️ Suspension Period: {data.recreation.rentals.suspensionPeriod}</p>
           </MetricCard>
 
           {/* SPECIAL EVENTS - SIXTH */}
-          <MetricCard title="Special Events" icon="ðŸŽ‰">
+          <MetricCard title="Special Events" icon="🎉">
             {Object.entries(data.recreation.specialEvents).map(([category, events]) => (
               <div key={category} className="mb-4 last:mb-0">
                 <h4 className="text-xs font-semibold text-gray-500 uppercase mb-2">
-                  {category === 'signature' && 'ðŸ† Signature Events'}
-                  {category === 'community' && 'ðŸ˜ï¸ Community Events'}
-                  {category === 'revenueGenerating' && 'ðŸ’° Revenue-Generating'}
-                  {category === 'healthFitness' && 'ðŸƒ Health & Fitness'}
+                  {category === 'signature' && '🏆 Signature Events'}
+                  {category === 'community' && '🏘️ Community Events'}
+                  {category === 'revenueGenerating' && '💰 Revenue-Generating'}
+                  {category === 'healthFitness' && '🏃 Health & Fitness'}
                 </h4>
                 <table className="w-full text-sm">
                   <thead>
@@ -1373,9 +1373,9 @@
           </MetricCard>
 
           {/* OUTDOOR RECREATION - SEVENTH (NEW PLACEHOLDER) */}
-          <MetricCard title="Outdoor Recreation" icon="ðŸŒ²">
+          <MetricCard title="Outdoor Recreation" icon="🌲">
             <div className="text-center py-8 text-gray-400">
-              <p className="text-sm">New position â€” metrics to be defined</p>
+              <p className="text-sm">New position — metrics to be defined</p>
               <p className="text-xs mt-2">Future metrics may include: trails, playgrounds, sports fields, outdoor amenities</p>
             </div>
           </MetricCard>
@@ -1387,7 +1387,7 @@
           ========================================== */}
       {activeTab === 'volunteer' && (
         <div className="space-y-4">
-          <MetricCard title="Volunteer Summary" icon="ðŸ¤">
+          <MetricCard title="Volunteer Summary" icon="🤝">
             <div className="grid grid-cols-3 gap-3 mb-4">
               <StatBox value={data.volunteers.totalHours.ytd} label="Total Hours YTD" sublabel={`PY: ${data.volunteers.totalHours.priorYtd}`} color="purple" />
               <StatBox value={data.volunteers.totalVolunteers.current} label="Active Volunteers" sublabel={`PY: ${data.volunteers.totalVolunteers.priorYear}`} color="purple" />
@@ -1395,7 +1395,7 @@
             </div>
           </MetricCard>
 
-          <MetricCard title="Volunteer Programs" icon="ðŸ“‹">
+          <MetricCard title="Volunteer Programs" icon="📋">
             <DataRow label="Available Programs" current={data.volunteers.availablePrograms} />
             <DataRow label="Volunteer Park Ranger Hours" current={data.volunteers.programs.volunteerParkRangers.hours} benchmark={`Req: ${data.volunteers.programs.volunteerParkRangers.required}`} />
             <DataRow label="Volunteer Park Rangers (Count)" current={data.volunteers.programs.volunteerParkRangers.count} />
@@ -1403,7 +1403,7 @@
             <DataRow label="Adopt-A-Park Participants" current={data.volunteers.programs.adoptAPark.participants} benchmark={`${data.volunteers.programs.adoptAPark.opportunities} opportunities`} />
           </MetricCard>
 
-          <MetricCard title="Background Checks" icon="âœ…">
+          <MetricCard title="Background Checks" icon="✅">
             <p className="text-sm text-gray-600">{data.volunteers.backgroundChecks}</p>
           </MetricCard>
         </div>
@@ -1414,18 +1414,18 @@
           ========================================== */}
       {activeTab === 'safety' && (
         <div className="space-y-4">
-          <MetricCard title="Training & Inspections" icon="ðŸ“‹">
+          <MetricCard title="Training & Inspections" icon="📋">
             <ComplianceRow label="Staff Safety Training" completion={data.safety.training.completion} completed={data.safety.training.staffCompleted} total={data.safety.training.staffTotal} status={data.safety.training.status} />
             <ComplianceRow label="Facility Safety Inspections" completion={data.safety.facilityInspections.completion} completed={data.safety.facilityInspections.completed} total={data.safety.facilityInspections.total} status={data.safety.facilityInspections.status} />
           </MetricCard>
 
-          <MetricCard title="Fire Safety Systems" icon="ðŸ”¥">
+          <MetricCard title="Fire Safety Systems" icon="📝¥">
             <ComplianceRow label="Fire Extinguisher Checks" completion={data.safety.fireSafety.extinguishers.completion} completed={data.safety.fireSafety.extinguishers.completed} total={data.safety.fireSafety.extinguishers.total} status={data.safety.fireSafety.extinguishers.status} />
             <ComplianceRow label="Fire Alarm Checks" completion={data.safety.fireSafety.alarms.completion} completed={data.safety.fireSafety.alarms.completed} total={data.safety.fireSafety.alarms.total} status={data.safety.fireSafety.alarms.status} />
             <ComplianceRow label="Fire Control Panel Checks" completion={data.safety.fireSafety.controlPanels.completion} completed={data.safety.fireSafety.controlPanels.completed} total={data.safety.fireSafety.controlPanels.total} status={data.safety.fireSafety.controlPanels.status} />
           </MetricCard>
 
-          <MetricCard title="AED & Medical" icon="ðŸ¥">
+          <MetricCard title="AED & Medical" icon="🏥">
             <ComplianceRow label="AED Operational Checks" completion={data.safety.aed.operationalChecks.completion} completed={data.safety.aed.operationalChecks.completed} total={data.safety.aed.operationalChecks.total} status={data.safety.aed.operationalChecks.status} />
             <div className="mt-3 pt-3 border-t">
               <span className="text-xs text-gray-500 font-medium">AED/CPR/FIRST AID RECERTS OUTSTANDING:</span>
@@ -1437,12 +1437,12 @@
             </div>
           </MetricCard>
 
-          <MetricCard title="Playground Safety" icon="ðŸ›">
+          <MetricCard title="Playground Safety" icon="🛝">
             <DataRow label="Inspections Completed" current={data.safety.playgrounds.inspectionsCompleted} benchmark={`of ${data.safety.playgrounds.inspectionsScheduled}`} />
             <DataRow label="Historical Rate (2017-present)" current={data.safety.playgrounds.historicalRate} />
           </MetricCard>
 
-          <MetricCard title="Active Safety Hazards" icon="ðŸš¨">
+          <MetricCard title="Active Safety Hazards" icon="🚨">
             <table className="w-full text-sm">
               <thead>
                 <tr className="text-left text-gray-500 text-xs uppercase">
@@ -1465,7 +1465,7 @@
             </table>
           </MetricCard>
 
-          <MetricCard title="Incident Reports" icon="ðŸ“">
+          <MetricCard title="Incident Reports" icon="📋">
             <div className="grid grid-cols-3 gap-3">
               <StatBox value={data.safety.incidents.current} label="This Month" color="gray" />
               <StatBox value={data.safety.incidents.priorYear} label="Same Month PY" color="gray" />
@@ -1480,7 +1480,7 @@
           ========================================== */}
       {activeTab === 'budget' && (
         <div className="space-y-4">
-          <MetricCard title="Budget vs. Actual" icon="ðŸ“Š">
+          <MetricCard title="Budget vs. Actual" icon="📊">
             <table className="w-full text-sm">
               <thead>
                 <tr className="text-left text-gray-500 text-xs uppercase">
@@ -1510,7 +1510,7 @@
             </table>
           </MetricCard>
 
-          <MetricCard title="Monthly Revenue Trend" icon="ðŸ’µ">
+          <MetricCard title="Monthly Revenue Trend" icon="💵">
             <div className="grid grid-cols-3 gap-3">
               <StatBox value={data.budget.revenue.monthly.current} label="Current Month" color="green" />
               <StatBox value={data.budget.revenue.monthly.priorYear} label="Same Month PY" color="gray" />
@@ -1518,7 +1518,7 @@
             </div>
           </MetricCard>
 
-          <MetricCard title="Key Ratios vs. Peers" icon="ðŸ“ˆ">
+          <MetricCard title="Key Ratios vs. Peers" icon="📈">
             <div className="grid grid-cols-3 gap-3">
               <div className="text-center p-3 bg-green-50 rounded-lg">
                 <div className="text-xl font-bold text-green-700">{data.budget.costRecovery.current}</div>
@@ -1545,7 +1545,7 @@
           ========================================== */}
       {activeTab === 'peers' && (
         <div className="space-y-4">
-          <MetricCard title="Little Rock vs. NRPA Peer Benchmarks" icon="ðŸ“Š">
+          <MetricCard title="Little Rock vs. NRPA Peer Benchmarks" icon="📊">
             <p className="text-xs text-gray-500 mb-3">Population 100K-250K | Source: {data.peerComparison.source}</p>
             <table className="w-full text-sm">
               <thead>
@@ -1574,16 +1574,16 @@
           </MetricCard>
 
           <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
-            <h4 className="font-medium text-blue-800 mb-2">ðŸ“Œ Key Insights</h4>
+            <h4 className="font-medium text-blue-800 mb-2">📌 Key Insights</h4>
             <ul className="text-sm text-gray-700 space-y-1">
-              <li>â€¢ Little Rock is the only major AR city <strong>without dedicated parks funding</strong> (no sales tax)</li>
-              <li>â€¢ General Fund structure creates <strong>no feedback loop</strong> â€” parks revenue flows to city, not retained</li>
-              <li>â€¢ Cost recovery of <strong>{data.budget.costRecovery.current}</strong> vs. peer median of <strong>{data.budget.costRecovery.peerBenchmark}</strong></li>
-              <li>â€¢ Peer cities average <strong>62% General Fund</strong>, <strong>21% earned revenue</strong>, <strong>8% voter-approved taxes</strong></li>
+              <li>• Little Rock is the only major AR city <strong>without dedicated parks funding</strong> (no sales tax)</li>
+              <li>• General Fund structure creates <strong>no feedback loop</strong> — parks revenue flows to city, not retained</li>
+              <li>• Cost recovery of <strong>{data.budget.costRecovery.current}</strong> vs. peer median of <strong>{data.budget.costRecovery.peerBenchmark}</strong></li>
+              <li>• Peer cities average <strong>62% General Fund</strong>, <strong>21% earned revenue</strong>, <strong>8% voter-approved taxes</strong></li>
             </ul>
           </div>
 
-          <MetricCard title="Peer City Quick Reference" icon="ðŸ™ï¸">
+          <MetricCard title="Peer City Quick Reference" icon="🏙️">
             <div className="text-xs text-gray-600 space-y-2">
               <p><strong>NRPA Benchmarks (100K-250K Pop):</strong></p>
               <ul className="list-disc list-inside space-y-1 ml-2">
