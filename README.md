@@ -16,7 +16,9 @@ Effective oversight requires access to performance data, trend analysis, and the
 
 **Vision**: Creating a City in a Park through innovative recreational programming and vibrant park spaces which enhance the quality of life for all residents of Little Rock.
 
-## Live Dashboard
+## Live Links
+
+**🔗 [View Commission Resources](https://lrparks.github.io/parks-dashboard/index.html)**
 
 **🔗 [View Dashboard](https://lrparks.github.io/parks-dashboard/dashboard.html)**
 
@@ -36,9 +38,14 @@ parks-dashboard/
 ├── about.html                    # About this dashboard
 ├── reports.html                  # Division report browser
 ├── meetings.html                 # Meeting archive
+├── calendar.html                 # Meeting calendar (NEW)
 ├── dashboard.html                # Main dashboard (React)
 ├── rebsamen.html                 # Tennis economic calculator (React, unlisted)
 ├── PR-strategic-kpi-tracker.html # KPIs from Strategic Plan 2025-2030
+│
+├── .github/
+│   └── workflows/
+│       └── auto-update-json.yml  # Automated JSON updates (NEW)
 │
 ├── components/                   # Shared HTML components
 │   ├── header.html               # Site navigation
@@ -53,14 +60,19 @@ parks-dashboard/
 ├── tailwind.config.js            # Tailwind configuration
 ├── src/input.css                 # Tailwind source
 │
-├── reports.json                  # Report metadata
-├── meetings.json                 # Meeting metadata
+├── reports.json                  # Report metadata (auto-updated)
+├── meetings.json                 # Meeting metadata (auto-updated)
 ├── robots.txt                    # Search engine blocking
 │
 ├── pdfs/                         # Division reports
 │   └── YYYYMM-division.pdf
-└── transcripts/                  # YouTube auto-transcripts
-    └── YYYYMM_Title.txt
+├── transcripts/                  # YouTube auto-transcripts
+│   └── YYYYMM_Title.txt
+│
+└── scripts/                      # Local development tools (optional)
+    ├── auto_update_reports_json.py
+    ├── auto_update_meetings_json.py
+    └── download_youtube_transcript.py
 ```
 
 ## Data Sources
@@ -88,8 +100,9 @@ Monthly reports from five divisions:
 |---------|--------|---------|
 | Period | `YYYYMM` | `202410` |
 | Reports | `YYYYMM-division.pdf` | `202410-admin.pdf` |
+| Reference Docs | `YYYYMM-reference-description.pdf` | `202601-reference-agenda.pdf` |
 | Transcripts | `YYYYMM_Title.txt` | `202410_Commission_Meeting.txt` |
-| Division Codes | lowercase | admin, operations, recreation, volunteer, safety |
+| Division Codes | lowercase | admin, operations, recreation, volunteer, safety, reference |
 
 ## Commission Responsibilities
 
@@ -109,6 +122,8 @@ Per [LRC §2-330](https://library.municode.com/ar/little_rock/codes/code_of_ordi
 - Google Sheets integration with live data feeds
 - Report browser with PDF viewer (month/division navigation)
 - Meeting archive with videos and transcripts
+- Meeting calendar view (NEW)
+- Automated JSON updates via GitHub Actions (NEW)
 - KPI Tracker (Strategic Plan 2025-2030)
 - Shared component system (header/footer)
 - GitHub Pages deployment
@@ -117,14 +132,68 @@ Per [LRC §2-330](https://library.municode.com/ar/little_rock/codes/code_of_ordi
 - Historical trend visualizations (charts/graphs)
 - Cross-report search functionality
 
-## Monthly Data Workflow
+## Automated Workflows
 
-1. Receive division reports (PDFs)
-2. Extract data using a consistent prompt
-3. Update the Historical_Data column
-4. Upload PDFs to `/pdfs/` directory
-5. Update `reports.json` metadata
-6. Verify the accuracy
+### GitHub Actions Integration
+
+The repository uses GitHub Actions to automatically maintain `reports.json` and `meetings.json` when new files are added.
+
+**Workflow:** `.github/workflows/auto-update-json.yml`
+
+**Triggers:**
+- Automatically when PDFs are pushed to `pdfs/`
+- Automatically when transcripts are pushed to `transcripts/`
+- Manually via Actions tab
+
+**What it does:**
+1. Scans `pdfs/` folder for new report files
+2. Scans `transcripts/` folder for new meeting transcripts
+3. Extracts metadata (period, division, video ID)
+4. Updates `reports.json` and `meetings.json`
+5. Commits changes back to repository
+
+**Video ID Extraction:**
+The workflow automatically extracts YouTube video IDs from transcript headers:
+```
+Title: December 2025 - Parks Commission Meeting
+Period: 202512
+Video ID: 91AmsS6KByU  ← Automatically extracted
+URL: https://www.youtube.com/watch?v=91AmsS6KByU
+```
+
+### Monthly Workflow (Simplified)
+
+**Old process:**
+1. Receive division reports
+2. Upload PDFs to repository
+3. Manually update reports.json
+4. Download YouTube transcript
+5. Upload transcript
+6. Manually update meetings.json with video ID
+7. Commit all changes
+
+**New automated process:**
+1. Receive division reports
+2. Upload PDFs to `pdfs/` folder
+3. Download YouTube transcript (includes video ID)
+4. Upload transcript to `transcripts/` folder
+5. Commit and push
+6. ✨ **GitHub Actions automatically updates both JSON files**
+
+**Time saved:** ~10-15 minutes per month
+
+### Local Development Scripts
+
+Optional Python scripts for local testing (in `scripts/` folder):
+
+- **`auto_update_reports_json.py`** - Scans PDFs and updates reports.json locally
+- **`auto_update_meetings_json.py`** - Scans transcripts and updates meetings.json locally
+- **`download_youtube_transcript.py`** - Interactive YouTube transcript downloader
+
+These mirror the GitHub Actions workflow and are useful for:
+- Testing changes before pushing
+- Bulk updates to existing data
+- Offline development
 
 ## Key Metrics (90+)
 
@@ -145,6 +214,7 @@ Per [LRC §2-330](https://library.municode.com/ar/little_rock/codes/code_of_ordi
 - **Frontend**: Vanilla JS (most pages), React 18 (dashboard, rebsamen)
 - **Styling**: Tailwind CSS (compiled)
 - **Data**: Google Sheets published CSV endpoints
+- **Automation**: GitHub Actions (YAML workflows)
 - **Hosting**: GitHub Pages (static)
 - **PDF Rendering**: Browser native / iframe
 - **Video**: YouTube embeds
@@ -159,7 +229,32 @@ python3 -m http.server 8000
 
 # Rebuild Tailwind CSS (after adding new Tailwind classes)
 npx tailwindcss -i ./src/input.css -o ./styles.css
+
+# Test JSON updates locally (optional)
+python scripts/auto_update_reports_json.py
+python scripts/auto_update_meetings_json.py
+
+# Download YouTube transcript
+python scripts/download_youtube_transcript.py
 ```
+
+## GitHub Actions Setup
+
+**First-time setup:**
+
+1. Add workflow file to `.github/workflows/auto-update-json.yml`
+2. In GitHub: **Settings** → **Actions** → **General**
+3. Set **Workflow permissions** to "Read and write permissions"
+4. Check "Allow GitHub Actions to create and approve pull requests"
+5. Save
+
+**Testing:**
+- **Actions** tab → **"Auto-update Reports and Meetings JSON"** → **"Run workflow"**
+
+**Viewing results:**
+- Check Actions tab for workflow runs
+- Look for commits from `github-actions[bot]`
+- Review the summary of what was added
 
 ## Resources
 
@@ -172,4 +267,4 @@ npx tailwindcss -i ./src/input.css -o ./styles.css
 
 ---
 
-*Unofficial project. Data sourced from public commission materials.*
+*Unofficial project. Data sourced from public commission materials. JSON updates automated via GitHub Actions.*
