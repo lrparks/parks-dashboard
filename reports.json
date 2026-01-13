@@ -1,79 +1,14 @@
 {
   "reports": [
     {
-      "period": "202204",
-      "division": "minutes",
-      "file": "pdfs/202204-minutes.pdf"
-    },
-    {
-      "period": "202205",
-      "division": "agenda",
-      "file": "pdfs/202205-agenda.pdf"
-    },
-    {
-      "period": "202205",
-      "division": "minutes",
-      "file": "pdfs/202205-minutes.pdf"
-    },
-    {
-      "period": "202206",
-      "division": "agenda",
-      "file": "pdfs/202206-agenda.pdf"
-    },
-    {
-      "period": "202206",
-      "division": "minutes",
-      "file": "pdfs/202206-minutes.pdf"
-    },
-    {
-      "period": "202207",
-      "division": "agenda",
-      "file": "pdfs/202207-agenda.pdf"
-    },
-    {
-      "period": "202207",
-      "division": "minutes",
-      "file": "pdfs/202207-minutes.pdf"
-    },
-    {
-      "period": "202208",
-      "division": "agenda",
-      "file": "pdfs/202208-agenda.pdf"
-    },
-    {
-      "period": "202208",
-      "division": "minutes",
-      "file": "pdfs/202208-minutes.pdf"
-    },
-    {
       "period": "202208",
       "division": "reference",
       "file": "pdfs/202208-reference-fop-proposal.pdf"
     },
     {
       "period": "202209",
-      "division": "agenda",
-      "file": "pdfs/202209-agenda.pdf"
-    },
-    {
-      "period": "202209",
-      "division": "minutes",
-      "file": "pdfs/202209-minutes.pdf"
-    },
-    {
-      "period": "202209",
       "division": "recreation",
       "file": "pdfs/202209-recreation.pdf"
-    },
-    {
-      "period": "202210",
-      "division": "agenda",
-      "file": "pdfs/202210-agenda.pdf"
-    },
-    {
-      "period": "202210",
-      "division": "minutes",
-      "file": "pdfs/202210-minutes.pdf"
     },
     {
       "period": "202210",
@@ -86,29 +21,9 @@
       "file": "pdfs/202210-reference-jimdailey-handout.pdf"
     },
     {
-      "period": "202211",
-      "division": "agenda",
-      "file": "pdfs/202211-agenda.pdf"
-    },
-    {
-      "period": "202211",
-      "division": "minutes",
-      "file": "pdfs/202211-minutes.pdf"
-    },
-    {
       "period": "202212",
       "division": "admin",
       "file": "pdfs/202212-admin.pdf"
-    },
-    {
-      "period": "202212",
-      "division": "agenda",
-      "file": "pdfs/202212-agenda.pdf"
-    },
-    {
-      "period": "202212",
-      "division": "minutes",
-      "file": "pdfs/202212-minutes.pdf"
     },
     {
       "period": "202212",
@@ -137,16 +52,6 @@
     },
     {
       "period": "202301",
-      "division": "agenda",
-      "file": "pdfs/202301-agenda.pdf"
-    },
-    {
-      "period": "202301",
-      "division": "minutes",
-      "file": "pdfs/202301-minutes.pdf"
-    },
-    {
-      "period": "202301",
       "division": "operations",
       "file": "pdfs/202301-operations.pdf"
     },
@@ -159,21 +64,6 @@
       "period": "202302",
       "division": "admin",
       "file": "pdfs/202302-admin.pdf"
-    },
-    {
-      "period": "202302",
-      "division": "agenda",
-      "file": "pdfs/202302-agenda-special.pdf"
-    },
-    {
-      "period": "202302",
-      "division": "agenda",
-      "file": "pdfs/202302-agenda.pdf"
-    },
-    {
-      "period": "202302",
-      "division": "minutes",
-      "file": "pdfs/202302-minutes.pdf"
     },
     {
       "period": "202302",
@@ -197,16 +87,6 @@
     },
     {
       "period": "202303",
-      "division": "agenda",
-      "file": "pdfs/202303-agenda.pdf"
-    },
-    {
-      "period": "202303",
-      "division": "minutes",
-      "file": "pdfs/202303-minutes.pdf"
-    },
-    {
-      "period": "202303",
       "division": "operations",
       "file": "pdfs/202303-operations.pdf"
     },
@@ -222,16 +102,6 @@
     },
     {
       "period": "202304",
-      "division": "agenda",
-      "file": "pdfs/202304-agenda.pdf"
-    },
-    {
-      "period": "202304",
-      "division": "minutes",
-      "file": "pdfs/202304-minutes.pdf"
-    },
-    {
-      "period": "202304",
       "division": "operations",
       "file": "pdfs/202304-operations.pdf"
     },
@@ -239,16 +109,6 @@
       "period": "202304",
       "division": "recreation",
       "file": "pdfs/202304-recreation.pdf"
-    },
-    {
-      "period": "202305",
-      "division": "agenda",
-      "file": "pdfs/202305-agenda.pdf"
-    },
-    {
-      "period": "202305",
-      "division": "minutes",
-      "file": "pdfs/202305-minutes.pdf"
     },
     {
       "period": "202305",
@@ -267,16 +127,6 @@
     },
     {
       "period": "202306",
-      "division": "agenda",
-      "file": "pdfs/202306-agenda.pdf"
-    },
-    {
-      "period": "202306",
-      "division": "minutes",
-      "file": "pdfs/202306-minutes.pdf"
-    },
-    {
-      "period": "202306",
       "division": "operations",
       "file": "pdfs/202306-operations.pdf"
     },
@@ -292,16 +142,6 @@
     },
     {
       "period": "202307",
-      "division": "agenda",
-      "file": "pdfs/202307-agenda.pdf"
-    },
-    {
-      "period": "202307",
-      "division": "minutes",
-      "file": "pdfs/202307-minutes.pdf"
-    },
-    {
-      "period": "202307",
       "division": "operations",
       "file": "pdfs/202307-operations.pdf"
     },
@@ -309,11 +149,6 @@
       "period": "202307",
       "division": "recreation",
       "file": "pdfs/202307-recreation.pdf"
-    },
-    {
-      "period": "202308",
-      "division": "agenda",
-      "file": "pdfs/202308-agenda.pdf"
     },
     {
       "period": "202308",
@@ -332,16 +167,6 @@
     },
     {
       "period": "202309",
-      "division": "agenda",
-      "file": "pdfs/202309-agenda.pdf"
-    },
-    {
-      "period": "202309",
-      "division": "minutes",
-      "file": "pdfs/202309-minutes.pdf"
-    },
-    {
-      "period": "202309",
       "division": "operations",
       "file": "pdfs/202309-operations.pdf"
     },
@@ -349,16 +174,6 @@
       "period": "202309",
       "division": "recreation",
       "file": "pdfs/202309-recreation.pdf"
-    },
-    {
-      "period": "202310",
-      "division": "agenda",
-      "file": "pdfs/202310-agenda.pdf"
-    },
-    {
-      "period": "202310",
-      "division": "minutes",
-      "file": "pdfs/202310-minutes.pdf"
     },
     {
       "period": "202310",
@@ -374,16 +189,6 @@
       "period": "202311",
       "division": "admin",
       "file": "pdfs/202311-admin.pdf"
-    },
-    {
-      "period": "202311",
-      "division": "agenda",
-      "file": "pdfs/202311-agenda.pdf"
-    },
-    {
-      "period": "202311",
-      "division": "minutes",
-      "file": "pdfs/202311-minutes.pdf"
     },
     {
       "period": "202311",
@@ -407,16 +212,6 @@
     },
     {
       "period": "202312",
-      "division": "agenda",
-      "file": "pdfs/202312-agenda.pdf"
-    },
-    {
-      "period": "202312",
-      "division": "minutes",
-      "file": "pdfs/202312-minutes.pdf"
-    },
-    {
-      "period": "202312",
       "division": "operations",
       "file": "pdfs/202312-operations.pdf"
     },
@@ -432,16 +227,6 @@
     },
     {
       "period": "202401",
-      "division": "agenda",
-      "file": "pdfs/202401-agenda.pdf"
-    },
-    {
-      "period": "202401",
-      "division": "minutes",
-      "file": "pdfs/202401-minutes.pdf"
-    },
-    {
-      "period": "202401",
       "division": "operations",
       "file": "pdfs/202401-operations.pdf"
     },
@@ -454,11 +239,6 @@
       "period": "202402",
       "division": "admin",
       "file": "pdfs/202402-admin.pdf"
-    },
-    {
-      "period": "202402",
-      "division": "agenda",
-      "file": "pdfs/202402-agenda.pdf"
     },
     {
       "period": "202402",
@@ -482,43 +262,13 @@
     },
     {
       "period": "202403",
-      "division": "agenda",
-      "file": "pdfs/202403-agenda.pdf"
-    },
-    {
-      "period": "202403",
       "division": "operations",
       "file": "pdfs/202403-operations.pdf"
-    },
-    {
-      "period": "202404",
-      "division": "agenda",
-      "file": "pdfs/202404-agenda.pdf"
-    },
-    {
-      "period": "202404",
-      "division": "minutes",
-      "file": "pdfs/202404-minutes.pdf"
-    },
-    {
-      "period": "202405",
-      "division": "minutes",
-      "file": "pdfs/202405-minutes.pdf"
     },
     {
       "period": "202406",
       "division": "admin",
       "file": "pdfs/202406-admin.pdf"
-    },
-    {
-      "period": "202406",
-      "division": "agenda",
-      "file": "pdfs/202406-agenda.pdf"
-    },
-    {
-      "period": "202406",
-      "division": "minutes",
-      "file": "pdfs/202406-minutes.pdf"
     },
     {
       "period": "202406",
@@ -534,16 +284,6 @@
       "period": "202406",
       "division": "safety",
       "file": "pdfs/202406-safety.pdf"
-    },
-    {
-      "period": "202407",
-      "division": "agenda",
-      "file": "pdfs/202407-agenda.pdf"
-    },
-    {
-      "period": "202407",
-      "division": "minutes",
-      "file": "pdfs/202407-minutes.pdf"
     },
     {
       "period": "202407",
@@ -564,11 +304,6 @@
       "period": "202407",
       "division": "safety",
       "file": "pdfs/202407-safety.pdf"
-    },
-    {
-      "period": "202408",
-      "division": "minutes",
-      "file": "pdfs/202408-minutes.pdf"
     },
     {
       "period": "202408",
@@ -597,16 +332,6 @@
     },
     {
       "period": "202409",
-      "division": "agenda",
-      "file": "pdfs/202409-agenda.pdf"
-    },
-    {
-      "period": "202409",
-      "division": "minutes",
-      "file": "pdfs/202409-minutes.pdf"
-    },
-    {
-      "period": "202409",
       "division": "operations",
       "file": "pdfs/202409-operations.pdf"
     },
@@ -621,24 +346,9 @@
       "file": "pdfs/202409-safety.pdf"
     },
     {
-      "period": "202410",
-      "division": "agenda",
-      "file": "pdfs/202410-agenda.pdf"
-    },
-    {
-      "period": "202410",
-      "division": "minutes",
-      "file": "pdfs/202410-minutes.pdf"
-    },
-    {
       "period": "202411",
       "division": "admin",
       "file": "pdfs/202411-admin.pdf"
-    },
-    {
-      "period": "202411",
-      "division": "agenda",
-      "file": "pdfs/202411-agenda.pdf"
     },
     {
       "period": "202411",
@@ -662,16 +372,6 @@
     },
     {
       "period": "202412",
-      "division": "agenda",
-      "file": "pdfs/202412-agenda.pdf"
-    },
-    {
-      "period": "202412",
-      "division": "minutes",
-      "file": "pdfs/202412-minutes.pdf"
-    },
-    {
-      "period": "202412",
       "division": "operations",
       "file": "pdfs/202412-operations.pdf"
     },
@@ -689,16 +389,6 @@
       "period": "202501",
       "division": "admin",
       "file": "pdfs/202501-admin.pdf"
-    },
-    {
-      "period": "202501",
-      "division": "agenda",
-      "file": "pdfs/202501-agenda.pdf"
-    },
-    {
-      "period": "202501",
-      "division": "minutes",
-      "file": "pdfs/202501-minutes.pdf"
     },
     {
       "period": "202501",
@@ -732,16 +422,6 @@
     },
     {
       "period": "202502",
-      "division": "agenda",
-      "file": "pdfs/202502-agenda.pdf"
-    },
-    {
-      "period": "202502",
-      "division": "minutes",
-      "file": "pdfs/202502-minutes.pdf"
-    },
-    {
-      "period": "202502",
       "division": "operations",
       "file": "pdfs/202502-operations.pdf"
     },
@@ -764,11 +444,6 @@
       "period": "202503",
       "division": "admin",
       "file": "pdfs/202503-admin.pdf"
-    },
-    {
-      "period": "202503",
-      "division": "agenda",
-      "file": "pdfs/202503-agenda.pdf"
     },
     {
       "period": "202503",
@@ -797,16 +472,6 @@
     },
     {
       "period": "202504",
-      "division": "agenda",
-      "file": "pdfs/202504-agenda.pdf"
-    },
-    {
-      "period": "202504",
-      "division": "minutes",
-      "file": "pdfs/202504-minutes.pdf"
-    },
-    {
-      "period": "202504",
       "division": "operations",
       "file": "pdfs/202504-operations.pdf"
     },
@@ -832,16 +497,6 @@
     },
     {
       "period": "202505",
-      "division": "agenda",
-      "file": "pdfs/202505-agenda.pdf"
-    },
-    {
-      "period": "202505",
-      "division": "minutes",
-      "file": "pdfs/202505-minutes.pdf"
-    },
-    {
-      "period": "202505",
       "division": "operations",
       "file": "pdfs/202505-operations.pdf"
     },
@@ -862,16 +517,6 @@
     },
     {
       "period": "202506",
-      "division": "agenda",
-      "file": "pdfs/202506-agenda.pdf"
-    },
-    {
-      "period": "202506",
-      "division": "minutes",
-      "file": "pdfs/202506-minutes.pdf"
-    },
-    {
-      "period": "202506",
       "division": "safety",
       "file": "pdfs/202506-safety.pdf"
     },
@@ -879,16 +524,6 @@
       "period": "202506",
       "division": "volunteer",
       "file": "pdfs/202506-volunteer.pdf"
-    },
-    {
-      "period": "202507",
-      "division": "agenda",
-      "file": "pdfs/202507-agenda.pdf"
-    },
-    {
-      "period": "202507",
-      "division": "minutes",
-      "file": "pdfs/202507-minutes.pdf"
     },
     {
       "period": "202507",
@@ -904,16 +539,6 @@
       "period": "202508",
       "division": "admin",
       "file": "pdfs/202508-admin.pdf"
-    },
-    {
-      "period": "202508",
-      "division": "agenda",
-      "file": "pdfs/202508-agenda.pdf"
-    },
-    {
-      "period": "202508",
-      "division": "minutes",
-      "file": "pdfs/202508-minutes.pdf"
     },
     {
       "period": "202508",
@@ -942,16 +567,6 @@
     },
     {
       "period": "202509",
-      "division": "agenda",
-      "file": "pdfs/202509-agenda.pdf"
-    },
-    {
-      "period": "202509",
-      "division": "minutes",
-      "file": "pdfs/202509-minutes.pdf"
-    },
-    {
-      "period": "202509",
       "division": "recreation",
       "file": "pdfs/202509-recreation.pdf"
     },
@@ -974,16 +589,6 @@
       "period": "202510",
       "division": "admin",
       "file": "pdfs/202510-admin.pdf"
-    },
-    {
-      "period": "202510",
-      "division": "agenda",
-      "file": "pdfs/202510-agenda.pdf"
-    },
-    {
-      "period": "202510",
-      "division": "minutes",
-      "file": "pdfs/202510-minutes.pdf"
     },
     {
       "period": "202510",
@@ -1012,16 +617,6 @@
     },
     {
       "period": "202511",
-      "division": "agenda",
-      "file": "pdfs/202511-agenda.pdf"
-    },
-    {
-      "period": "202511",
-      "division": "minutes",
-      "file": "pdfs/202511-minutes.pdf"
-    },
-    {
-      "period": "202511",
       "division": "recreation",
       "file": "pdfs/202511-recreation.pdf"
     },
@@ -1039,16 +634,6 @@
       "period": "202512",
       "division": "admin",
       "file": "pdfs/202512-admin.pdf"
-    },
-    {
-      "period": "202512",
-      "division": "agenda",
-      "file": "pdfs/202512-agenda.pdf"
-    },
-    {
-      "period": "202512",
-      "division": "minutes",
-      "file": "pdfs/202512-minutes.pdf"
     },
     {
       "period": "202512",
@@ -1074,11 +659,6 @@
       "period": "202601",
       "division": "admin",
       "file": "pdfs/202601-admin.pdf"
-    },
-    {
-      "period": "202601",
-      "division": "agenda",
-      "file": "pdfs/202601-agenda.pdf"
     },
     {
       "period": "202601",
