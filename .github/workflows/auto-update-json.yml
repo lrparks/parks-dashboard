@@ -300,6 +300,15 @@ jobs:
           
           if updated_transcripts:
               print(f"🔄 Updated {len(updated_transcripts)} transcript paths")
+              # Only count this as an update if there are no new meetings
+              # (path updates alone don't need a commit)
+              if not missing_transcripts:
+                  print("   (No new meetings, only path updates - skipping commit)")
+                  output_file = os.environ.get('GITHUB_OUTPUT', '')
+                  if output_file:
+                      with open(output_file, 'a') as f:
+                          f.write('MEETINGS_UPDATED=false\n')
+                  sys.exit(0)
           
           # Sort by period (reverse chronological)
           data['meetings'].sort(key=lambda x: x['period'], reverse=True)
@@ -329,6 +338,12 @@ jobs:
           
           # Stage changed JSON files
           git add reports.json meetings.json
+          
+          # Check if there are actually changes to commit
+          if git diff --cached --quiet; then
+            echo "No actual changes to commit (files unchanged)"
+            exit 0
+          fi
           
           # Create commit message
           COMMIT_MSG="Auto-update JSON files"
