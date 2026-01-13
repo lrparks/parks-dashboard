@@ -38,17 +38,25 @@ jobs:
           REPORTS_JSON = "reports.json"
           PDFS_FOLDER = "pdfs"
           
+          # Divisions that should NOT be added to reports.json
+          # (agenda/minutes are meeting docs, not division reports)
+          EXCLUDED_DIVISIONS = {'agenda', 'minutes'}
+
           def parse_filename(filename):
               """Parse PDF filename to extract period and division."""
               name = filename.replace('.pdf', '')
               pattern = r'^(\d{6})-([a-z]+)(?:-(.+))?$'
               match = re.match(pattern, name)
-              
+
               if not match:
                   return None
-              
+
               period = match.group(1)
               division = match.group(2)
+
+              # Skip meeting-related documents (handled separately)
+              if division in EXCLUDED_DIVISIONS:
+                  return None
               
               if len(period) != 6 or not period.isdigit():
                   return None
