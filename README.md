@@ -16,7 +16,9 @@ Effective oversight requires access to performance data, trend analysis, and the
 
 **Vision**: Creating a City in a Park through innovative recreational programming and vibrant park spaces which enhance the quality of life for all residents of Little Rock.
 
-## Live Dashboard
+## Live Links
+
+**🔗 [View Commission Resources](https://lrparks.github.io/parks-dashboard/index.html)**
 
 **🔗 [View Dashboard](https://lrparks.github.io/parks-dashboard/dashboard.html)**
 
