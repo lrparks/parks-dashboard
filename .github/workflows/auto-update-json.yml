@@ -105,7 +105,8 @@ jobs:
           
           if not missing_pdfs:
               print("✓ All PDF files already in reports.json")
-              print("REPORTS_UPDATED=false" >> os.environ.get('GITHUB_OUTPUT', '/dev/stdout'))
+              with open(os.environ.get('GITHUB_OUTPUT', '/dev/stdout'), 'a') as f:
+                  f.write('REPORTS_UPDATED=false\n')
               exit(0)
           
           print(f"➕ Adding {len(missing_pdfs)} new entries:")
@@ -278,7 +279,8 @@ jobs:
           
           if not missing_transcripts and not updated_transcripts:
               print("✓ All transcripts already in meetings.json")
-              print("MEETINGS_UPDATED=false" >> os.environ.get('GITHUB_OUTPUT', '/dev/stdout'))
+              with open(os.environ.get('GITHUB_OUTPUT', '/dev/stdout'), 'a') as f:
+                  f.write('MEETINGS_UPDATED=false\n')
               exit(0)
           
           if missing_transcripts:
