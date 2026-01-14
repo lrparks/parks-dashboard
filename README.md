@@ -36,16 +36,18 @@ Effective oversight requires access to performance data, trend analysis, and the
 parks-dashboard/
 ├── index.html                    # Landing page
 ├── about.html                    # About this dashboard
-├── reports.html                  # Division report browser
-├── meetings.html                 # Meeting archive
-├── calendar.html                 # Meeting calendar (NEW)
+├── reports.html                  # Division report browser (with full-text search)
+├── meetings.html                 # Meeting archive (with full-text search)
+├── calendar.html                 # Meeting calendar
+├── parks-commission-attendance.html  # Commissioner attendance tracker
 ├── dashboard.html                # Main dashboard (React)
 ├── rebsamen.html                 # Tennis economic calculator (React, unlisted)
 ├── PR-strategic-kpi-tracker.html # KPIs from Strategic Plan 2025-2030
 │
 ├── .github/
 │   └── workflows/
-│       └── auto-update-json.yml  # Automated JSON updates (NEW)
+│       ├── auto-update-json.yml  # Automated JSON updates
+│       └── build-search-index.yml # Builds full-text search indexes
 │
 ├── components/                   # Shared HTML components
 │   ├── header.html               # Site navigation
@@ -62,6 +64,8 @@ parks-dashboard/
 │
 ├── reports.json                  # Report metadata (auto-updated)
 ├── meetings.json                 # Meeting metadata (auto-updated)
+├── attendance.json               # Commissioner attendance data
+├── search-index-*.json           # Full-text search indexes (auto-generated)
 ├── robots.txt                    # Search engine blocking
 │
 ├── pdfs/                         # Division reports
@@ -69,9 +73,10 @@ parks-dashboard/
 ├── transcripts/                  # YouTube auto-transcripts
 │   └── YYYYMM_Title.txt
 │
-└── scripts/                      # Local development tools (optional)
-    ├── auto_update_reports_json.py
-    ├── auto_update_meetings_json.py
+└── scripts/                      # Development tools
+    ├── build-search-index.js         # Extracts text from PDFs for search
+    ├── auto_update_reports_json.py   # Updates reports.json locally
+    ├── auto_update_meetings_json.py  # Updates meetings.json locally
     └── download_youtube_transcript.py
 ```
 
@@ -104,6 +109,48 @@ Monthly reports from five divisions:
 | Transcripts | `YYYYMM_Title.txt` | `202410_Commission_Meeting.txt` |
 | Division Codes | lowercase | admin, operations, recreation, volunteer, safety, reference |
 
+## Attendance Tracking
+
+The `parks-commission-attendance.html` page tracks commissioner attendance using data from `attendance.json`.
+
+**Data Structure:**
+```json
+{
+  "2025": {
+    "meetings": ["202501", "202502", ...],
+    "commissioners": [
+      {
+        "name": "First Last",
+        "role": "Chair",
+        "term_expires": "2026",
+        "status": "Active",
+        "subcommittees": ["MP", "Mktg"],
+        "attendance": {
+          "202501": true,
+          "202502": false,
+          "202503": null
+        }
+      }
+    ],
+    "bod_liaisons": [
+      {
+        "name": "Director Name",
+        "role": "City Board",
+        "attendance": { "202501": true }
+      }
+    ]
+  }
+}
+```
+
+**Attendance Values:**
+- `true` = Present
+- `false` = Absent
+- `null` = Not yet a member
+- Omitted = No meeting that month
+
+**Subcommittee Codes:** MP (Master Plan), Mktg (Marketing), PC (Parks Conservancy)
+
 ## Commission Responsibilities
 
 Per [LRC §2-330](https://library.municode.com/ar/little_rock/codes/code_of_ordinances?nodeId=PTIICOOR_CH2AD_ARTVIIIPA_S2-330LIROPAREADCO), the Commission:
@@ -122,15 +169,17 @@ Per [LRC §2-330](https://library.municode.com/ar/little_rock/codes/code_of_ordi
 - Google Sheets integration with live data feeds
 - Report browser with PDF viewer (month/division navigation)
 - Meeting archive with videos and transcripts
-- Meeting calendar view (NEW)
-- Automated JSON updates via GitHub Actions (NEW)
+- **Full-text search** across all PDFs and transcripts
+- Meeting calendar view
+- Commissioner attendance tracker
+- Automated JSON updates via GitHub Actions
+- Automated search index building via GitHub Actions
 - KPI Tracker (Strategic Plan 2025-2030)
 - Shared component system (header/footer)
 - GitHub Pages deployment
 
 ### 📋 Planned
 - Historical trend visualizations (charts/graphs)
-- Cross-report search functionality
 
 ## Automated Workflows
 
@@ -182,18 +231,67 @@ URL: https://www.youtube.com/watch?v=91AmsS6KByU
 
 **Time saved:** ~10-15 minutes per month
 
+### Search Index Workflow
+
+Full-text search is powered by pre-built JSON indexes that are automatically regenerated when PDFs or transcripts change.
+
+**Workflow:** `.github/workflows/build-search-index.yml`
+
+**Triggers:**
+- Automatically when PDFs are pushed to `pdfs/`
+- Automatically when transcripts are pushed to `transcripts/`
+- Manually via Actions tab
+
+**What it does:**
+1. Extracts text from all PDFs using `pdftotext`
+2. Reads transcript files directly
+3. Creates year-based search index files
+4. Commits updated indexes back to repository
+
+**Index Files:**
+| File | Contents |
+|------|----------|
+| `search-index-2022-2023.json` | Combined older data |
+| `search-index-2024.json` | 2024 documents |
+| `search-index-2025.json` | 2025 documents |
+| `search-index-2026.json` | 2026 documents (current) |
+
+**Document Types Indexed:**
+- Division reports (`YYYYMM-division.pdf`)
+- Agendas (`YYYYMM-agenda.pdf`)
+- Minutes (`YYYYMM-minutes.pdf`)
+- Reference docs (`YYYYMM-reference-*.pdf`)
+- Transcripts (`YYYYMM_Title.txt`)
+
+**Search Features:**
+- **Reports page**: Search all document types, filter by type (Report, Agenda, Minutes, Reference, Transcript)
+- **Meetings page**: Search agendas, minutes, and transcripts only
+- Client-side fuzzy search using Fuse.js
+- Results show matching context with highlighted keywords
+
 ### Local Development Scripts
 
-Optional Python scripts for local testing (in `scripts/` folder):
+Scripts in the `scripts/` folder for local development:
 
+- **`build-search-index.js`** - Extracts PDF text and builds search indexes (requires Node.js and pdftotext)
 - **`auto_update_reports_json.py`** - Scans PDFs and updates reports.json locally
 - **`auto_update_meetings_json.py`** - Scans transcripts and updates meetings.json locally
 - **`download_youtube_transcript.py`** - Interactive YouTube transcript downloader
 
-These mirror the GitHub Actions workflow and are useful for:
+These mirror the GitHub Actions workflows and are useful for:
 - Testing changes before pushing
 - Bulk updates to existing data
 - Offline development
+
+**Building search indexes locally:**
+```bash
+# Install pdftotext (required)
+sudo apt-get install poppler-utils  # Linux
+brew install poppler                 # macOS
+
+# Run the build script
+node scripts/build-search-index.js
+```
 
 ## Key Metrics (90+)
 
@@ -214,11 +312,12 @@ These mirror the GitHub Actions workflow and are useful for:
 - **Frontend**: Vanilla JS (most pages), React 18 (dashboard, rebsamen)
 - **Styling**: Tailwind CSS (compiled)
 - **Data**: Google Sheets published CSV endpoints
+- **Search**: Fuse.js (client-side fuzzy search), pdftotext (text extraction)
 - **Automation**: GitHub Actions (YAML workflows)
 - **Hosting**: GitHub Pages (static)
 - **PDF Rendering**: Browser native / iframe
 - **Video**: YouTube embeds
-- **Search Indexing**: Blocked via robots.txt
+- **Robots**: Blocked via robots.txt
 
 ## Local Development
 
