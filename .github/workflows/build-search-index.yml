@@ -4,6 +4,7 @@ on:
   push:
     paths:
       - 'pdfs/**/*.pdf'
+      - 'transcripts/**/*.txt'
     branches:
       - main
   workflow_dispatch:  # Manual trigger
