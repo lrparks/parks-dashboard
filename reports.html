@@ -5,6 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Division Reports - Little Rock Parks & Recreation</title>
     <link href="styles.css" rel="stylesheet">
+    <!-- Fuse.js for fuzzy search -->
+    <script src="https://cdn.jsdelivr.net/npm/fuse.js@7.0.0"></script>
 </head>
 <body class="min-h-screen bg-gray-100">
     <!-- Navigation Header -->
@@ -18,8 +20,54 @@
             <p class="text-gray-600 text-sm mt-1">Monthly reports from all Parks & Recreation divisions</p>
         </div>
 
+        <!-- Search Box -->
+        <div id="search-section" class="bg-white rounded-lg shadow-md p-4 mb-6">
+            <div class="flex flex-col sm:flex-row gap-3">
+                <div class="flex-1 relative">
+                    <svg class="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                    </svg>
+                    <input type="text" id="searchInput" placeholder="Search reports..."
+                           class="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500 text-sm"
+                           oninput="handleSearch(this.value)">
+                </div>
+                <button onclick="clearSearch()" id="clearBtn" class="hidden px-4 py-2 bg-gray-100 hover:bg-gray-200 rounded-lg text-sm transition">
+                    Clear
+                </button>
+            </div>
+            <!-- Division Filters -->
+            <div class="mt-3 flex flex-wrap gap-2" id="divisionFilters">
+                <label class="inline-flex items-center gap-1.5 text-xs">
+                    <input type="checkbox" checked class="rounded text-green-600 focus:ring-green-500" onchange="handleSearch(document.getElementById('searchInput').value)" data-division="admin">
+                    <span>Admin</span>
+                </label>
+                <label class="inline-flex items-center gap-1.5 text-xs">
+                    <input type="checkbox" checked class="rounded text-green-600 focus:ring-green-500" onchange="handleSearch(document.getElementById('searchInput').value)" data-division="operations">
+                    <span>Operations</span>
+                </label>
+                <label class="inline-flex items-center gap-1.5 text-xs">
+                    <input type="checkbox" checked class="rounded text-green-600 focus:ring-green-500" onchange="handleSearch(document.getElementById('searchInput').value)" data-division="recreation">
+                    <span>Recreation</span>
+                </label>
+                <label class="inline-flex items-center gap-1.5 text-xs">
+                    <input type="checkbox" checked class="rounded text-green-600 focus:ring-green-500" onchange="handleSearch(document.getElementById('searchInput').value)" data-division="safety">
+                    <span>Safety</span>
+                </label>
+                <label class="inline-flex items-center gap-1.5 text-xs">
+                    <input type="checkbox" checked class="rounded text-green-600 focus:ring-green-500" onchange="handleSearch(document.getElementById('searchInput').value)" data-division="volunteer">
+                    <span>Volunteer</span>
+                </label>
+                <label class="inline-flex items-center gap-1.5 text-xs">
+                    <input type="checkbox" checked class="rounded text-green-600 focus:ring-green-500" onchange="handleSearch(document.getElementById('searchInput').value)" data-division="reference">
+                    <span>Reference</span>
+                </label>
+            </div>
+            <!-- Search Stats -->
+            <div id="searchStats" class="mt-2 text-xs text-gray-500 hidden"></div>
+        </div>
+
         <!-- View Toggle -->
-        <div class="mb-6">
+        <div class="mb-6" id="viewToggle">
             <div class="flex flex-wrap gap-1 rounded-lg border border-gray-200 bg-white p-1">
                 <button id="btn-by-month" onclick="setView('month')" class="px-3 sm:px-4 py-2 text-xs sm:text-sm font-medium rounded-md transition bg-green-600 text-white">
                     By Month
@@ -40,6 +88,9 @@
         <div id="error" class="bg-red-50 border border-red-200 rounded-lg p-4 mb-4 hidden">
             <span class="text-red-700">Error loading reports. Please try again later.</span>
         </div>
+
+        <!-- Search Results Container -->
+        <div id="search-results" class="hidden"></div>
 
         <!-- Reports Container -->
         <div id="reports-container" class="hidden"></div>
@@ -96,7 +147,10 @@
 
         // State
         let reports = [];
+        let searchIndex = null;
+        let fuse = null;
         let currentView = 'month';
+        let isSearching = false;
 
         // Load reports data
         async function loadReports() {
@@ -105,6 +159,33 @@
                 if (!response.ok) throw new Error('Failed to load');
                 const data = await response.json();
                 reports = data.reports || [];
+
+                // Build search data with additional fields
+                const searchData = reports.map(r => ({
+                    ...r,
+                    divisionName: DIVISIONS[r.division] || r.division,
+                    periodFormatted: formatPeriod(r.period),
+                    year: r.period.substring(0, 4),
+                    monthName: formatPeriod(r.period).split(' ')[0]
+                }));
+
+                // Initialize Fuse.js
+                fuse = new Fuse(searchData, {
+                    keys: [
+                        { name: 'divisionName', weight: 2 },
+                        { name: 'periodFormatted', weight: 1.5 },
+                        { name: 'year', weight: 1 },
+                        { name: 'monthName', weight: 1 },
+                        { name: 'file', weight: 0.5 }
+                    ],
+                    threshold: 0.3,
+                    includeScore: true,
+                    includeMatches: true
+                });
+
+                // Try to load full-text search index
+                loadSearchIndex();
+
                 document.getElementById('loading').classList.add('hidden');
                 document.getElementById('reports-container').classList.remove('hidden');
                 renderReports();
@@ -113,6 +194,152 @@
                 document.getElementById('error').classList.remove('hidden');
                 console.error('Error loading reports:', err);
             }
+        }
+
+        // Load full-text search index (if available)
+        async function loadSearchIndex() {
+            try {
+                const response = await fetch('search-index.json');
+                if (response.ok) {
+                    searchIndex = await response.json();
+                    // Rebuild Fuse with full-text content
+                    const searchData = reports.map(r => {
+                        const indexed = searchIndex.find(s => s.file === r.file);
+                        return {
+                            ...r,
+                            divisionName: DIVISIONS[r.division] || r.division,
+                            periodFormatted: formatPeriod(r.period),
+                            year: r.period.substring(0, 4),
+                            monthName: formatPeriod(r.period).split(' ')[0],
+                            content: indexed ? indexed.content : ''
+                        };
+                    });
+
+                    fuse = new Fuse(searchData, {
+                        keys: [
+                            { name: 'divisionName', weight: 2 },
+                            { name: 'periodFormatted', weight: 1.5 },
+                            { name: 'content', weight: 1 },
+                            { name: 'year', weight: 0.8 },
+                            { name: 'monthName', weight: 0.8 },
+                            { name: 'file', weight: 0.3 }
+                        ],
+                        threshold: 0.4,
+                        includeScore: true,
+                        includeMatches: true,
+                        ignoreLocation: true
+                    });
+                    console.log('Full-text search index loaded');
+                }
+            } catch (err) {
+                // No search index available, metadata search only
+                console.log('No full-text search index available, using metadata search');
+            }
+        }
+
+        // Get active division filters
+        function getActiveFilters() {
+            const checkboxes = document.querySelectorAll('#divisionFilters input[type="checkbox"]');
+            const active = [];
+            checkboxes.forEach(cb => {
+                if (cb.checked) active.push(cb.dataset.division);
+            });
+            return active;
+        }
+
+        // Handle search
+        function handleSearch(query) {
+            const clearBtn = document.getElementById('clearBtn');
+            const searchResults = document.getElementById('search-results');
+            const reportsContainer = document.getElementById('reports-container');
+            const viewToggle = document.getElementById('viewToggle');
+            const searchStats = document.getElementById('searchStats');
+            const activeFilters = getActiveFilters();
+
+            if (!query.trim()) {
+                // No search query - show normal view
+                clearBtn.classList.add('hidden');
+                searchResults.classList.add('hidden');
+                reportsContainer.classList.remove('hidden');
+                viewToggle.classList.remove('hidden');
+                searchStats.classList.add('hidden');
+                isSearching = false;
+                renderReports();
+                return;
+            }
+
+            isSearching = true;
+            clearBtn.classList.remove('hidden');
+            searchResults.classList.remove('hidden');
+            reportsContainer.classList.add('hidden');
+            viewToggle.classList.add('hidden');
+            searchStats.classList.remove('hidden');
+
+            // Perform search
+            let results = fuse.search(query);
+
+            // Filter by division
+            results = results.filter(r => activeFilters.includes(r.item.division));
+
+            // Update stats
+            searchStats.textContent = `Found ${results.length} result${results.length !== 1 ? 's' : ''} for "${query}"`;
+
+            // Render results
+            renderSearchResults(results, query);
+        }
+
+        // Clear search
+        function clearSearch() {
+            document.getElementById('searchInput').value = '';
+            handleSearch('');
+        }
+
+        // Render search results
+        function renderSearchResults(results, query) {
+            const container = document.getElementById('search-results');
+
+            if (results.length === 0) {
+                container.innerHTML = `
+                    <div class="bg-white rounded-lg shadow-md p-8 text-center">
+                        <svg class="w-12 h-12 mx-auto text-gray-300 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                        <p class="text-gray-500">No reports found for "${query}"</p>
+                        <p class="text-gray-400 text-sm mt-1">Try different keywords or check your filters</p>
+                    </div>
+                `;
+                return;
+            }
+
+            let html = '<div class="space-y-3">';
+            results.forEach(result => {
+                const r = result.item;
+                const score = Math.round((1 - result.score) * 100);
+
+                html += `
+                    <button onclick="openPdfViewer('${r.file}', '${DIVISIONS[r.division]} - ${formatPeriod(r.period)}')"
+                            class="w-full bg-white rounded-lg p-4 shadow hover:shadow-md transition text-left flex items-start gap-4 group">
+                        <div class="text-green-600 mt-1">
+                            <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                            </svg>
+                        </div>
+                        <div class="flex-1 min-w-0">
+                            <div class="font-medium text-gray-800 group-hover:text-green-600 transition">
+                                ${DIVISIONS[r.division]}
+                            </div>
+                            <div class="text-sm text-gray-500">${formatPeriod(r.period)}</div>
+                            <div class="text-xs text-gray-400 mt-1 truncate">${r.file}</div>
+                        </div>
+                        <div class="text-xs text-gray-400 bg-gray-100 px-2 py-1 rounded">
+                            ${score}% match
+                        </div>
+                    </button>
+                `;
+            });
+            html += '</div>';
+
+            container.innerHTML = html;
         }
 
         // Set view mode
@@ -129,26 +356,37 @@
 
         // Render reports based on current view
         function renderReports() {
+            if (isSearching) return;
+
             const container = document.getElementById('reports-container');
+            const activeFilters = getActiveFilters();
+
+            // Filter reports by active divisions
+            const filtered = reports.filter(r => activeFilters.includes(r.division));
 
             if (currentView === 'month') {
-                renderByMonth(container);
+                renderByMonth(container, filtered);
             } else {
-                renderByDivision(container);
+                renderByDivision(container, filtered);
             }
         }
 
         // Render grouped by month
-        function renderByMonth(container) {
+        function renderByMonth(container, filteredReports) {
             // Group by period
             const byPeriod = {};
-            reports.forEach(r => {
+            filteredReports.forEach(r => {
                 if (!byPeriod[r.period]) byPeriod[r.period] = [];
                 byPeriod[r.period].push(r);
             });
 
             // Sort periods descending (newest first)
             const periods = Object.keys(byPeriod).sort().reverse();
+
+            if (periods.length === 0) {
+                container.innerHTML = '<div class="bg-white rounded-lg shadow-md p-8 text-center text-gray-500">No reports match your filters</div>';
+                return;
+            }
 
             let html = '';
             periods.forEach(period => {
@@ -166,10 +404,10 @@
         }
 
         // Render grouped by division
-        function renderByDivision(container) {
+        function renderByDivision(container, filteredReports) {
             // Group by division (exclude reference documents)
             const byDivision = {};
-            reports.forEach(r => {
+            filteredReports.forEach(r => {
                 // Skip reference documents in division view
                 if (r.division === 'reference') return;
                 if (!byDivision[r.division]) byDivision[r.division] = [];
@@ -180,6 +418,11 @@
             const divisions = Object.keys(byDivision).sort((a, b) =>
                 DIVISIONS[a].localeCompare(DIVISIONS[b])
             );
+
+            if (divisions.length === 0) {
+                container.innerHTML = '<div class="bg-white rounded-lg shadow-md p-8 text-center text-gray-500">No reports match your filters</div>';
+                return;
+            }
 
             let html = '';
             divisions.forEach(division => {
