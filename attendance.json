@@ -35,7 +35,7 @@
           "202211": true,
           "202212": true
         },
-        "notes": "Not renewing term"
+        "notes": ""
       },
       {
         "name": "Cannon Fletcher",
@@ -57,7 +57,7 @@
           "202211": true,
           "202212": true
         },
-        "notes": "Masterplan Chair (Dec25)"
+        "notes": ""
       },
       {
         "name": "Samuel Ellis",
@@ -79,7 +79,7 @@
           "202211": true,
           "202212": true
         },
-        "notes": "Parks Conservancy Chair"
+        "notes": ""
       },
       {
         "name": "Abby Jennings",
@@ -299,7 +299,7 @@
           "202211": true,
           "202212": true
         },
-        "notes": "Listed absent Jan24; not seen after"
+        "notes": ""
       },
       {
         "name": "Linda Smith",
@@ -321,7 +321,7 @@
           "202211": true,
           "202212": true
         },
-        "notes": "Not seen after Dec24"
+        "notes": ""
       },
       {
         "name": "Matt Buie",
@@ -473,7 +473,7 @@
           "202311": true,
           "202312": true
         },
-        "notes": "Not renewing term"
+        "notes": ""
       },
       {
         "name": "Cannon Fletcher",
@@ -495,7 +495,7 @@
           "202311": true,
           "202312": true
         },
-        "notes": "Masterplan Chair (Dec25)"
+        "notes": ""
       },
       {
         "name": "Chemia Woods",
@@ -539,7 +539,7 @@
           "202311": true,
           "202312": false
         },
-        "notes": "Not seeking reappointment"
+        "notes": ""
       },
       {
         "name": "Samuel Ellis",
@@ -561,7 +561,7 @@
           "202311": null,
           "202312": true
         },
-        "notes": "Parks Conservancy Chair"
+        "notes": ""
       },
       {
         "name": "Summer Campbell",
@@ -627,7 +627,7 @@
           "202311": true,
           "202312": false
         },
-        "notes": "Resigned Jul25"
+        "notes": ""
       },
       {
         "name": "Lauren Eldridge",
@@ -649,7 +649,7 @@
           "202311": true,
           "202312": false
         },
-        "notes": "Listed absent Jan24; not seen after"
+        "notes": ""
       },
       {
         "name": "Linda Smith",
@@ -671,7 +671,7 @@
           "202311": true,
           "202312": true
         },
-        "notes": "Not seen after Dec24"
+        "notes": ""
       },
       {
         "name": "Matt Buie",
@@ -715,7 +715,7 @@
           "202311": true,
           "202312": false
         },
-        "notes": "Listed absent Feb, not seen after"
+        "notes": ""
       }
     ],
     "bod_liaisons": [
@@ -811,7 +811,7 @@
         "subcommittees": [],
         "attendance": {
           "202401": true,
-          "202402": null,
+          "202402": false,
           "202403": null,
           "202404": true,
           "202405": true,
@@ -820,10 +820,10 @@
           "202408": true,
           "202409": true,
           "202410": true,
-          "202411": null,
+          "202411": false,
           "202412": true
         },
-        "notes": "Not renewing term"
+        "notes": ""
       },
       {
         "name": "Cannon Fletcher",
@@ -833,7 +833,7 @@
         "subcommittees": [],
         "attendance": {
           "202401": true,
-          "202402": null,
+          "202402": true,
           "202403": null,
           "202404": true,
           "202405": true,
@@ -842,10 +842,10 @@
           "202408": true,
           "202409": true,
           "202410": true,
-          "202411": null,
+          "202411": true,
           "202412": true
         },
-        "notes": "Masterplan Chair (Dec25)"
+        "notes": ""
       },
       {
         "name": "Chemia Woods",
@@ -855,7 +855,7 @@
         "subcommittees": [],
         "attendance": {
           "202401": true,
-          "202402": null,
+          "202402": false,
           "202403": null,
           "202404": true,
           "202405": true,
@@ -864,7 +864,7 @@
           "202408": true,
           "202409": true,
           "202410": false,
-          "202411": null,
+          "202411": true,
           "202412": false
         },
         "notes": ""
@@ -877,7 +877,7 @@
         "subcommittees": [],
         "attendance": {
           "202401": true,
-          "202402": null,
+          "202402": true,
           "202403": null,
           "202404": true,
           "202405": true,
@@ -886,10 +886,10 @@
           "202408": false,
           "202409": true,
           "202410": true,
-          "202411": null,
+          "202411": true,
           "202412": true
         },
-        "notes": "Not seeking reappointment"
+        "notes": ""
       },
       {
         "name": "Quinten Whiteside",
@@ -899,7 +899,7 @@
         "subcommittees": [],
         "attendance": {
           "202401": false,
-          "202402": null,
+          "202402": true,
           "202403": null,
           "202404": true,
           "202405": true,
@@ -908,10 +908,10 @@
           "202408": true,
           "202409": true,
           "202410": true,
-          "202411": null,
+          "202411": true,
           "202412": true
         },
-        "notes": "Running for Chair"
+        "notes": ""
       },
       {
         "name": "Samuel Ellis",
@@ -921,7 +921,7 @@
         "subcommittees": [],
         "attendance": {
           "202401": true,
-          "202402": null,
+          "202402": true,
           "202403": null,
           "202404": true,
           "202405": true,
@@ -930,10 +930,10 @@
           "202408": true,
           "202409": true,
           "202410": true,
-          "202411": null,
+          "202411": true,
           "202412": false
         },
-        "notes": "Parks Conservancy Chair"
+        "notes": ""
       },
       {
         "name": "Summer Campbell",
@@ -943,7 +943,7 @@
         "subcommittees": [],
         "attendance": {
           "202401": true,
-          "202402": null,
+          "202402": false,
           "202403": null,
           "202404": true,
           "202405": true,
@@ -952,7 +952,7 @@
           "202408": true,
           "202409": true,
           "202410": true,
-          "202411": null,
+          "202411": true,
           "202412": true
         },
         "notes": ""
@@ -965,7 +965,7 @@
         "subcommittees": [],
         "attendance": {
           "202401": true,
-          "202402": null,
+          "202402": true,
           "202403": null,
           "202404": true,
           "202405": false,
@@ -974,32 +974,10 @@
           "202408": true,
           "202409": false,
           "202410": true,
-          "202411": null,
+          "202411": true,
           "202412": false
         },
-        "notes": "Resigned Jul25"
-      },
-      {
-        "name": "Lauren Eldridge",
-        "role": "",
-        "term_expires": "",
-        "status": "Former",
-        "subcommittees": [],
-        "attendance": {
-          "202401": false,
-          "202402": null,
-          "202403": null,
-          "202404": null,
-          "202405": null,
-          "202406": null,
-          "202407": null,
-          "202408": null,
-          "202409": null,
-          "202410": null,
-          "202411": null,
-          "202412": null
-        },
-        "notes": "Listed absent Jan24; not seen after"
+        "notes": ""
       },
       {
         "name": "Linda Smith",
@@ -1009,7 +987,7 @@
         "subcommittees": [],
         "attendance": {
           "202401": true,
-          "202402": null,
+          "202402": true,
           "202403": null,
           "202404": false,
           "202405": true,
@@ -1018,10 +996,10 @@
           "202408": false,
           "202409": true,
           "202410": true,
-          "202411": null,
+          "202411": true,
           "202412": false
         },
-        "notes": "Not seen after Dec24"
+        "notes": ""
       },
       {
         "name": "Matt Buie",
@@ -1053,7 +1031,7 @@
         "subcommittees": [],
         "attendance": {
           "202401": false,
-          "202402": null,
+          "202402": true,
           "202403": null,
           "202404": true,
           "202405": false,
@@ -1062,10 +1040,10 @@
           "202408": true,
           "202409": true,
           "202410": false,
-          "202411": null,
+          "202411": false,
           "202412": false
         },
-        "notes": "Listed absent Feb, not seen after"
+        "notes": ""
       },
       {
         "name": "Ron Bara",
@@ -1075,7 +1053,7 @@
         "subcommittees": [],
         "attendance": {
           "202401": true,
-          "202402": null,
+          "202402": true,
           "202403": null,
           "202404": false,
           "202405": true,
@@ -1084,10 +1062,10 @@
           "202408": false,
           "202409": true,
           "202410": false,
-          "202411": null,
+          "202411": false,
           "202412": true
         },
-        "notes": "Listed absent Feb, not seen after"
+        "notes": ""
       }
     ],
     "bod_liaisons": [
@@ -1099,7 +1077,7 @@
         "subcommittees": [],
         "attendance": {
           "202401": true,
-          "202402": null,
+          "202402": true,
           "202403": null,
           "202404": true,
           "202405": false,
@@ -1108,30 +1086,8 @@
           "202408": true,
           "202409": true,
           "202410": false,
-          "202411": null,
+          "202411": false,
           "202412": true
-        },
-        "notes": ""
-      },
-      {
-        "name": "BJ Wyrick",
-        "role": "Vice Mayor",
-        "term_expires": "",
-        "status": "Active",
-        "subcommittees": [],
-        "attendance": {
-          "202401": null,
-          "202402": null,
-          "202403": null,
-          "202404": null,
-          "202405": null,
-          "202406": null,
-          "202407": null,
-          "202408": false,
-          "202409": false,
-          "202410": false,
-          "202411": null,
-          "202412": false
         },
         "notes": ""
       },
@@ -1143,7 +1099,7 @@
         "subcommittees": [],
         "attendance": {
           "202401": true,
-          "202402": null,
+          "202402": true,
           "202403": null,
           "202404": true,
           "202405": false,
@@ -1152,7 +1108,7 @@
           "202408": false,
           "202409": true,
           "202410": true,
-          "202411": null,
+          "202411": false,
           "202412": false
         },
         "notes": ""
