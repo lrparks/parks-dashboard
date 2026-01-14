@@ -46,7 +46,7 @@
 
         <!-- Meeting Detail Modal -->
         <div id="modal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-            <div class="bg-white rounded-lg shadow-xl p-6 max-w-md w-full max-h-[90vh] overflow-y-auto">
+            <div class="bg-white rounded-lg shadow-xl p-6 max-w-sm w-full max-h-[90vh] overflow-y-auto">
                 <div class="flex justify-between items-start mb-4">
                     <h3 id="modalTitle" class="text-lg font-bold text-gray-800"></h3>
                     <button onclick="closeModal()" class="text-gray-400 hover:text-gray-600 text-xl">✕</button>
@@ -57,6 +57,20 @@
                         Add to Calendar
                     </a>
                     <button onclick="closeModal()" class="px-4 py-2 bg-gray-200 rounded hover:bg-gray-300 text-sm">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+        <!-- PDF Viewer Modal -->
+        <div id="docModal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+            <div class="bg-white rounded-lg shadow-xl w-full max-w-4xl h-[90vh] flex flex-col">
+                <div class="flex justify-between items-center p-4 border-b">
+                    <h3 id="docModalTitle" class="font-bold text-gray-800"></h3>
+                    <button onclick="closeDocModal()" class="text-gray-400 hover:text-gray-600 text-xl">✕</button>
+                </div>
+                <div class="flex-1 p-2">
+                    <iframe id="docFrame" class="w-full h-full rounded border" src=""></iframe>
                 </div>
             </div>
         </div>
@@ -291,11 +305,11 @@
             if (meeting.agenda) docs.push(['Agenda', meeting.agenda]);
             if (meeting.minutes) docs.push(['Minutes', meeting.minutes]);
             if (meeting.transcript) docs.push(['Transcript', meeting.transcript]);
-            
+
             if (docs.length > 0) {
                 content += `<div class="mt-3 pt-3 border-t"><div class="text-xs text-gray-500 mb-2">📎 Documents</div><div class="flex flex-wrap gap-2">`;
                 docs.forEach(([label, path]) => {
-                    content += `<a href="${path}" target="_blank" class="px-2 py-1 bg-gray-100 hover:bg-gray-200 rounded text-xs text-gray-700">${label}</a>`;
+                    content += `<button onclick="openDocViewer('${path}', '${label}')" class="px-2 py-1 bg-gray-100 hover:bg-gray-200 rounded text-xs text-gray-700">${label}</button>`;
                 });
                 content += `</div></div>`;
             }
@@ -339,19 +353,39 @@ END:VCALENDAR`;
             document.getElementById('modal').classList.add('hidden');
         }
 
+        function openDocViewer(path, title) {
+            document.getElementById('docModalTitle').textContent = title;
+            document.getElementById('docFrame').src = path;
+            document.getElementById('docModal').classList.remove('hidden');
+        }
+
+        function closeDocModal() {
+            document.getElementById('docModal').classList.add('hidden');
+            document.getElementById('docFrame').src = '';
+        }
+
         function changeYear(delta) {
-            currentYear += delta;
+            const newYear = currentYear + delta;
+            // Limit to 2022 and later (no data before Feb 2022)
+            if (newYear < 2022) return;
+            currentYear = newYear;
             renderCalendar();
         }
 
-        // Close modal on escape key
+        // Close modals on escape key
         document.addEventListener('keydown', (e) => {
-            if (e.key === 'Escape') closeModal();
+            if (e.key === 'Escape') {
+                closeModal();
+                closeDocModal();
+            }
         });
 
-        // Close modal on backdrop click
+        // Close modals on backdrop click
         document.getElementById('modal').addEventListener('click', (e) => {
             if (e.target.id === 'modal') closeModal();
+        });
+        document.getElementById('docModal').addEventListener('click', (e) => {
+            if (e.target.id === 'docModal') closeDocModal();
         });
 
         // Initialize

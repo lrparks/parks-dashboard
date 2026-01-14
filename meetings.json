@@ -712,6 +712,30 @@
       "transcript": "transcripts/202504_Impact The Rock- A Day of Unity & Service.txt",
       "type": "city-event",
       "date": "2025-04-26"
+    },
+    {
+      "period": "202504",
+      "title": "Quarterly Site Visit - AMFA",
+      "date": "2025-04-24",
+      "time": "5:00",
+      "location": "amfa",
+      "type": "site-visit"
+    },
+    {
+      "period": "202507",
+      "title": "Quarterly Site Visit - West Central Community Center",
+      "date": "2025-07-10",
+      "time": "4:00",
+      "location": "west-central",
+      "type": "site-visit"
+    },
+    {
+      "period": "202510",
+      "title": "Quarterly Site Visit - Boyle Park",
+      "date": "2025-10-09",
+      "time": "4:00",
+      "location": "boyle-park",
+      "type": "site-visit"
     }
   ],
   "special_meetings": [
@@ -741,6 +765,21 @@
       "room": "Virtual Meeting",
       "building": "Online",
       "address": ""
+    },
+    "amfa": {
+      "room": "Arkansas Museum of Fine Arts",
+      "building": "AMFA",
+      "address": "501 E 9th St, Little Rock, AR 72202"
+    },
+    "west-central": {
+      "room": "Ball Field",
+      "building": "West Central Community Center",
+      "address": "West Central Community Center, Little Rock, AR"
+    },
+    "boyle-park": {
+      "room": "Boyle Park",
+      "building": "Boyle Park",
+      "address": "Boyle Park, Little Rock, AR"
     }
   },
   "meetingTypes": {
