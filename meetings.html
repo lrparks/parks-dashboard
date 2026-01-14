@@ -5,6 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Meeting Archive - Little Rock Parks & Recreation</title>
     <link href="styles.css" rel="stylesheet">
+    <!-- Fuse.js for fuzzy search -->
+    <script src="https://cdn.jsdelivr.net/npm/fuse.js@7.0.0"></script>
 </head>
 <body class="min-h-screen bg-gray-100">
     <!-- Navigation Header -->
@@ -18,8 +20,45 @@
             <p class="text-gray-600 text-sm mt-1">Commission meeting videos, agendas, minutes, and transcripts</p>
         </div>
 
+        <!-- Search Box -->
+        <div id="search-section" class="bg-white rounded-lg shadow-md p-4 mb-6">
+            <div class="flex flex-col sm:flex-row gap-3">
+                <div class="flex-1 relative">
+                    <svg class="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                    </svg>
+                    <input type="text" id="searchInput" placeholder="Search meeting documents..."
+                           class="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500 text-sm"
+                           oninput="handleSearch(this.value)">
+                </div>
+                <button onclick="clearSearch()" id="clearBtn" class="hidden px-4 py-2 bg-gray-100 hover:bg-gray-200 rounded-lg text-sm transition">
+                    Clear
+                </button>
+            </div>
+            <!-- Document Type Filters -->
+            <div class="mt-3 flex flex-wrap gap-3" id="docTypeFilters">
+                <label class="inline-flex items-center gap-1.5 text-xs">
+                    <input type="checkbox" checked class="rounded text-blue-600 focus:ring-blue-500" onchange="handleSearch(document.getElementById('searchInput').value)" data-type="agenda">
+                    <span>Agendas</span>
+                </label>
+                <label class="inline-flex items-center gap-1.5 text-xs">
+                    <input type="checkbox" checked class="rounded text-green-600 focus:ring-green-500" onchange="handleSearch(document.getElementById('searchInput').value)" data-type="minutes">
+                    <span>Minutes</span>
+                </label>
+                <label class="inline-flex items-center gap-1.5 text-xs">
+                    <input type="checkbox" checked class="rounded text-purple-600 focus:ring-purple-500" onchange="handleSearch(document.getElementById('searchInput').value)" data-type="transcript">
+                    <span>Transcripts</span>
+                </label>
+            </div>
+            <!-- Search Stats -->
+            <div id="searchStats" class="mt-2 text-xs text-gray-500 hidden"></div>
+        </div>
+
+        <!-- Search Results Container -->
+        <div id="search-results" class="hidden mb-6"></div>
+
         <!-- View Toggle -->
-        <div class="mb-6">
+        <div class="mb-6" id="viewToggle">
             <div class="flex flex-wrap gap-1 rounded-lg border border-gray-200 bg-white p-1">
                 <button onclick="setView('meeting')" id="btn-meeting"
                     class="px-3 sm:px-4 py-2 text-xs sm:text-sm font-medium rounded-md transition bg-green-600 text-white">
@@ -88,6 +127,31 @@
         // State
         let currentView = 'meeting';
         let meetingsData = [];
+        let searchIndex = [];
+        let fuse = null;
+        let isSearching = false;
+
+        // Year-based search indexes
+        const SEARCH_INDEX_FILES = [
+            'search-index-2022-2023.json',
+            'search-index-2024.json',
+            'search-index-2025.json',
+            'search-index-2026.json'
+        ];
+
+        // Document type labels
+        const DOC_TYPE_LABELS = {
+            agenda: 'Agenda',
+            minutes: 'Minutes',
+            transcript: 'Transcript'
+        };
+
+        // Document type colors
+        const DOC_TYPE_COLORS = {
+            agenda: { bg: 'bg-blue-100', text: 'text-blue-600', hover: 'hover:bg-blue-50' },
+            minutes: { bg: 'bg-green-100', text: 'text-green-600', hover: 'hover:bg-green-50' },
+            transcript: { bg: 'bg-purple-100', text: 'text-purple-600', hover: 'hover:bg-purple-50' }
+        };
 
         // Convert YYYYMM to display format
         function formatPeriod(period) {
@@ -130,11 +194,187 @@
                 document.getElementById('meetings-container').classList.remove('hidden');
 
                 renderMeetings(meetingsData);
+
+                // Load search indexes
+                loadSearchIndex();
             } catch (err) {
                 document.getElementById('loading').classList.add('hidden');
                 document.getElementById('error').classList.remove('hidden');
                 console.error('Error loading meetings:', err);
             }
+        }
+
+        // Load full-text search indexes (filtered for meeting docs only)
+        async function loadSearchIndex() {
+            const allIndexed = [];
+            let loadedCount = 0;
+
+            const loadPromises = SEARCH_INDEX_FILES.map(async (file) => {
+                try {
+                    const response = await fetch(file);
+                    if (response.ok) {
+                        const data = await response.json();
+                        loadedCount++;
+                        return data;
+                    }
+                } catch (err) {
+                    // Index file not available
+                }
+                return [];
+            });
+
+            const results = await Promise.all(loadPromises);
+            results.forEach(data => allIndexed.push(...data));
+
+            // Filter to only agenda, minutes, transcript types
+            searchIndex = allIndexed.filter(doc =>
+                doc.type === 'agenda' || doc.type === 'minutes' || doc.type === 'transcript'
+            );
+
+            if (searchIndex.length > 0) {
+                // Build search data with formatted period
+                const searchData = searchIndex.map(doc => ({
+                    ...doc,
+                    periodFormatted: formatPeriod(doc.period),
+                    year: doc.period.substring(0, 4),
+                    monthName: formatPeriod(doc.period).split(' ')[0],
+                    typeLabel: DOC_TYPE_LABELS[doc.type] || doc.type
+                }));
+
+                fuse = new Fuse(searchData, {
+                    keys: [
+                        { name: 'typeLabel', weight: 1.5 },
+                        { name: 'periodFormatted', weight: 1.5 },
+                        { name: 'content', weight: 1 },
+                        { name: 'title', weight: 1.2 },
+                        { name: 'year', weight: 0.8 },
+                        { name: 'monthName', weight: 0.8 }
+                    ],
+                    threshold: 0.4,
+                    includeScore: true,
+                    includeMatches: true,
+                    ignoreLocation: true
+                });
+                console.log(`Meeting search loaded: ${searchIndex.length} docs from ${loadedCount} index files`);
+            } else {
+                console.log('No meeting search indexes available');
+            }
+        }
+
+        // Get active document type filters
+        function getActiveTypeFilters() {
+            const checkboxes = document.querySelectorAll('#docTypeFilters input[type="checkbox"]');
+            const active = [];
+            checkboxes.forEach(cb => {
+                if (cb.checked) active.push(cb.dataset.type);
+            });
+            return active;
+        }
+
+        // Handle search
+        function handleSearch(query) {
+            const clearBtn = document.getElementById('clearBtn');
+            const searchResults = document.getElementById('search-results');
+            const meetingsContainer = document.getElementById('meetings-container');
+            const viewToggle = document.getElementById('viewToggle');
+            const searchStats = document.getElementById('searchStats');
+            const activeFilters = getActiveTypeFilters();
+
+            if (!query.trim() || !fuse) {
+                clearBtn.classList.add('hidden');
+                searchResults.classList.add('hidden');
+                meetingsContainer.classList.remove('hidden');
+                viewToggle.classList.remove('hidden');
+                searchStats.classList.add('hidden');
+                isSearching = false;
+                return;
+            }
+
+            isSearching = true;
+            clearBtn.classList.remove('hidden');
+            searchResults.classList.remove('hidden');
+            meetingsContainer.classList.add('hidden');
+            viewToggle.classList.add('hidden');
+            searchStats.classList.remove('hidden');
+
+            // Perform search
+            let results = fuse.search(query);
+
+            // Filter by document type
+            results = results.filter(r => activeFilters.includes(r.item.type));
+
+            // Update stats
+            searchStats.textContent = `Found ${results.length} result${results.length !== 1 ? 's' : ''} for "${query}"`;
+
+            // Render results
+            renderSearchResults(results, query);
+        }
+
+        // Clear search
+        function clearSearch() {
+            document.getElementById('searchInput').value = '';
+            handleSearch('');
+        }
+
+        // Render search results
+        function renderSearchResults(results, query) {
+            const container = document.getElementById('search-results');
+
+            if (results.length === 0) {
+                container.innerHTML = `
+                    <div class="bg-white rounded-lg shadow-md p-8 text-center">
+                        <svg class="w-12 h-12 mx-auto text-gray-300 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                        <p class="text-gray-500">No documents found for "${query}"</p>
+                        <p class="text-gray-400 text-sm mt-1">Try different keywords or check your filters</p>
+                    </div>
+                `;
+                return;
+            }
+
+            let html = '<div class="bg-white rounded-lg shadow-md overflow-hidden"><div class="divide-y divide-gray-100">';
+            results.forEach(result => {
+                const doc = result.item;
+                const score = Math.round((1 - result.score) * 100);
+                const colors = DOC_TYPE_COLORS[doc.type] || { bg: 'bg-gray-100', text: 'text-gray-600', hover: 'hover:bg-gray-50' };
+
+                html += `
+                    <button onclick="openDocViewer('${doc.file}', '${DOC_TYPE_LABELS[doc.type]} - ${doc.periodFormatted}')"
+                            class="w-full flex items-center justify-between px-4 py-3 ${colors.hover} transition text-left">
+                        <div class="flex items-center gap-3">
+                            <div class="w-10 h-10 ${colors.bg} rounded-lg flex items-center justify-center flex-shrink-0">
+                                ${doc.type === 'agenda' ? `
+                                    <svg class="w-5 h-5 ${colors.text}" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
+                                    </svg>
+                                ` : doc.type === 'minutes' ? `
+                                    <svg class="w-5 h-5 ${colors.text}" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                                    </svg>
+                                ` : `
+                                    <svg class="w-5 h-5 ${colors.text}" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h7" />
+                                    </svg>
+                                `}
+                            </div>
+                            <div class="min-w-0">
+                                <div class="font-medium text-gray-800">${DOC_TYPE_LABELS[doc.type]}</div>
+                                <div class="text-sm text-gray-500">${doc.periodFormatted}</div>
+                            </div>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <span class="text-xs text-gray-400 bg-gray-100 px-2 py-1 rounded">${score}%</span>
+                            <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                            </svg>
+                        </div>
+                    </button>
+                `;
+            });
+            html += '</div></div>';
+
+            container.innerHTML = html;
         }
 
         // Render meetings based on current view
