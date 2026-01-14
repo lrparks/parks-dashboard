@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Attendance - Little Rock Parks & Recreation Commission</title>
+    <link href="styles.css" rel="stylesheet">
+    <style>
+        @media print {
+            .no-print { display: none !important; }
+            body { print-color-adjust: exact; -webkit-print-color-adjust: exact; }
+        }
+        .present { background-color: #dcfce7; color: #166534; }
+        .absent { background-color: #fee2e2; color: #991b1b; }
+        .no-meeting { background-color: #f3f4f6; color: #9ca3af; }
+        .not-member { background-color: #f9fafb; color: #d1d5db; }
+        .warning { background-color: #fef3c7; }
+        .danger { background-color: #fee2e2; }
+    </style>
+</head>
+<body class="min-h-screen bg-gray-100">
+    <!-- Navigation Header -->
+    <div id="site-header"></div>
+
+    <div class="max-w-7xl mx-auto p-4">
+        <!-- Header -->
+        <div class="mb-4">
+            <h1 class="text-xl font-bold text-gray-800">Parks & Recreation Commission</h1>
+            <p class="text-gray-600 text-sm">Attendance Tracker - Little Rock, AR</p>
+        </div>
+
+        <!-- Year Selector -->
+        <div class="bg-white rounded-lg shadow-md p-3 mb-4 no-print">
+            <div class="flex items-center gap-3">
+                <label class="text-sm font-medium text-gray-700">Year:</label>
+                <select id="yearSelect" class="px-3 py-1.5 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-green-500 focus:border-green-500">
+                    <option value="2025" selected>2025</option>
+                    <option value="2024">2024</option>
+                    <option value="2023">2023</option>
+                    <option value="2022">2022</option>
+                </select>
+                <span class="text-xs text-gray-500 ml-4">Bylaws: Members missing &gt;25% or 3 consecutive meetings are automatically removed</span>
+            </div>
+        </div>
+
+        <!-- Attendance Table -->
+        <div class="bg-white rounded-lg shadow-md overflow-hidden">
+            <div class="overflow-x-auto">
+                <table class="w-full text-sm">
+                    <thead>
+                        <tr class="bg-green-700 text-white">
+                            <th class="px-3 py-2 text-left font-semibold">Commissioner</th>
+                            <th class="px-2 py-2 text-left font-semibold">Role</th>
+                            <th class="px-2 py-2 text-center font-semibold">Exp</th>
+                            <th class="px-2 py-2 text-center font-semibold">Rate</th>
+                            <th class="px-2 py-2 text-center font-semibold w-8">J</th>
+                            <th class="px-2 py-2 text-center font-semibold w-8">F</th>
+                            <th class="px-2 py-2 text-center font-semibold w-8">M</th>
+                            <th class="px-2 py-2 text-center font-semibold w-8">A</th>
+                            <th class="px-2 py-2 text-center font-semibold w-8">M</th>
+                            <th class="px-2 py-2 text-center font-semibold w-8">J</th>
+                            <th class="px-2 py-2 text-center font-semibold w-8">J</th>
+                            <th class="px-2 py-2 text-center font-semibold w-8">A</th>
+                            <th class="px-2 py-2 text-center font-semibold w-8">S</th>
+                            <th class="px-2 py-2 text-center font-semibold w-8">O</th>
+                            <th class="px-2 py-2 text-center font-semibold w-8">N</th>
+                            <th class="px-2 py-2 text-center font-semibold w-8">D</th>
+                        </tr>
+                    </thead>
+                    <tbody id="attendanceBody">
+                        <!-- Populated by JavaScript -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- BOD Liaisons Section -->
+        <div class="mt-4 bg-white rounded-lg shadow-md overflow-hidden">
+            <div class="bg-gray-600 text-white px-3 py-2">
+                <h3 class="text-sm font-semibold">Board of Directors Liaisons</h3>
+            </div>
+            <div class="overflow-x-auto">
+                <table class="w-full text-sm">
+                    <thead>
+                        <tr class="bg-gray-500 text-white">
+                            <th class="px-3 py-2 text-left font-semibold">Name</th>
+                            <th class="px-2 py-2 text-left font-semibold">Role</th>
+                            <th class="px-2 py-2 text-center font-semibold">Rate</th>
+                            <th class="px-2 py-2 text-center font-semibold w-8">J</th>
+                            <th class="px-2 py-2 text-center font-semibold w-8">F</th>
+                            <th class="px-2 py-2 text-center font-semibold w-8">M</th>
+                            <th class="px-2 py-2 text-center font-semibold w-8">A</th>
+                            <th class="px-2 py-2 text-center font-semibold w-8">M</th>
+                            <th class="px-2 py-2 text-center font-semibold w-8">J</th>
+                            <th class="px-2 py-2 text-center font-semibold w-8">J</th>
+                            <th class="px-2 py-2 text-center font-semibold w-8">A</th>
+                            <th class="px-2 py-2 text-center font-semibold w-8">S</th>
+                            <th class="px-2 py-2 text-center font-semibold w-8">O</th>
+                            <th class="px-2 py-2 text-center font-semibold w-8">N</th>
+                            <th class="px-2 py-2 text-center font-semibold w-8">D</th>
+                        </tr>
+                    </thead>
+                    <tbody id="liaisonsBody">
+                        <!-- Populated by JavaScript -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Legend -->
+        <div class="mt-4 bg-white rounded-lg shadow-md p-3">
+            <div class="flex flex-wrap gap-4 text-xs">
+                <div class="flex items-center gap-1">
+                    <span class="w-6 h-6 rounded present flex items-center justify-center font-bold">✓</span>
+                    <span>Present</span>
+                </div>
+                <div class="flex items-center gap-1">
+                    <span class="w-6 h-6 rounded absent flex items-center justify-center font-bold">✗</span>
+                    <span>Absent</span>
+                </div>
+                <div class="flex items-center gap-1">
+                    <span class="w-6 h-6 rounded no-meeting flex items-center justify-center">·</span>
+                    <span>No Meeting</span>
+                </div>
+                <div class="flex items-center gap-1">
+                    <span class="w-6 h-6 rounded not-member flex items-center justify-center">—</span>
+                    <span>Not Member</span>
+                </div>
+                <div class="flex items-center gap-1 ml-4">
+                    <span class="w-6 h-6 rounded warning"></span>
+                    <span>&lt;80% (Warning)</span>
+                </div>
+                <div class="flex items-center gap-1">
+                    <span class="w-6 h-6 rounded danger"></span>
+                    <span>&lt;75% (Violation)</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Subcommittee Reference -->
+        <div class="mt-4 bg-white rounded-lg shadow-md p-3">
+            <h3 class="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-2">Subcommittee Assignments</h3>
+            <div class="grid grid-cols-3 gap-4 text-xs">
+                <div>
+                    <span class="font-medium">Master Plan:</span>
+                    <span class="text-gray-600" id="mpMembers">-</span>
+                </div>
+                <div>
+                    <span class="font-medium">Marketing:</span>
+                    <span class="text-gray-600" id="mktgMembers">-</span>
+                </div>
+                <div>
+                    <span class="font-medium">Parks Conservancy:</span>
+                    <span class="text-gray-600" id="pcMembers">-</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <div id="site-footer"></div>
+
+    <!-- Component Loader -->
+    <script src="js/components.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            loadSiteComponents({ basePath: 'components' });
+        });
+    </script>
+
+    <script>
+        let attendanceData = null;
+
+        // Load attendance data from JSON
+        async function loadAttendanceData() {
+            try {
+                const response = await fetch('attendance.json');
+                attendanceData = await response.json();
+                renderAttendance(document.getElementById('yearSelect').value);
+            } catch (error) {
+                console.error('Error loading attendance.json:', error);
+                document.getElementById('attendanceBody').innerHTML =
+                    '<tr><td colspan="16" class="px-3 py-8 text-center text-red-500">Error loading attendance data.</td></tr>';
+            }
+        }
+
+        function calculateAttendanceRate(person, meetings) {
+            let attended = 0;
+            let applicable = 0;
+
+            meetings.forEach(period => {
+                const status = person.attendance[period];
+                if (status === true) {
+                    attended++;
+                    applicable++;
+                } else if (status === false) {
+                    applicable++;
+                }
+                // null/undefined = not a member yet or no meeting, don't count
+            });
+
+            if (applicable === 0) return { rate: null, attended: 0, total: 0 };
+            return {
+                rate: Math.round((attended / applicable) * 100),
+                attended: attended,
+                total: applicable
+            };
+        }
+
+        function renderPersonRow(person, meetings, year) {
+            const months = ['01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12'];
+
+            // Calculate attendance rate
+            const rateData = calculateAttendanceRate(person, meetings);
+            let rateClass = '';
+            if (rateData.rate !== null) {
+                if (rateData.rate < 75) rateClass = 'danger';
+                else if (rateData.rate < 80) rateClass = 'warning';
+            }
+
+            // Status styling
+            let nameClass = '';
+            if (person.status === 'Lapsed' || person.status === 'Removed' || person.status === 'Former') {
+                nameClass = 'text-gray-400';
+            }
+
+            // Build row
+            let rowHtml = `
+                <td class="px-3 py-2 font-medium ${nameClass}">${person.name}${person.notes ? ' <span class="text-xs text-gray-400">(' + person.notes + ')</span>' : ''}</td>
+                <td class="px-2 py-2 text-gray-600">${person.role || '-'}</td>
+            `;
+
+            // Only commissioners have term_expires
+            if (person.term_expires !== undefined) {
+                rowHtml += `<td class="px-2 py-2 text-center text-gray-600">${person.term_expires || '-'}</td>`;
+            }
+
+            rowHtml += `
+                <td class="px-2 py-2 text-center font-semibold ${rateClass}">
+                    ${rateData.rate !== null ? rateData.rate + '%' : '-'}
+                    <span class="text-xs text-gray-400 font-normal">(${rateData.attended}/${rateData.total})</span>
+                </td>
+            `;
+
+            // Monthly cells
+            months.forEach(month => {
+                const period = year + month;
+                const status = person.attendance[period];
+
+                let cellClass = '';
+                let cellContent = '';
+
+                if (status === true) {
+                    cellClass = 'present';
+                    cellContent = '✓';
+                } else if (status === false) {
+                    cellClass = 'absent';
+                    cellContent = '✗';
+                } else if (status === null) {
+                    cellClass = 'not-member';
+                    cellContent = '-';
+                } else {
+                    cellClass = 'no-meeting';
+                    cellContent = '·';
+                }
+
+                rowHtml += `<td class="px-2 py-2 text-center ${cellClass} font-bold">${cellContent}</td>`;
+            });
+
+            return rowHtml;
+        }
+
+        function renderAttendance(year) {
+            const data = attendanceData[year];
+            const tbody = document.getElementById('attendanceBody');
+            const liaisonsBody = document.getElementById('liaisonsBody');
+            tbody.innerHTML = '';
+            liaisonsBody.innerHTML = '';
+
+            if (!data || !data.commissioners || data.commissioners.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="16" class="px-3 py-8 text-center text-gray-500">No attendance data for ' + year + '</td></tr>';
+                liaisonsBody.innerHTML = '<tr><td colspan="15" class="px-3 py-4 text-center text-gray-500">No data</td></tr>';
+                updateSubcommittees([]);
+                return;
+            }
+
+            // Render commissioners
+            data.commissioners.forEach(commissioner => {
+                const tr = document.createElement('tr');
+                tr.className = 'border-t border-gray-100 hover:bg-gray-50';
+                tr.innerHTML = renderPersonRow(commissioner, data.meetings, year);
+                tbody.appendChild(tr);
+            });
+
+            // Render BOD liaisons
+            if (data.bod_liaisons && data.bod_liaisons.length > 0) {
+                data.bod_liaisons.forEach(liaison => {
+                    const tr = document.createElement('tr');
+                    tr.className = 'border-t border-gray-100 hover:bg-gray-50';
+                    // Liaisons don't have term_expires, so we modify the row slightly
+                    const rowHtml = renderPersonRow(liaison, data.meetings, year);
+                    tr.innerHTML = rowHtml;
+                    liaisonsBody.appendChild(tr);
+                });
+            } else {
+                liaisonsBody.innerHTML = '<tr><td colspan="15" class="px-3 py-4 text-center text-gray-500">No liaison data</td></tr>';
+            }
+
+            updateSubcommittees(data.commissioners);
+        }
+
+        function updateSubcommittees(commissioners) {
+            const mp = commissioners.filter(c => c.subcommittees && c.subcommittees.includes('MP') && c.status === 'Active').map(c => c.name.split(' ')[1] || c.name.split(' ')[0]);
+            const mktg = commissioners.filter(c => c.subcommittees && c.subcommittees.includes('Mktg') && c.status === 'Active').map(c => c.name.split(' ')[1] || c.name.split(' ')[0]);
+            const pc = commissioners.filter(c => c.subcommittees && c.subcommittees.includes('PC') && c.status === 'Active').map(c => c.name.split(' ')[1] || c.name.split(' ')[0]);
+
+            document.getElementById('mpMembers').textContent = mp.length > 0 ? mp.join(', ') : '-';
+            document.getElementById('mktgMembers').textContent = mktg.length > 0 ? mktg.join(', ') : '-';
+            document.getElementById('pcMembers').textContent = pc.length > 0 ? pc.join(', ') : '-';
+        }
+
+        // Event listeners
+        document.getElementById('yearSelect').addEventListener('change', function() {
+            renderAttendance(this.value);
+        });
+
+        // Initialize
+        loadAttendanceData();
+    </script>
+</body>
+</html>
