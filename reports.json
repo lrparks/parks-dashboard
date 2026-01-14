@@ -647,6 +647,11 @@
     },
     {
       "period": "202512",
+      "division": "reference",
+      "file": "pdfs/202512-reference-DRAFT-2025-year-review.pdf"
+    },
+    {
+      "period": "202512",
       "division": "safety",
       "file": "pdfs/202512-safety.pdf"
     },
