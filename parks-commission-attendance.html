@@ -74,10 +74,10 @@
             </div>
         </div>
 
-        <!-- BOD Liaisons Section -->
+        <!-- City Board Liaisons Section -->
         <div class="mt-4 bg-white rounded-lg shadow-md overflow-hidden">
             <div class="bg-gray-600 text-white px-3 py-2">
-                <h3 class="text-sm font-semibold">Board of Directors Liaisons</h3>
+                <h3 class="text-sm font-semibold">City Board Liaisons</h3>
             </div>
             <div class="overflow-x-auto">
                 <table class="w-full text-sm">
@@ -85,7 +85,6 @@
                         <tr class="bg-gray-500 text-white">
                             <th class="px-3 py-2 text-left font-semibold">Name</th>
                             <th class="px-2 py-2 text-left font-semibold">Role</th>
-                            <th class="px-2 py-2 text-center font-semibold">Rate</th>
                             <th class="px-2 py-2 text-center font-semibold w-8">J</th>
                             <th class="px-2 py-2 text-center font-semibold w-8">F</th>
                             <th class="px-2 py-2 text-center font-semibold w-8">M</th>
@@ -270,6 +269,43 @@
             return rowHtml;
         }
 
+        function renderLiaisonRow(person, meetings, year) {
+            const months = ['01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12'];
+
+            // Build row (no rate column for liaisons)
+            let rowHtml = `
+                <td class="px-3 py-2 font-medium">${person.name}${person.notes ? ' <span class="text-xs text-gray-400">(' + person.notes + ')</span>' : ''}</td>
+                <td class="px-2 py-2 text-gray-600">${person.role || '-'}</td>
+            `;
+
+            // Monthly cells
+            months.forEach(month => {
+                const period = year + month;
+                const status = person.attendance[period];
+
+                let cellClass = '';
+                let cellContent = '';
+
+                if (status === true) {
+                    cellClass = 'present';
+                    cellContent = '✓';
+                } else if (status === false) {
+                    cellClass = 'absent';
+                    cellContent = '✗';
+                } else if (status === null) {
+                    cellClass = 'not-member';
+                    cellContent = '-';
+                } else {
+                    cellClass = 'no-meeting';
+                    cellContent = '·';
+                }
+
+                rowHtml += `<td class="px-2 py-2 text-center ${cellClass} font-bold">${cellContent}</td>`;
+            });
+
+            return rowHtml;
+        }
+
         function renderAttendance(year) {
             const data = attendanceData[year];
             const tbody = document.getElementById('attendanceBody');
@@ -292,18 +328,16 @@
                 tbody.appendChild(tr);
             });
 
-            // Render BOD liaisons
+            // Render City Board liaisons (no stats)
             if (data.bod_liaisons && data.bod_liaisons.length > 0) {
                 data.bod_liaisons.forEach(liaison => {
                     const tr = document.createElement('tr');
                     tr.className = 'border-t border-gray-100 hover:bg-gray-50';
-                    // Liaisons don't have term_expires, so we modify the row slightly
-                    const rowHtml = renderPersonRow(liaison, data.meetings, year);
-                    tr.innerHTML = rowHtml;
+                    tr.innerHTML = renderLiaisonRow(liaison, data.meetings, year);
                     liaisonsBody.appendChild(tr);
                 });
             } else {
-                liaisonsBody.innerHTML = '<tr><td colspan="15" class="px-3 py-4 text-center text-gray-500">No liaison data</td></tr>';
+                liaisonsBody.innerHTML = '<tr><td colspan="14" class="px-3 py-4 text-center text-gray-500">No liaison data</td></tr>';
             }
 
             updateSubcommittees(data.commissioners);
