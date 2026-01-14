@@ -4,9 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>How to Become a Parks Commissioner - Little Rock, AR</title>
-    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="styles.css" rel="stylesheet">
     <style>
-        body { margin: 0; padding: 0; }
         .content-section { scroll-margin-top: 80px; }
         @media print {
             .no-print { display: none !important; }
@@ -18,8 +17,15 @@
     <!-- Header -->
     <header class="bg-green-700 text-white shadow-lg sticky top-0 z-50 no-print">
         <div class="max-w-6xl mx-auto px-4 py-4">
-            <h1 class="text-2xl font-bold">How to Become a Parks & Recreation Commissioner</h1>
-            <p class="text-green-100 text-sm">Little Rock, Arkansas</p>
+            <div class="flex items-center justify-between">
+                <div>
+                    <h1 class="text-2xl font-bold">How to Become a Parks & Recreation Commissioner</h1>
+                    <p class="text-green-100 text-sm">Little Rock, Arkansas</p>
+                </div>
+                <a href="index.html" class="text-green-100 hover:text-white text-sm transition">
+                    &larr; Back to Dashboard
+                </a>
+            </div>
         </div>
     </header>
 
@@ -469,13 +475,14 @@
     </main>
 
     <!-- Footer -->
-    <footer class="bg-gray-800 text-gray-300 mt-12 py-6">
-        <div class="max-w-6xl mx-auto px-4 text-center">
-            <p class="text-sm">Little Rock Parks & Recreation Commission</p>
-            <p class="text-xs text-gray-400 mt-2">Information based on Commission Bylaws (adopted 12/11/24) and LRC §2-330</p>
-            <p class="text-xs text-gray-400 mt-1">Version 1.0 | January 2026</p>
-        </div>
-    </footer>
+    <div id="site-footer"></div>
 
+    <!-- Component Loader (footer only - page has unique header) -->
+    <script src="js/components.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            loadSiteComponents({ basePath: 'components', header: false });
+        });
+    </script>
 </body>
 </html>
