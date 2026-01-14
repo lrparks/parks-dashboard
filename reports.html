@@ -196,44 +196,70 @@
             }
         }
 
-        // Load full-text search index (if available)
-        async function loadSearchIndex() {
-            try {
-                const response = await fetch('search-index.json');
-                if (response.ok) {
-                    searchIndex = await response.json();
-                    // Rebuild Fuse with full-text content
-                    const searchData = reports.map(r => {
-                        const indexed = searchIndex.find(s => s.file === r.file);
-                        return {
-                            ...r,
-                            divisionName: DIVISIONS[r.division] || r.division,
-                            periodFormatted: formatPeriod(r.period),
-                            year: r.period.substring(0, 4),
-                            monthName: formatPeriod(r.period).split(' ')[0],
-                            content: indexed ? indexed.content : ''
-                        };
-                    });
+        // Year-based search indexes
+        const SEARCH_INDEX_FILES = [
+            'search-index-2022-2023.json',
+            'search-index-2024.json',
+            'search-index-2025.json',
+            'search-index-2026.json'
+        ];
 
-                    fuse = new Fuse(searchData, {
-                        keys: [
-                            { name: 'divisionName', weight: 2 },
-                            { name: 'periodFormatted', weight: 1.5 },
-                            { name: 'content', weight: 1 },
-                            { name: 'year', weight: 0.8 },
-                            { name: 'monthName', weight: 0.8 },
-                            { name: 'file', weight: 0.3 }
-                        ],
-                        threshold: 0.4,
-                        includeScore: true,
-                        includeMatches: true,
-                        ignoreLocation: true
-                    });
-                    console.log('Full-text search index loaded');
+        // Load full-text search indexes (year-based)
+        async function loadSearchIndex() {
+            const allIndexed = [];
+            let loadedCount = 0;
+
+            // Load all available index files in parallel
+            const loadPromises = SEARCH_INDEX_FILES.map(async (file) => {
+                try {
+                    const response = await fetch(file);
+                    if (response.ok) {
+                        const data = await response.json();
+                        loadedCount++;
+                        return data;
+                    }
+                } catch (err) {
+                    // Index file not available
                 }
-            } catch (err) {
-                // No search index available, metadata search only
-                console.log('No full-text search index available, using metadata search');
+                return [];
+            });
+
+            const results = await Promise.all(loadPromises);
+            results.forEach(data => allIndexed.push(...data));
+
+            if (allIndexed.length > 0) {
+                searchIndex = allIndexed;
+
+                // Rebuild Fuse with full-text content
+                const searchData = reports.map(r => {
+                    const indexed = searchIndex.find(s => s.file === r.file);
+                    return {
+                        ...r,
+                        divisionName: DIVISIONS[r.division] || r.division,
+                        periodFormatted: formatPeriod(r.period),
+                        year: r.period.substring(0, 4),
+                        monthName: formatPeriod(r.period).split(' ')[0],
+                        content: indexed ? indexed.content : ''
+                    };
+                });
+
+                fuse = new Fuse(searchData, {
+                    keys: [
+                        { name: 'divisionName', weight: 2 },
+                        { name: 'periodFormatted', weight: 1.5 },
+                        { name: 'content', weight: 1 },
+                        { name: 'year', weight: 0.8 },
+                        { name: 'monthName', weight: 0.8 },
+                        { name: 'file', weight: 0.3 }
+                    ],
+                    threshold: 0.4,
+                    includeScore: true,
+                    includeMatches: true,
+                    ignoreLocation: true
+                });
+                console.log(`Full-text search loaded: ${allIndexed.length} docs from ${loadedCount} index files`);
+            } else {
+                console.log('No full-text search indexes available, using metadata search');
             }
         }
 

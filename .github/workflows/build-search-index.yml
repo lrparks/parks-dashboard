@@ -1,0 +1,42 @@
+name: Build Search Index
+
+on:
+  push:
+    paths:
+      - 'pdfs/**/*.pdf'
+    branches:
+      - main
+  workflow_dispatch:  # Manual trigger
+
+jobs:
+  build-index:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install pdftotext
+        run: sudo apt-get update && sudo apt-get install -y poppler-utils
+
+      - name: Build search indexes
+        run: node scripts/build-search-index.js
+
+      - name: Commit search indexes
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add search-index-*.json
+          if git diff --quiet --cached; then
+            echo "No changes to commit"
+          else
+            git commit -m "Update search indexes"
+            git push
+          fi
