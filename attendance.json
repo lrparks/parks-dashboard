@@ -104,28 +104,6 @@
         "notes": ""
       },
       {
-        "name": "Alexandria Washington",
-        "role": "",
-        "term_expires": "",
-        "status": "Former",
-        "subcommittees": [],
-        "attendance": {
-          "202201": null,
-          "202202": false,
-          "202203": false,
-          "202204": false,
-          "202205": null,
-          "202206": null,
-          "202207": null,
-          "202208": null,
-          "202209": null,
-          "202210": null,
-          "202211": null,
-          "202212": null
-        },
-        "notes": ""
-      },
-      {
         "name": "Ashley Martinez",
         "role": "",
         "term_expires": "",
@@ -143,50 +121,6 @@
           "202209": false,
           "202210": true,
           "202211": false,
-          "202212": null
-        },
-        "notes": ""
-      },
-      {
-        "name": "Delwin Slater",
-        "role": "",
-        "term_expires": "",
-        "status": "Former",
-        "subcommittees": [],
-        "attendance": {
-          "202201": null,
-          "202202": false,
-          "202203": false,
-          "202204": false,
-          "202205": null,
-          "202206": null,
-          "202207": null,
-          "202208": null,
-          "202209": null,
-          "202210": null,
-          "202211": null,
-          "202212": null
-        },
-        "notes": ""
-      },
-      {
-        "name": "Demetria Murdock",
-        "role": "",
-        "term_expires": "",
-        "status": "Former",
-        "subcommittees": [],
-        "attendance": {
-          "202201": null,
-          "202202": false,
-          "202203": false,
-          "202204": false,
-          "202205": false,
-          "202206": false,
-          "202207": false,
-          "202208": null,
-          "202209": null,
-          "202210": null,
-          "202211": null,
           "202212": null
         },
         "notes": ""
@@ -217,7 +151,7 @@
         "name": "James Ferstl",
         "role": "Vice-Chair",
         "term_expires": "",
-        "status": "Former",
+        "status": "Active",
         "subcommittees": [],
         "attendance": {
           "202201": null,
@@ -258,32 +192,10 @@
         "notes": ""
       },
       {
-        "name": "Kenneth Taylor",
-        "role": "",
-        "term_expires": "",
-        "status": "Former",
-        "subcommittees": [],
-        "attendance": {
-          "202201": null,
-          "202202": false,
-          "202203": false,
-          "202204": false,
-          "202205": null,
-          "202206": null,
-          "202207": null,
-          "202208": null,
-          "202209": null,
-          "202210": null,
-          "202211": null,
-          "202212": null
-        },
-        "notes": ""
-      },
-      {
         "name": "Lauren Eldridge",
         "role": "",
         "term_expires": "",
-        "status": "Former",
+        "status": "Active",
         "subcommittees": [],
         "attendance": {
           "202201": null,
@@ -305,7 +217,7 @@
         "name": "Linda Smith",
         "role": "",
         "term_expires": "",
-        "status": "Former",
+        "status": "Active",
         "subcommittees": [],
         "attendance": {
           "202201": null,
@@ -327,7 +239,7 @@
         "name": "Matt Buie",
         "role": "Chair",
         "term_expires": "",
-        "status": "Former",
+        "status": "Active",
         "subcommittees": [],
         "attendance": {
           "202201": null,
@@ -349,7 +261,7 @@
         "name": "Ren Bressinck",
         "role": "",
         "term_expires": "",
-        "status": "Former",
+        "status": "Active",
         "subcommittees": [],
         "attendance": {
           "202201": null,
@@ -371,7 +283,7 @@
         "name": "Robyn Nosari",
         "role": "",
         "term_expires": "",
-        "status": "Former",
+        "status": "Active",
         "subcommittees": [],
         "attendance": {
           "202201": null,
@@ -611,7 +523,7 @@
         "name": "James Ferstl",
         "role": "Vice-Chair",
         "term_expires": "",
-        "status": "Former",
+        "status": "Active",
         "subcommittees": [],
         "attendance": {
           "202301": true,
@@ -633,7 +545,7 @@
         "name": "Lauren Eldridge",
         "role": "",
         "term_expires": "",
-        "status": "Former",
+        "status": "Active",
         "subcommittees": [],
         "attendance": {
           "202301": true,
@@ -655,7 +567,7 @@
         "name": "Linda Smith",
         "role": "",
         "term_expires": "",
-        "status": "Former",
+        "status": "Active",
         "subcommittees": [],
         "attendance": {
           "202301": false,
@@ -677,7 +589,7 @@
         "name": "Matt Buie",
         "role": "Chair",
         "term_expires": "",
-        "status": "Former",
+        "status": "Active",
         "subcommittees": [],
         "attendance": {
           "202301": true,
@@ -699,7 +611,7 @@
         "name": "Ron Bara",
         "role": "",
         "term_expires": "",
-        "status": "Former",
+        "status": "Active",
         "subcommittees": [],
         "attendance": {
           "202301": null,
@@ -961,7 +873,7 @@
         "name": "James Ferstl",
         "role": "Vice-Chair",
         "term_expires": "",
-        "status": "Former",
+        "status": "Active",
         "subcommittees": [],
         "attendance": {
           "202401": true,
@@ -983,7 +895,7 @@
         "name": "Linda Smith",
         "role": "",
         "term_expires": "",
-        "status": "Former",
+        "status": "Active",
         "subcommittees": [],
         "attendance": {
           "202401": true,
@@ -1027,7 +939,7 @@
         "name": "Quincy Grant",
         "role": "",
         "term_expires": "",
-        "status": "Former",
+        "status": "Active",
         "subcommittees": [],
         "attendance": {
           "202401": false,
@@ -1049,7 +961,7 @@
         "name": "Ron Bara",
         "role": "",
         "term_expires": "",
-        "status": "Former",
+        "status": "Active",
         "subcommittees": [],
         "attendance": {
           "202401": true,
