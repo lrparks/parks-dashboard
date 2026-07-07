@@ -672,8 +672,118 @@
     },
     {
       "period": "202601",
+      "division": "reference",
+      "file": "pdfs/202601-reference-parks-commission-retreat-notes.pdf"
+    },
+    {
+      "period": "202601",
       "division": "safety",
       "file": "pdfs/202601-safety.pdf"
+    },
+    {
+      "period": "202602",
+      "division": "admin",
+      "file": "pdfs/202602-admin.pdf"
+    },
+    {
+      "period": "202602",
+      "division": "operations",
+      "file": "pdfs/202602-operations.pdf"
+    },
+    {
+      "period": "202602",
+      "division": "recreation",
+      "file": "pdfs/202602-recreation.pdf"
+    },
+    {
+      "period": "202602",
+      "division": "safety",
+      "file": "pdfs/202602-safety.pdf"
+    },
+    {
+      "period": "202603",
+      "division": "admin",
+      "file": "pdfs/202603-admin.pdf"
+    },
+    {
+      "period": "202603",
+      "division": "operations",
+      "file": "pdfs/202603-operations.pdf"
+    },
+    {
+      "period": "202603",
+      "division": "recreation",
+      "file": "pdfs/202603-recreation.pdf"
+    },
+    {
+      "period": "202603",
+      "division": "safety",
+      "file": "pdfs/202603-safety.pdf"
+    },
+    {
+      "period": "202604",
+      "division": "safety",
+      "file": "pdfs/202604-safety.pdf"
+    },
+    {
+      "period": "202605",
+      "division": "admin",
+      "file": "pdfs/202605-admin.pdf"
+    },
+    {
+      "period": "202605",
+      "division": "operations",
+      "file": "pdfs/202605-operations.pdf"
+    },
+    {
+      "period": "202605",
+      "division": "recreation",
+      "file": "pdfs/202605-recreation.pdf"
+    },
+    {
+      "period": "202605",
+      "division": "reference",
+      "file": "pdfs/202605-reference-parks-conservancy-passport-program.pdf"
+    },
+    {
+      "period": "202605",
+      "division": "safety",
+      "file": "pdfs/202605-safety.pdf"
+    },
+    {
+      "period": "202606",
+      "division": "admin",
+      "file": "pdfs/202606-admin.pdf"
+    },
+    {
+      "period": "202606",
+      "division": "operations",
+      "file": "pdfs/202606-operations.pdf"
+    },
+    {
+      "period": "202606",
+      "division": "recreation",
+      "file": "pdfs/202606-recreation.pdf"
+    },
+    {
+      "period": "202606",
+      "division": "safety",
+      "file": "pdfs/202606-safety.pdf"
+    },
+    {
+      "period": "202607",
+      "division": "operations",
+      "file": "pdfs/202607-operations.pdf"
+    },
+    {
+      "period": "202607",
+      "division": "recreation",
+      "file": "pdfs/202607-recreation.pdf"
+    },
+    {
+      "period": "202607",
+      "division": "safety",
+      "file": "pdfs/202607-safety.pdf"
     }
   ]
 }

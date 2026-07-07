@@ -69,7 +69,7 @@
       "type": "commission",
       "title": "July 2026 - Parks Commission Meeting",
       "youtube": null,
-      "agenda": null,
+      "agenda": "pdfs/202607-agenda.pdf",
       "minutes": null,
       "transcript": null
     },
@@ -81,8 +81,8 @@
       "type": "commission",
       "title": "June 2026 - Parks Commission Meeting",
       "youtube": null,
-      "agenda": null,
-      "minutes": null,
+      "agenda": "pdfs/202606-agenda.pdf",
+      "minutes": "pdfs/202606-minutes.pdf",
       "transcript": null
     },
     {
@@ -94,8 +94,8 @@
       "title": "May 2026 - Parks Commission Meeting",
       "note": "City Employee Luncheon - Leadership absent",
       "youtube": null,
-      "agenda": null,
-      "minutes": null,
+      "agenda": "pdfs/202605-agenda.pdf",
+      "minutes": "pdfs/202605-minutes.pdf",
       "transcript": null
     },
     {
@@ -106,8 +106,8 @@
       "type": "commission",
       "title": "April 2026 - Parks Commission Meeting",
       "youtube": null,
-      "agenda": null,
-      "minutes": null,
+      "agenda": "pdfs/202604-agenda.pdf",
+      "minutes": "pdfs/202604-minutes.pdf",
       "transcript": null
     },
     {
@@ -118,8 +118,8 @@
       "type": "commission",
       "title": "March 2026 - Parks Commission Meeting",
       "youtube": null,
-      "agenda": null,
-      "minutes": null,
+      "agenda": "pdfs/202603-agenda.pdf",
+      "minutes": "pdfs/202603-minutes.pdf",
       "transcript": null
     },
     {
@@ -131,8 +131,8 @@
       "title": "February 2026 - Parks Commission Meeting",
       "note": "Board of Directors Presentation scheduled this month",
       "youtube": null,
-      "agenda": null,
-      "minutes": null,
+      "agenda": "pdfs/202602-agenda.pdf",
+      "minutes": "pdfs/202602-minutes.pdf",
       "transcript": null
     },
     {
@@ -144,7 +144,7 @@
       "title": "January 2026 - Parks Commission Meeting",
       "youtube": null,
       "agenda": "pdfs/202601-agenda.pdf",
-      "minutes": null,
+      "minutes": "pdfs/202601-minutes.pdf",
       "transcript": null
     },
     {
