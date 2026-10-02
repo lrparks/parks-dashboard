@@ -784,6 +784,26 @@
       "period": "202607",
       "division": "safety",
       "file": "pdfs/202607-safety.pdf"
+    },
+    {
+      "period": "202609",
+      "division": "admin",
+      "file": "pdfs/202609-admin.pdf"
+    },
+    {
+      "period": "202609",
+      "division": "operations",
+      "file": "pdfs/202609-operations.pdf"
+    },
+    {
+      "period": "202609",
+      "division": "recreation",
+      "file": "pdfs/202609-recreation.pdf"
+    },
+    {
+      "period": "202609",
+      "division": "safety",
+      "file": "pdfs/202609-safety.pdf"
     }
   ]
 }
