@@ -33,7 +33,7 @@
       "type": "commission",
       "title": "October 2026 - Parks Commission Meeting",
       "youtube": null,
-      "agenda": null,
+      "agenda": "pdfs/202610-agenda.pdf",
       "minutes": null,
       "transcript": null
     },
@@ -46,8 +46,8 @@
       "title": "September 2026 - Parks Commission Meeting",
       "youtube": "nsAbSAIacOk",
       "agenda": "pdfs/202609-agenda.pdf",
-      "minutes": null,
-      "transcript": null
+      "minutes": "pdfs/202609-minutes.pdf",
+      "transcript": "transcripts/202609_September 2026 - Parks Commission Meeting.txt"
     },
     {
       "period": "202608",
@@ -59,7 +59,7 @@
       "youtube": "ItcRqBI1NTQ",
       "agenda": "pdfs/202608-agenda.pdf",
       "minutes": "pdfs/202608-minutes.pdf",
-      "transcript": null
+      "transcript": "transcripts/202608_August 2026 - Parks Commission Meeting.txt"
     },
     {
       "period": "202607",
@@ -71,7 +71,7 @@
       "youtube": "S0mCIxQZG2w",
       "agenda": "pdfs/202607-agenda.pdf",
       "minutes": "pdfs/202607-minutes.pdf",
-      "transcript": null
+      "transcript": "transcripts/202607_July 2026 - Parks Commission Meeting.txt"
     },
     {
       "period": "202606",
@@ -83,7 +83,7 @@
       "youtube": "w8A7YQUBMpo",
       "agenda": "pdfs/202606-agenda.pdf",
       "minutes": "pdfs/202606-minutes.pdf",
-      "transcript": null
+      "transcript": "transcripts/202606_June 2026 - Parks Commission Meeting.txt"
     },
     {
       "period": "202605",
@@ -96,7 +96,7 @@
       "youtube": "DBTSSA1Sv7I",
       "agenda": "pdfs/202605-agenda.pdf",
       "minutes": "pdfs/202605-minutes.pdf",
-      "transcript": null
+      "transcript": "transcripts/202605_May 2026 - Parks Commission Meeting.txt"
     },
     {
       "period": "202604",
@@ -108,7 +108,7 @@
       "youtube": "VYewyoiRO1U",
       "agenda": "pdfs/202604-agenda.pdf",
       "minutes": "pdfs/202604-minutes.pdf",
-      "transcript": null
+      "transcript": "transcripts/202604_April 2026 - Parks Commission Meeting.txt"
     },
     {
       "period": "202603",
@@ -120,7 +120,7 @@
       "youtube": "z-8rJ9clrS8",
       "agenda": "pdfs/202603-agenda.pdf",
       "minutes": "pdfs/202603-minutes.pdf",
-      "transcript": null
+      "transcript": "transcripts/202603_March 2026 - Parks Commission Meeting.txt"
     },
     {
       "period": "202602",
@@ -133,7 +133,7 @@
       "youtube": "lcpkN4DxXj8",
       "agenda": "pdfs/202602-agenda.pdf",
       "minutes": "pdfs/202602-minutes.pdf",
-      "transcript": null
+      "transcript": "transcripts/202602_February 2026 - Parks Commission Meeting.txt"
     },
     {
       "period": "202601",
