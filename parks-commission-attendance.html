@@ -326,8 +326,13 @@
                 return;
             }
 
-            // Render commissioners
-            data.commissioners.forEach(commissioner => {
+            // Render commissioners: active first, then by last name
+            const lastName = name => name.trim().split(/\s+/).pop();
+            const sorted = [...data.commissioners].sort((a, b) =>
+                (a.status !== 'Active') - (b.status !== 'Active') ||
+                lastName(a.name).localeCompare(lastName(b.name)) ||
+                a.name.localeCompare(b.name));
+            sorted.forEach(commissioner => {
                 const tr = document.createElement('tr');
                 tr.className = 'border-t border-gray-100 hover:bg-gray-50';
                 tr.innerHTML = renderPersonRow(commissioner, data.meetings, year);
