@@ -1376,5 +1376,288 @@
         "notes": ""
       }
     ]
+  },
+  "2026": {
+    "meetings": [
+      "202601",
+      "202602",
+      "202603",
+      "202604",
+      "202605",
+      "202606",
+      "202607",
+      "202608",
+      "202609"
+    ],
+    "commissioners": [
+      {
+        "name": "Cannon Fletcher",
+        "role": "MP Chair",
+        "term_expires": "Jan28",
+        "status": "Active",
+        "subcommittees": ["MP"],
+        "attendance": {
+          "202601": true,
+          "202602": true,
+          "202603": false,
+          "202604": true,
+          "202605": true,
+          "202606": true,
+          "202607": true,
+          "202608": true,
+          "202609": true
+        },
+        "notes": ""
+      },
+      {
+        "name": "Chemia Woods",
+        "role": "Vice-Chair",
+        "term_expires": "Jan27",
+        "status": "Active",
+        "subcommittees": ["Mktg"],
+        "attendance": {
+          "202601": true,
+          "202602": false,
+          "202603": true,
+          "202604": true,
+          "202605": true,
+          "202606": true,
+          "202607": false,
+          "202608": true,
+          "202609": true
+        },
+        "notes": ""
+      },
+      {
+        "name": "Nolen Hughes",
+        "role": "",
+        "term_expires": "",
+        "status": "Active",
+        "subcommittees": [],
+        "attendance": {
+          "202601": true,
+          "202602": false,
+          "202603": true,
+          "202604": true,
+          "202605": true,
+          "202606": true,
+          "202607": false,
+          "202608": true,
+          "202609": true
+        },
+        "notes": ""
+      },
+      {
+        "name": "Quinten Whiteside",
+        "role": "Chair",
+        "term_expires": "Jan27",
+        "status": "Active",
+        "subcommittees": [],
+        "attendance": {
+          "202601": true,
+          "202602": true,
+          "202603": true,
+          "202604": true,
+          "202605": true,
+          "202606": true,
+          "202607": true,
+          "202608": true,
+          "202609": true
+        },
+        "notes": ""
+      },
+      {
+        "name": "Rogers Yarnell",
+        "role": "",
+        "term_expires": "",
+        "status": "Active",
+        "subcommittees": [],
+        "attendance": {
+          "202601": null,
+          "202602": null,
+          "202603": null,
+          "202604": null,
+          "202605": null,
+          "202606": null,
+          "202607": null,
+          "202608": null,
+          "202609": true
+        },
+        "notes": ""
+      },
+      {
+        "name": "Ryne Pruitt",
+        "role": "",
+        "term_expires": "",
+        "status": "Active",
+        "subcommittees": [],
+        "attendance": {
+          "202601": null,
+          "202602": null,
+          "202603": null,
+          "202604": null,
+          "202605": null,
+          "202606": null,
+          "202607": null,
+          "202608": null,
+          "202609": true
+        },
+        "notes": ""
+      },
+      {
+        "name": "Samuel Ellis",
+        "role": "",
+        "term_expires": "Jan27",
+        "status": "Active",
+        "subcommittees": [],
+        "attendance": {
+          "202601": false,
+          "202602": true,
+          "202603": true,
+          "202604": true,
+          "202605": false,
+          "202606": true,
+          "202607": true,
+          "202608": true,
+          "202609": false
+        },
+        "notes": ""
+      },
+      {
+        "name": "Summer Campbell",
+        "role": "PC Chair",
+        "term_expires": "Jan27",
+        "status": "Active",
+        "subcommittees": ["PC"],
+        "attendance": {
+          "202601": true,
+          "202602": true,
+          "202603": true,
+          "202604": true,
+          "202605": true,
+          "202606": true,
+          "202607": true,
+          "202608": true,
+          "202609": true
+        },
+        "notes": ""
+      },
+      {
+        "name": "William Beattie",
+        "role": "",
+        "term_expires": "",
+        "status": "Active",
+        "subcommittees": [],
+        "attendance": {
+          "202601": null,
+          "202602": null,
+          "202603": null,
+          "202604": null,
+          "202605": null,
+          "202606": null,
+          "202607": null,
+          "202608": null,
+          "202609": true
+        },
+        "notes": ""
+      },
+      {
+        "name": "Amber Tiegen",
+        "role": "",
+        "term_expires": "",
+        "status": "Former",
+        "subcommittees": [],
+        "attendance": {
+          "202601": true,
+          "202602": false,
+          "202603": true,
+          "202604": false,
+          "202605": true,
+          "202606": false,
+          "202607": false,
+          "202608": null,
+          "202609": null
+        },
+        "notes": ""
+      },
+      {
+        "name": "Ben France",
+        "role": "Chair",
+        "term_expires": "",
+        "status": "Former",
+        "subcommittees": [],
+        "attendance": {
+          "202601": true,
+          "202602": null,
+          "202603": null,
+          "202604": null,
+          "202605": null,
+          "202606": null,
+          "202607": null,
+          "202608": null,
+          "202609": null
+        },
+        "notes": ""
+      },
+      {
+        "name": "Mike Bernardo",
+        "role": "",
+        "term_expires": "",
+        "status": "Former",
+        "subcommittees": [],
+        "attendance": {
+          "202601": true,
+          "202602": null,
+          "202603": null,
+          "202604": null,
+          "202605": null,
+          "202606": null,
+          "202607": null,
+          "202608": null,
+          "202609": null
+        },
+        "notes": ""
+      }
+    ],
+    "bod_liaisons": [
+      {
+        "name": "Andrea Lewis",
+        "role": "BOD Liaison",
+        "term_expires": "",
+        "status": "Active",
+        "subcommittees": [],
+        "attendance": {
+          "202601": true,
+          "202602": false,
+          "202603": false,
+          "202604": true,
+          "202605": false,
+          "202606": false,
+          "202607": false,
+          "202608": true,
+          "202609": false
+        },
+        "notes": ""
+      },
+      {
+        "name": "Capi Peck",
+        "role": "BOD Liaison",
+        "term_expires": "",
+        "status": "Active",
+        "subcommittees": [],
+        "attendance": {
+          "202601": true,
+          "202602": true,
+          "202603": false,
+          "202604": true,
+          "202605": false,
+          "202606": true,
+          "202607": false,
+          "202608": false,
+          "202609": true
+        },
+        "notes": ""
+      }
+    ]
   }
 }
