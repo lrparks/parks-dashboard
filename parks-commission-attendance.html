@@ -176,7 +176,8 @@
         // Load attendance data from JSON
         async function loadAttendanceData() {
             try {
-                const response = await fetch('attendance.json');
+                // Revalidate so data updates show up without a hard refresh (Pages caches 10 min)
+                const response = await fetch('attendance.json', { cache: 'no-cache' });
                 attendanceData = await response.json();
                 renderAttendance(document.getElementById('yearSelect').value);
             } catch (error) {
