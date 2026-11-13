@@ -844,6 +844,16 @@
       "period": "202610",
       "division": "safety",
       "file": "pdfs/202610-safety.pdf"
+    },
+    {
+      "period": "202611",
+      "division": "reference",
+      "file": "pdfs/202611-reference-2001-master-plan.pdf"
+    },
+    {
+      "period": "202611",
+      "division": "reference",
+      "file": "pdfs/202611-reference-capra-2027-standards.pdf"
     }
   ]
 }
