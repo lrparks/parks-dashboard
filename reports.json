@@ -847,6 +847,21 @@
     },
     {
       "period": "202611",
+      "division": "admin",
+      "file": "pdfs/202611-admin.pdf"
+    },
+    {
+      "period": "202611",
+      "division": "operations",
+      "file": "pdfs/202611-operations.pdf"
+    },
+    {
+      "period": "202611",
+      "division": "recreation",
+      "file": "pdfs/202611-recreation.pdf"
+    },
+    {
+      "period": "202611",
       "division": "reference",
       "file": "pdfs/202611-reference-2001-master-plan.pdf"
     },
@@ -854,6 +869,16 @@
       "period": "202611",
       "division": "reference",
       "file": "pdfs/202611-reference-capra-2027-standards.pdf"
+    },
+    {
+      "period": "202611",
+      "division": "safety",
+      "file": "pdfs/202611-safety.pdf"
+    },
+    {
+      "period": "202611",
+      "division": "volunteer",
+      "file": "pdfs/202611-volunteer.pdf"
     }
   ]
 }
